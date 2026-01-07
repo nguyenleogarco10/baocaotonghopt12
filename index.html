@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo Tài chính Tháng 12 - Executive Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .chart-container { position: relative; height: 300px; width: 100%; }
+        .daily-chart-container { position: relative; height: 400px; width: 100%; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 1); }
+        .nav-btn-active { background-color: #1e293b !important; color: white !important; }
+        .stat-card:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+        .transition-all { transition: all 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="pb-12">
+
+    <!-- Top Navigation Menu -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-black text-slate-900 tracking-tighter">FINANCE<span class="text-blue-600">HUB</span></span>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="filterBrand('all')" id="btn-all" class="nav-btn px-4 py-2 rounded-lg text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 nav-btn-active">TỔNG HỆ THỐNG</button>
+                    <button onclick="filterBrand('Phục Linh')" id="btn-phuc-linh" class="nav-btn px-4 py-2 rounded-lg text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">PHỤC LINH</button>
+                    <button onclick="filterBrand('An Nhiên')" id="btn-an-nhien" class="nav-btn px-4 py-2 rounded-lg text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">AN NHIÊN</button>
+                    <button onclick="filterBrand('An Nguyên')" id="btn-an-nguyen" class="nav-btn px-4 py-2 rounded-lg text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">AN NGUYÊN</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Area -->
+    <header class="bg-slate-900 text-white py-10 px-6 mb-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 id="main-title" class="text-3xl font-bold tracking-tight uppercase">Toàn Bộ Hệ Thống - Tháng 12</h1>
+                <p class="text-slate-400 mt-1 uppercase text-sm tracking-widest font-semibold italic">Phân tích chuyên sâu dữ liệu khách hàng & doanh thu</p>
+            </div>
+            <div class="mt-4 md:mt-0 text-right bg-slate-800 p-4 rounded-xl border border-slate-700">
+                <div class="text-xs text-slate-400 uppercase">Trạng thái dữ liệu</div>
+                <div class="text-emerald-400 font-bold flex items-center justify-end">
+                    <span class="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></span> Xác thực 100% từ CSV
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Summary Stats Section -->
+        <div id="summary-stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Dynamic Content via JS -->
+        </div>
+
+        <!-- Charts Section -->
+        <div id="general-charts" class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+            <div class="glass-card p-6 rounded-2xl shadow-sm">
+                <h3 class="text-lg font-bold mb-6 flex items-center">
+                    <span class="w-2 h-2 bg-blue-600 rounded-full mr-2"></span> Cơ Cấu Doanh Thu
+                </h3>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+            <div class="glass-card p-6 rounded-2xl shadow-sm">
+                <h3 class="text-lg font-bold mb-6 flex items-center">
+                    <span class="w-2 h-2 bg-emerald-600 rounded-full mr-2"></span> So Sánh Lượt Khách Thực Tế
+                </h3>
+                <div class="chart-container">
+                    <canvas id="guestChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables Section: Guest Counts & Peak Days -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+            <div class="glass-card rounded-2xl shadow-sm overflow-hidden border border-slate-200">
+                <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-800">Thống Kê Lượt Khách Theo Chi Nhánh</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
+                            <tr>
+                                <th class="p-4">Cơ sở</th>
+                                <th class="p-4">Thương hiệu</th>
+                                <th class="p-4 text-center">Tổng Khách</th>
+                                <th class="p-4 text-center">Tỷ trọng (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="guest-table-body" class="divide-y divide-slate-100">
+                            <!-- JS Inject -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl shadow-sm overflow-hidden border border-slate-200">
+                <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
+                    <h3 class="font-bold text-slate-800">Ngày Đông Khách Nhất (Phân Tích File)</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
+                            <tr>
+                                <th class="p-4">Cơ sở</th>
+                                <th class="p-4">Ngày Cao Điểm</th>
+                                <th class="p-4 text-center">Lượt khách cao điểm</th>
+                                <th class="p-4">Đánh giá</th>
+                            </tr>
+                        </thead>
+                        <tbody id="peak-day-table-body" class="divide-y divide-slate-100">
+                            <!-- JS Inject -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Guest Trend Chart (Replaces KPI) -->
+        <div class="glass-card p-8 rounded-3xl shadow-xl border border-indigo-100 bg-gradient-to-br from-white to-indigo-50/30 mb-12">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-900 tracking-tight">BIẾN ĐỘNG LƯỢT KHÁCH THEO TUẦN</h3>
+                    <p class="text-slate-500 font-medium">Sơ đồ phân bổ lượng khách từ Thứ 2 đến Chủ Nhật (Dữ liệu thực tế)</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-2">
+                    <span class="px-3 py-1 bg-white text-slate-600 text-xs font-bold rounded-full border border-slate-200 shadow-sm">Dữ liệu tháng 12</span>
+                </div>
+            </div>
+            <div class="daily-chart-container">
+                <canvas id="dailyGuestChart"></canvas>
+            </div>
+        </div>
+
+        <footer class="text-center text-slate-400 text-xs font-medium pb-8 border-t border-slate-100 pt-8">
+            <p>HỆ THỐNG BÁO CÁO TÀI CHÍNH TỰ ĐỘNG © 2026 - DÀNH CHO BAN GIÁM ĐỐC</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // Full Dataset - All numbers verified from CSV analysis
+        const rawData = [
+            { brand: 'Phục Linh', branch: 'Xã Đàn', guests: 220, revenue: 1064449000, tbb: 4838405, peakDay: 'Thứ Hai', peakGuests: 41 },
+            { brand: 'Phục Linh', branch: 'Cầu Giấy', guests: 194, revenue: 941188000, tbb: 4851485, peakDay: 'Thứ Tư', peakGuests: 35 },
+            { brand: 'Phục Linh', branch: 'Hà Đông', guests: 195, revenue: 860443000, tbb: 4412528, peakDay: 'Thứ Bảy', peakGuests: 33 },
+            { brand: 'Phục Linh', branch: 'Hải Phòng', guests: 163, revenue: 443440500, tbb: 2720494, peakDay: 'Chủ Nhật', peakGuests: 36 },
+            { brand: 'An Nhiên', branch: 'CMT8', guests: 99, revenue: 295630000, tbb: 2986162, peakDay: 'Thứ Sáu', peakGuests: 17 },
+            { brand: 'An Nhiên', branch: 'ADV', guests: 112, revenue: 264500700, tbb: 2361613, peakDay: 'Chủ Nhật', peakGuests: 25 },
+            { brand: 'An Nguyên', branch: 'Long Biên', guests: 207, revenue: 746840000, tbb: 3607923, peakDay: 'Thứ Ba', peakGuests: 46 }
+        ];
+
+        // Daily Distribution Data (Calculated from Excel)
+        // Order: Mon, Tue, Wed, Thu, Fri, Sat, Sun
+        const dailyData = {
+            'all': [189, 200, 177, 146, 131, 165, 182],
+            'Phục Linh': [120, 121, 118, 100, 81, 107, 125],
+            'An Nhiên': [35, 33, 31, 21, 31, 28, 32],
+            'An Nguyên': [34, 46, 28, 25, 19, 30, 25]
+        };
+
+        let revenueChart, guestChart, dailyGuestChart;
+
+        function filterBrand(brand) {
+            const filteredData = brand === 'all' ? rawData : rawData.filter(d => d.brand === brand);
+            updateUI(filteredData, brand);
+            
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-btn-active'));
+            const btnId = brand === 'all' ? 'btn-all' : 'btn-' + brand.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
+            document.getElementById(btnId).classList.add('nav-btn-active');
+        }
+
+        function updateUI(data, brandName) {
+            const totalRev = data.reduce((s, d) => s + d.revenue, 0);
+            const totalGuests = data.reduce((s, d) => s + d.guests, 0);
+            const avgTbb = (totalRev / totalGuests).toFixed(0);
+
+            document.getElementById('main-title').innerText = brandName === 'all' ? 'Toàn Bộ Hệ Thống - Tháng 12' : `Brand: ${brandName} - Tháng 12`;
+
+            document.getElementById('summary-stats').innerHTML = `
+                <div class="glass-card p-6 rounded-2xl stat-card border-l-4 border-blue-500">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Doanh Thu</p>
+                    <p class="text-xl font-black text-slate-900 mt-2">${totalRev.toLocaleString()} <span class="text-xs font-normal">đ</span></p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl stat-card border-l-4 border-emerald-500">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Lượt Khách</p>
+                    <p class="text-xl font-black text-slate-900 mt-2">${totalGuests.toLocaleString()} <span class="text-xs font-normal">người</span></p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl stat-card border-l-4 border-amber-500">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Trung Bình Bill</p>
+                    <p class="text-xl font-black text-slate-900 mt-2">${parseInt(avgTbb).toLocaleString()} <span class="text-xs font-normal">đ</span></p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl stat-card border-l-4 border-indigo-500">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Số Cơ Sở</p>
+                    <p class="text-xl font-black text-slate-900 mt-2">${data.length} <span class="text-xs font-normal">điểm</span></p>
+                </div>
+            `;
+
+            let guestTableHTML = '';
+            data.forEach(d => {
+                const percent = ((d.guests / totalGuests) * 100).toFixed(1);
+                guestTableHTML += `
+                    <tr>
+                        <td class="p-4 font-bold text-slate-800">${d.branch}</td>
+                        <td class="p-4 text-slate-500 text-xs font-bold">${d.brand}</td>
+                        <td class="p-4 text-center font-mono">${d.guests}</td>
+                        <td class="p-4 text-center">
+                            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">${percent}%</span>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('guest-table-body').innerHTML = guestTableHTML;
+
+            let peakTableHTML = '';
+            data.forEach(d => {
+                peakTableHTML += `
+                    <tr>
+                        <td class="p-4 font-bold text-slate-800">${d.branch}</td>
+                        <td class="p-4 text-indigo-600 font-bold">${d.peakDay}</td>
+                        <td class="p-4 text-center font-mono">${d.peakGuests}</td>
+                        <td class="p-4 text-center text-xs">
+                            <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full font-bold uppercase tracking-tighter">Peak Day</span>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('peak-day-table-body').innerHTML = peakTableHTML;
+
+            updateCharts(data, brandName);
+        }
+
+        function updateCharts(data, brandName) {
+            if (revenueChart) revenueChart.destroy();
+            if (guestChart) guestChart.destroy();
+            if (dailyGuestChart) dailyGuestChart.destroy();
+
+            // Chart 1: Revenue
+            let chart1Labels, chart1Data, chart1Type;
+            if (brandName === 'all') {
+                chart1Labels = ['Phục Linh', 'An Nhiên', 'An Nguyên'];
+                chart1Data = [3309520500, 560130700, 746840000];
+                chart1Type = 'doughnut';
+            } else {
+                chart1Labels = data.map(d => d.branch);
+                chart1Data = data.map(d => d.revenue);
+                chart1Type = 'pie';
+            }
+
+            revenueChart = new Chart(document.getElementById('revenueChart'), {
+                type: chart1Type,
+                data: {
+                    labels: chart1Labels,
+                    datasets: [{
+                        data: chart1Data,
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+
+            // Chart 2: Total Guests by Branch
+            guestChart = new Chart(document.getElementById('guestChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.branch),
+                    datasets: [{
+                        label: 'Lượt khách',
+                        data: data.map(d => d.guests),
+                        backgroundColor: '#10b981',
+                        borderRadius: 6
+                    }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // Chart 3: Daily Guest Trends (Replaces KPI)
+            const currentDailyData = dailyData[brandName] || dailyData['all'];
+            
+            // Create a gradient for the line chart
+            const ctx = document.getElementById('dailyGuestChart').getContext('2d');
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(79, 70, 229, 0.4)'); // Indigo
+            gradient.addColorStop(1, 'rgba(79, 70, 229, 0.0)');
+
+            dailyGuestChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
+                    datasets: [{
+                        label: `Lượng khách - ${brandName === 'all' ? 'Toàn Hệ Thống' : brandName}`,
+                        data: currentDailyData,
+                        borderColor: '#4f46e5', // Indigo-600
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#4f46e5',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        fill: true,
+                        tension: 0.4 // Smooth curves
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                        },
+                        x: { 
+                            grid: { display: false } 
+                        }
+                    },
+                    plugins: { 
+                        legend: { display: true, position: 'top' },
+                        tooltip: {
+                            backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                            padding: 12,
+                            titleFont: { size: 13 },
+                            bodyFont: { size: 14, weight: 'bold' },
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.parsed.y} khách`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        window.onload = () => filterBrand('all');
+    </script>
+</body>
+</html>
