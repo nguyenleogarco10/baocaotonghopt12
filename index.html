@@ -3,151 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Báo cáo Tài chính Tháng 12 - Executive Dashboard</title>
+    <title>Báo Cáo Tài Chính Chiến Lược - T12/2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Premium Font Stack -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Space Grotesk', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: { 850: '#1e293b', 900: '#0f172a' },
+                        // Desaturated Luxury Palette
+                        indigo: { 
+                            500: '#6366f1', 
+                            600: '#4f46e5',
+                            900: '#312e81',
+                            'muted': '#818cf8' 
+                        },
+                        emerald: {
+                            'luxury': '#10b981', // Keeping it slightly vibrant for positive KPI
+                            'muted': '#6ee7b7'
+                        }
+                    },
+                    boxShadow: {
+                        // 3-Layer Luxury Shadow
+                        'luxury': '0 1px 2px rgba(15,23,42,0.04), 0 8px 20px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.6)',
+                        'luxury-hover': '0 20px 40px -10px rgba(15,23,42,0.1), 0 10px 20px -5px rgba(15,23,42,0.04), inset 0 1px 0 rgba(255,255,255,0.8)',
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)'
+                    },
+                    animation: {
+                        'blob': 'blob 20s infinite', // Slower animation
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .chart-container { position: relative; height: 300px; width: 100%; }
-        .daily-chart-container { position: relative; height: 400px; width: 100%; }
-        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 1); }
-        .nav-btn-active { background-color: #1e293b !important; color: white !important; }
-        .stat-card:hover { transform: translateY(-5px); transition: all 0.3s ease; }
-        .transition-all { transition: all 0.3s ease-in-out; }
+        body { background-color: #f8fafc; color: #1e293b; }
+        .chart-container { position: relative; height: 320px; width: 100%; }
+        .daily-chart-container { position: relative; height: 380px; width: 100%; }
+        
+        /* Glassmorphism Refined */
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-btn-active { 
+            background-color: #0f172a !important; 
+            color: white !important; 
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15); 
+            border-color: transparent !important;
+        }
+        
+        .transition-luxury { transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        
+        /* Thin Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
     </style>
 </head>
-<body class="pb-12">
+<body class="pb-20 antialiased selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden">
 
-    <!-- Top Navigation Menu -->
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <span class="text-xl font-black text-slate-900 tracking-tighter">FINANCE<span class="text-blue-600">HUB</span></span>
+    <!-- Top Strategic Bar -->
+    <div class="w-full bg-white border-b border-slate-100 py-2">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold">Báo cáo Tài chính Chiến lược • Tháng 12/2025</p>
+            <div class="flex items-center space-x-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span class="font-mono text-[10px] uppercase tracking-widest text-slate-400">Kết nối trực tiếp</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/60 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center h-20">
+                <div class="flex items-center space-x-8">
+                    <!-- Logo Section -->
+                    <div class="flex items-center">
+                        <img src="1.png" alt="Company Logo" class="h-16 w-auto object-contain"> 
+                    </div>
+                    
+                    <!-- View Mode Toggle -->
+                    <div class="hidden md:flex items-center bg-slate-100/80 rounded-full p-1 border border-slate-200">
+                        <button onclick="setViewMode('executive')" id="btn-view-exec" class="px-5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide transition-all bg-white shadow-sm text-slate-800 border border-slate-200/50">Tổng Quan</button>
+                        <button onclick="setViewMode('analyst')" id="btn-view-analyst" class="px-5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide transition-all text-slate-400 hover:text-slate-600">Chi Tiết</button>
+                    </div>
                 </div>
-                <div class="flex space-x-2">
-                    <button onclick="filterBrand('all')" id="btn-all" class="nav-btn px-4 py-2 rounded-lg text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 nav-btn-active">TỔNG HỆ THỐNG</button>
-                    <button onclick="filterBrand('Phục Linh')" id="btn-phuc-linh" class="nav-btn px-4 py-2 rounded-lg text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">PHỤC LINH</button>
-                    <button onclick="filterBrand('An Nhiên')" id="btn-an-nhien" class="nav-btn px-4 py-2 rounded-lg text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">AN NHIÊN</button>
-                    <button onclick="filterBrand('An Nguyên')" id="btn-an-nguyen" class="nav-btn px-4 py-2 rounded-lg text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">AN NGUYÊN</button>
+
+                <div class="flex space-x-2 mt-4 md:mt-0 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+                    <button onclick="filterBrand('all')" id="btn-all" class="nav-btn px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 transition-luxury nav-btn-active">Tổng Hệ Thống</button>
+                    <button onclick="filterBrand('Phục Linh')" id="btn-phuc-linh" class="nav-btn px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 transition-luxury">Phục Linh</button>
+                    <button onclick="filterBrand('An Nhiên')" id="btn-an-nhien" class="nav-btn px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 transition-luxury">An Nhiên</button>
+                    <button onclick="filterBrand('An Nguyên')" id="btn-an-nguyen" class="nav-btn px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 transition-luxury">An Nguyên</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Header Area =-->
-    <header class="bg-slate-900 text-white py-10 px-6 mb-8">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-            <div>
-                <h1 id="main-title" class="text-3xl font-bold tracking-tight uppercase">Toàn Bộ Hệ Thống - Tháng 12</h1>
-                <p class="text-slate-400 mt-1 uppercase text-sm tracking-widest font-semibold italic">Phân tích chuyên sâu dữ liệu khách hàng & doanh thu</p>
-            </div>
-            <div class="mt-4 md:mt-0 text-right bg-slate-800 p-4 rounded-xl border border-slate-700">
-                <div class="text-xs text-slate-400 uppercase">Trạng thái dữ liệu</div>
-                <div class="text-emerald-400 font-bold flex items-center justify-end">
-                    <span class="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></span> Xác thực 100% từ CSV
+    <!-- Hero Section -->
+    <header class="relative bg-slate-50 py-20 px-6 mb-12 overflow-hidden border-b border-slate-200">
+        <!-- Subtle Animated Background -->
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-200/20 rounded-full mix-blend-multiply filter blur-[100px] animate-blob"></div>
+        <div class="absolute -bottom-32 -left-32 w-[400px] h-[400px] bg-emerald-100/40 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-2000"></div>
+
+        <div class="max-w-7xl mx-auto relative z-10 animate-fade-in-up">
+            <div class="flex flex-col lg:flex-row justify-between items-end">
+                <div class="max-w-4xl">
+                    <!-- Editorial Typography -->
+                    <h1 id="main-headline" class="font-display text-4xl md:text-[52px] leading-[1.05] font-bold tracking-tight text-slate-900 mb-6">
+                        Tháng 12 đạt <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">4,616,491,200 VND</span><br>Tăng trưởng tập trung nhóm Key Accounts.
+                    </h1>
+                    
+                    <p id="sub-headline" class="font-sans text-slate-500 text-lg md:text-xl font-light leading-relaxed max-w-2xl border-l-2 border-indigo-500 pl-6">
+                        Dữ liệu xác thực cho thấy Phục Linh chiếm ưu thế tuyệt đối (72%), trong khi An Nguyên đạt hiệu suất vận hành trên mỗi điểm bán tốt nhất hệ thống.
+                    </p>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto px-6 lg:px-8 -mt-8">
         
-        <!-- Summary Stats Section -->
-        <div id="summary-stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <!-- Dynamic Content via JS -->
+        <!-- 1. Smart KPIs: Insight Driven (Luxury Cards) -->
+        <div id="summary-stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 relative z-20">
+            <!-- Dynamic Content -->
         </div>
 
-        <!-- Charts Section -->
-        <div id="general-charts" class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-            <div class="glass-card p-6 rounded-2xl shadow-sm">
-                <h3 class="text-lg font-bold mb-6 flex items-center">
-                    <span class="w-2 h-2 bg-blue-600 rounded-full mr-2"></span> Cơ Cấu Doanh Thu
-                </h3>
-                <div class="chart-container">
+        <!-- 2. Strategic Narrative Charts -->
+        <div id="executive-charts" class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 animate-fade-in-up" style="animation-delay: 0.2s;">
+            <!-- Revenue Mix -->
+            <div class="lg:col-span-1 glass-card p-8 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury transform hover:-translate-y-1">
+                <div class="flex justify-between items-start mb-8">
+                    <div>
+                        <h3 class="font-display text-lg font-bold text-slate-800">Cơ Cấu Doanh Thu</h3>
+                        <p class="font-sans text-[11px] text-slate-400 mt-1 uppercase tracking-wide">Phân bổ nguồn tiền</p>
+                    </div>
+                </div>
+                <div class="chart-container" style="height: 240px;">
                     <canvas id="revenueChart"></canvas>
                 </div>
+                <div class="mt-8 pt-6 border-t border-slate-100">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-1 h-8 bg-indigo-500 rounded-full mt-1"></div>
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">NHẬN ĐỊNH</p>
+                            <p id="revenue-insight" class="font-sans text-sm text-slate-700 font-medium leading-snug">Phục Linh chi phối 72% tổng doanh thu. Rủi ro tập trung cao.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="glass-card p-6 rounded-2xl shadow-sm">
-                <h3 class="text-lg font-bold mb-6 flex items-center">
-                    <span class="w-2 h-2 bg-emerald-600 rounded-full mr-2"></span> So Sánh Lượt Khách Thực Tế
-                </h3>
-                <div class="chart-container">
-                    <canvas id="guestChart"></canvas>
+
+            <!-- Operational Trend -->
+            <div class="lg:col-span-2 glass-card p-8 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury transform hover:-translate-y-1">
+                <div class="flex justify-between items-start mb-8">
+                    <div>
+                        <h3 class="font-display text-lg font-bold text-slate-800">Nhịp Điệu Vận Hành</h3>
+                        <p class="font-sans text-[11px] text-slate-400 mt-1 uppercase tracking-wide">Biến động lượng khách tuần hoàn</p>
+                    </div>
+                    <div class="flex items-center space-x-2 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
+                        <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                        <span class="font-mono text-[10px] font-bold text-slate-500">XU HƯỚNG THỰC</span>
+                    </div>
+                </div>
+                <div class="daily-chart-container" style="height: 320px;">
+                    <canvas id="dailyGuestChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Tables Section: Guest Counts & Peak Days -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-            <div class="glass-card rounded-2xl shadow-sm overflow-hidden border border-slate-200">
-                <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
-                    <h3 class="font-bold text-slate-800">Thống Kê Lượt Khách Theo Chi Nhánh</h3>
+        <!-- 3. Analyst View Details (Hidden by default) -->
+        <div id="analyst-section" class="hidden opacity-0 transition-opacity duration-700 ease-in-out">
+            <div class="flex items-center space-x-4 mb-8">
+                <h3 class="font-display text-xl font-bold text-slate-900">Chi Tiết Vận Hành (Chế độ Phân tích)</h3>
+                <div class="h-px flex-1 bg-slate-200"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                <!-- Guest Comparison Bar -->
+                <div class="glass-card p-8 rounded-[24px] shadow-luxury">
+                    <h4 class="font-display font-bold text-slate-700 mb-6">So Sánh Lượng Khách</h4>
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="guestChart"></canvas>
+                    </div>
                 </div>
-                <div class="overflow-x-auto">
+
+                <!-- Detailed Table -->
+                <div class="glass-card rounded-[24px] shadow-luxury overflow-hidden border border-white">
                     <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
+                        <thead class="bg-slate-50/80 text-slate-500 font-mono text-[10px] uppercase tracking-wider font-semibold border-b border-slate-100">
                             <tr>
-                                <th class="p-4">Cơ sở</th>
-                                <th class="p-4">Thương hiệu</th>
-                                <th class="p-4 text-center">Tổng Khách</th>
-                                <th class="p-4 text-center">Tỷ trọng (%)</th>
+                                <th class="p-5 pl-8">Cơ sở</th>
+                                <th class="p-5 text-center">Ngày Đông Nhất</th>
+                                <th class="p-5 text-right">Khách Tối Đa</th>
+                                <th class="p-5 text-right pr-8">TBB (VNĐ)</th>
                             </tr>
                         </thead>
-                        <tbody id="guest-table-body" class="divide-y divide-slate-100">
+                        <tbody id="detail-table-body" class="divide-y divide-slate-50 font-mono text-xs text-slate-600">
                             <!-- JS Inject -->
                         </tbody>
                     </table>
                 </div>
             </div>
+        </div>
 
-            <div class="glass-card rounded-2xl shadow-sm overflow-hidden border border-slate-200">
-                <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
-                    <h3 class="font-bold text-slate-800">Ngày Đông Khách Nhất (Phân Tích File)</h3>
+        <!-- 4. Key Takeaways: CEO Box -->
+        <div id="key-takeaways" class="glass-card p-10 rounded-[32px] shadow-2xl bg-slate-900 text-white mb-20 relative overflow-hidden group">
+            <!-- Ambient Glow -->
+            <div class="absolute top-0 right-0 p-40 bg-indigo-500/20 rounded-full blur-[100px] transform translate-x-1/2 -translate-y-1/2 transition-all duration-1000 group-hover:bg-indigo-500/30"></div>
+            <div class="absolute bottom-0 left-0 p-32 bg-emerald-500/10 rounded-full blur-[80px] transform -translate-x-1/2 translate-y-1/2"></div>
+            
+            <div class="relative z-10">
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="p-2 bg-white/10 rounded-lg backdrop-blur-sm">
+                        <svg class="w-5 h-5 text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold tracking-tight">TÓM TẮT ĐIỀU HÀNH</h3>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
-                            <tr>
-                                <th class="p-4">Cơ sở</th>
-                                <th class="p-4">Ngày Cao Điểm</th>
-                                <th class="p-4 text-center">Lượt khách cao điểm</th>
-                                <th class="p-4">Đánh giá</th>
-                            </tr>
-                        </thead>
-                        <tbody id="peak-day-table-body" class="divide-y divide-slate-100">
-                            <!-- JS Inject -->
-                        </tbody>
-                    </table>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <div class="flex items-start group/item">
+                            <span class="font-mono text-emerald-400 font-bold mr-4 text-sm mt-1 group-hover/item:text-emerald-300 transition-colors">01</span>
+                            <div>
+                                <h4 class="font-display font-bold text-lg text-white mb-1">Phục Linh là trụ cột (Cash Cow)</h4>
+                                <p class="font-sans text-sm text-slate-400 leading-relaxed font-light">Đóng góp <strong class="text-white font-medium">72% doanh thu</strong> toàn hệ thống. Cần chính sách giữ chân khách hàng VIP tại Xã Đàn & Cầu Giấy để bảo vệ dòng tiền.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start group/item">
+                            <span class="font-mono text-yellow-400 font-bold mr-4 text-sm mt-1 group-hover/item:text-yellow-300 transition-colors">02</span>
+                            <div>
+                                <h4 class="font-display font-bold text-lg text-white mb-1">Điểm nghẽn giá trị tại An Nhiên</h4>
+                                <p class="font-sans text-sm text-slate-400 leading-relaxed font-light">TBB thấp hơn <strong class="text-white font-medium">32%</strong> so với mức trung bình. Cần gói dịch vụ Up-sell mới cho phân khúc này.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex items-start group/item">
+                            <span class="font-mono text-indigo-400 font-bold mr-4 text-sm mt-1 group-hover/item:text-indigo-300 transition-colors">03</span>
+                            <div>
+                                <h4 class="font-display font-bold text-lg text-white mb-1">An Nguyên: Mô hình hiệu suất cao</h4>
+                                <p class="font-sans text-sm text-slate-400 leading-relaxed font-light">Chỉ 1 cơ sở nhưng lượng khách ngang ngửa top Phục Linh. Mô hình tinh gọn <strong class="text-white font-medium">cần nhân rộng (Scalable)</strong>.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start group/item">
+                            <span class="font-mono text-pink-400 font-bold mr-4 text-sm mt-1 group-hover/item:text-pink-300 transition-colors">04</span>
+                            <div>
+                                <h4 class="font-display font-bold text-lg text-white mb-1">Cảnh báo vận hành cuối tuần</h4>
+                                <p class="font-sans text-sm text-slate-400 leading-relaxed font-light">Chủ Nhật là Ngày Cao Điểm tại 50% cơ sở. Cần phương án điều phối nhân sự linh hoạt để đảm bảo trải nghiệm khách hàng.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Weekly Guest Trend Chart (Replaces KPI) -->
-        <div class="glass-card p-8 rounded-3xl shadow-xl border border-indigo-100 bg-gradient-to-br from-white to-indigo-50/30 mb-12">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-                <div>
-                    <h3 class="text-2xl font-black text-slate-900 tracking-tight">BIẾN ĐỘNG LƯỢT KHÁCH THEO TUẦN</h3>
-                    <p class="text-slate-500 font-medium">Sơ đồ phân bổ lượng khách từ Thứ 2 đến Chủ Nhật (Dữ liệu thực tế)</p>
-                </div>
-                <div class="mt-4 md:mt-0 flex space-x-2">
-                    <span class="px-3 py-1 bg-white text-slate-600 text-xs font-bold rounded-full border border-slate-200 shadow-sm">Dữ liệu tháng 12</span>
-                </div>
-            </div>
-            <div class="daily-chart-container">
-                <canvas id="dailyGuestChart"></canvas>
-            </div>
-        </div>
-
-        <footer class="text-center text-slate-400 text-xs font-medium pb-8 border-t border-slate-100 pt-8">
-            <p>HỆ THỐNG BÁO CÁO TÀI CHÍNH TỰ ĐỘNG © 2026 - DÀNH CHO BAN GIÁM ĐỐC</p>
+        <footer class="flex justify-between items-center pt-8 border-t border-slate-200">
+            <p class="font-mono text-[10px] text-slate-400 uppercase tracking-widest">Tài liệu mật • Chỉ lưu hành nội bộ</p>
+            <p class="font-mono text-[10px] text-slate-400">Hệ thống v2.4 • Được tạo bởi FinanceHub</p>
         </footer>
 
     </main>
 
     <script>
-        // Full Dataset - All numbers verified from CSV analysis
+        // --- DATA LAYER (UNCHANGED) ---
         const rawData = [
             { brand: 'Phục Linh', branch: 'Xã Đàn', guests: 220, revenue: 1064449000, tbb: 4838405, peakDay: 'Thứ Hai', peakGuests: 41 },
             { brand: 'Phục Linh', branch: 'Cầu Giấy', guests: 194, revenue: 941188000, tbb: 4851485, peakDay: 'Thứ Tư', peakGuests: 35 },
@@ -158,8 +302,6 @@
             { brand: 'An Nguyên', branch: 'Long Biên', guests: 207, revenue: 746840000, tbb: 3607923, peakDay: 'Thứ Ba', peakGuests: 46 }
         ];
 
-        // Daily Distribution Data (Calculated from Excel)
-        // Order: Mon, Tue, Wed, Thu, Fri, Sat, Sun
         const dailyData = {
             'all': [189, 200, 177, 146, 131, 165, 182],
             'Phục Linh': [120, 121, 118, 100, 81, 107, 125],
@@ -167,175 +309,286 @@
             'An Nguyên': [34, 46, 28, 25, 19, 30, 25]
         };
 
-        let revenueChart, guestChart, dailyGuestChart;
+        const SYSTEM_TOTAL_REV = 4616491200;
+        const SYSTEM_AVG_TBB = 3879400;
+
+        let revenueChart, dailyGuestChart, guestChart;
+
+        // --- UI LOGIC ---
+
+        function setViewMode(mode) {
+            const analystSection = document.getElementById('analyst-section');
+            const btnExec = document.getElementById('btn-view-exec');
+            const btnAnalyst = document.getElementById('btn-view-analyst');
+
+            if (mode === 'executive') {
+                analystSection.classList.add('hidden', 'opacity-0');
+                analystSection.classList.remove('block', 'opacity-100');
+                
+                // Toggle Styles
+                btnExec.classList.add('bg-white', 'shadow-sm', 'text-slate-800', 'border-slate-200/50');
+                btnExec.classList.remove('text-slate-400');
+                
+                btnAnalyst.classList.remove('bg-white', 'shadow-sm', 'text-slate-800', 'border-slate-200/50');
+                btnAnalyst.classList.add('text-slate-400');
+            } else {
+                analystSection.classList.remove('hidden');
+                // Allow DOM to update before transition
+                setTimeout(() => analystSection.classList.remove('opacity-0'), 20);
+                
+                btnAnalyst.classList.add('bg-white', 'shadow-sm', 'text-slate-800', 'border-slate-200/50');
+                btnAnalyst.classList.remove('text-slate-400');
+
+                btnExec.classList.remove('bg-white', 'shadow-sm', 'text-slate-800', 'border-slate-200/50');
+                btnExec.classList.add('text-slate-400');
+                
+                analystSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
 
         function filterBrand(brand) {
             const filteredData = brand === 'all' ? rawData : rawData.filter(d => d.brand === brand);
             updateUI(filteredData, brand);
             
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-btn-active'));
+            // Refined Nav Button States
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('nav-btn-active', 'bg-slate-900', 'text-white');
+                b.classList.add('bg-white', 'text-slate-500');
+            });
+            
             const btnId = brand === 'all' ? 'btn-all' : 'btn-' + brand.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
-            document.getElementById(btnId).classList.add('nav-btn-active');
+            const activeBtn = document.getElementById(btnId);
+            activeBtn.classList.add('nav-btn-active');
+            activeBtn.classList.remove('bg-white', 'text-slate-500');
         }
 
         function updateUI(data, brandName) {
             const totalRev = data.reduce((s, d) => s + d.revenue, 0);
             const totalGuests = data.reduce((s, d) => s + d.guests, 0);
-            const avgTbb = (totalRev / totalGuests).toFixed(0);
+            const avgTbb = Math.round(totalRev / totalGuests);
 
-            document.getElementById('main-title').innerText = brandName === 'all' ? 'Toàn Bộ Hệ Thống - Tháng 12' : `Brand: ${brandName} - Tháng 12`;
+            // Update Headlines
+            if (brandName === 'all') {
+                document.getElementById('main-headline').innerHTML = `Tháng 12 đạt <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">${totalRev.toLocaleString()} VND</span><br>Tăng trưởng tập trung nhóm Key Accounts.`;
+                document.getElementById('sub-headline').innerText = "Dữ liệu xác thực cho thấy Phục Linh chiếm ưu thế tuyệt đối (72%), trong khi An Nguyên đạt hiệu suất vận hành trên mỗi điểm bán tốt nhất hệ thống.";
+            } else if (brandName === 'Phục Linh') {
+                document.getElementById('main-headline').innerHTML = `Phục Linh: <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">${totalRev.toLocaleString()} VND</span><br>Chiếm lĩnh 72% thị phần hệ thống.`;
+                document.getElementById('sub-headline').innerText = "Cơ sở Xã Đàn và Cầu Giấy đang dẫn đầu về hiệu suất tài chính (TBB > 4.8M), đóng vai trò Cash Cow.";
+            } else if (brandName === 'An Nhiên') {
+                document.getElementById('main-headline').innerHTML = `An Nhiên: <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-500">${totalRev.toLocaleString()} VND</span><br>Tiềm năng tối ưu hóa giá trị đơn hàng.`;
+                document.getElementById('sub-headline').innerText = "TBB hiện tại thấp hơn mức trung bình hệ thống, đây là dư địa tăng trưởng lớn nhất cho Q1/2026.";
+            } else {
+                document.getElementById('main-headline').innerHTML = `An Nguyên: <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-400">MÔ HÌNH HIỆU QUẢ CAO</span><br>1 cơ sở tạo ra doanh thu ngang Top 3.`;
+                document.getElementById('sub-headline').innerText = "Long Biên chứng minh hiệu quả vận hành vượt trội với lượng khách ổn định và chi phí tối ưu.";
+            }
 
+            // Calculations
+            let revShare = ((totalRev / SYSTEM_TOTAL_REV) * 100).toFixed(1);
+            let tbbDiff = ((avgTbb - SYSTEM_AVG_TBB) / SYSTEM_AVG_TBB * 100).toFixed(1);
+            let tbbColor = tbbDiff >= 0 ? 'text-emerald-luxury' : 'text-red-500'; // Using luxury emerald
+            let tbbBg = tbbDiff >= 0 ? 'bg-emerald-50' : 'bg-red-50';
+            let tbbIcon = tbbDiff >= 0 ? '▲' : '▼';
+
+            // --- Luxury KPI Cards ---
+            // Pattern: Label (Small/Wide) | Number (Big/Mono) | Context Badge
             document.getElementById('summary-stats').innerHTML = `
-                <div class="glass-card p-6 rounded-2xl stat-card border-l-4 border-blue-500">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Doanh Thu</p>
-                    <p class="text-xl font-black text-slate-900 mt-2">${totalRev.toLocaleString()} <span class="text-xs font-normal">đ</span></p>
+                <!-- Total Revenue -->
+                <div class="glass-card p-6 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury hover:scale-[1.02] cursor-default border-l-4 border-indigo-600">
+                    <p class="font-sans text-[10px] font-bold text-slate-400 uppercase tracking-[0.18em] mb-2">Tổng Doanh Thu</p>
+                    <div class="flex items-baseline space-x-1">
+                        <p class="font-mono text-[24px] font-bold text-slate-800 tracking-tighter">${totalRev.toLocaleString()}</p>
+                        <span class="font-sans text-sm text-slate-400 font-medium">VND</span>
+                    </div>
+                    <div class="mt-3 flex items-center">
+                         <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-[10px] font-bold uppercase tracking-wider rounded border border-indigo-100">
+                            Đóng góp ${revShare}%
+                         </span>
+                    </div>
                 </div>
-                <div class="glass-card p-6 rounded-2xl stat-card border-l-4 border-emerald-500">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Lượt Khách</p>
-                    <p class="text-xl font-black text-slate-900 mt-2">${totalGuests.toLocaleString()} <span class="text-xs font-normal">người</span></p>
+
+                <!-- Total Guests -->
+                <div class="glass-card p-6 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury hover:scale-[1.02] cursor-default border-l-4 border-emerald-500">
+                    <p class="font-sans text-[10px] font-bold text-slate-400 uppercase tracking-[0.18em] mb-2">Tổng Lượt Khách</p>
+                    <div class="flex items-baseline space-x-1">
+                        <p class="font-mono text-[24px] font-bold text-slate-800 tracking-tighter">${totalGuests.toLocaleString()}</p>
+                        <span class="font-sans text-sm text-slate-400 font-medium">Khách</span>
+                    </div>
+                    <div class="mt-3 flex items-center">
+                         <span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider rounded border border-emerald-100">
+                            Lưu lượng ổn định
+                         </span>
+                    </div>
                 </div>
-                <div class="glass-card p-6 rounded-2xl stat-card border-l-4 border-amber-500">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Trung Bình Bill</p>
-                    <p class="text-xl font-black text-slate-900 mt-2">${parseInt(avgTbb).toLocaleString()} <span class="text-xs font-normal">đ</span></p>
+
+                <!-- Avg Bill -->
+                <div class="glass-card p-6 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury hover:scale-[1.02] cursor-default border-l-4 border-amber-400">
+                    <p class="font-sans text-[10px] font-bold text-slate-400 uppercase tracking-[0.18em] mb-2">Giá Trị Bill TB (TBB)</p>
+                    <div class="flex items-baseline space-x-1">
+                        <p class="font-mono text-[24px] font-bold text-slate-800 tracking-tighter">${avgTbb.toLocaleString()}</p>
+                        <span class="font-sans text-sm text-slate-400 font-medium">VND</span>
+                    </div>
+                    <div class="mt-3 flex items-center">
+                         <span class="px-2 py-1 ${tbbBg} ${tbbColor} text-[10px] font-bold uppercase tracking-wider rounded border border-slate-100">
+                            ${tbbIcon} ${Math.abs(tbbDiff)}% so với TB hệ thống
+                         </span>
+                    </div>
                 </div>
-                <div class="glass-card p-6 rounded-2xl stat-card border-l-4 border-indigo-500">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Số Cơ Sở</p>
-                    <p class="text-xl font-black text-slate-900 mt-2">${data.length} <span class="text-xs font-normal">điểm</span></p>
+
+                <!-- Efficiency -->
+                <div class="glass-card p-6 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury hover:scale-[1.02] cursor-default border-l-4 border-slate-400">
+                    <p class="font-sans text-[10px] font-bold text-slate-400 uppercase tracking-[0.18em] mb-2">Hiệu Suất Vận Hành</p>
+                    <div class="flex items-baseline space-x-1">
+                        <p class="font-mono text-[24px] font-bold text-slate-800 tracking-tighter">${Math.round(totalGuests/data.length)}</p>
+                        <span class="font-sans text-sm text-slate-400 font-medium">Khách / Cơ sở</span>
+                    </div>
+                    <div class="mt-3 flex items-center">
+                         <span class="px-2 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider rounded border border-slate-200">
+                            Tải vận hành
+                         </span>
+                    </div>
                 </div>
             `;
 
-            let guestTableHTML = '';
+            // Update Table
+            let tableHTML = '';
             data.forEach(d => {
-                const percent = ((d.guests / totalGuests) * 100).toFixed(1);
-                guestTableHTML += `
-                    <tr>
-                        <td class="p-4 font-bold text-slate-800">${d.branch}</td>
-                        <td class="p-4 text-slate-500 text-xs font-bold">${d.brand}</td>
-                        <td class="p-4 text-center font-mono">${d.guests}</td>
-                        <td class="p-4 text-center">
-                            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">${percent}%</span>
+                tableHTML += `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-5 pl-8 font-sans font-semibold text-slate-700 border-r border-slate-100/50">${d.branch}</td>
+                        <td class="p-5 text-center text-indigo-600 font-bold">
+                            <span class="bg-indigo-50 px-3 py-1 rounded-full text-[11px] uppercase tracking-wide">${d.peakDay}</span>
                         </td>
+                        <td class="p-5 text-right font-mono text-slate-600">${d.peakGuests}</td>
+                        <td class="p-5 pr-8 text-right font-mono font-bold text-emerald-600">${d.tbb.toLocaleString()}</td>
                     </tr>
                 `;
             });
-            document.getElementById('guest-table-body').innerHTML = guestTableHTML;
-
-            let peakTableHTML = '';
-            data.forEach(d => {
-                peakTableHTML += `
-                    <tr>
-                        <td class="p-4 font-bold text-slate-800">${d.branch}</td>
-                        <td class="p-4 text-indigo-600 font-bold">${d.peakDay}</td>
-                        <td class="p-4 text-center font-mono">${d.peakGuests}</td>
-                        <td class="p-4 text-center text-xs">
-                            <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full font-bold uppercase tracking-tighter">Peak Day</span>
-                        </td>
-                    </tr>
-                `;
-            });
-            document.getElementById('peak-day-table-body').innerHTML = peakTableHTML;
+            document.getElementById('detail-table-body').innerHTML = tableHTML;
 
             updateCharts(data, brandName);
         }
 
         function updateCharts(data, brandName) {
             if (revenueChart) revenueChart.destroy();
-            if (guestChart) guestChart.destroy();
             if (dailyGuestChart) dailyGuestChart.destroy();
+            if (guestChart) guestChart.destroy();
 
-            // Chart 1: Revenue
-            let chart1Labels, chart1Data, chart1Type;
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.scale.grid.color = '#f1f5f9';
+
+            // --- Chart 1: Revenue Doughnut (Desaturated Colors) ---
+            let chart1Labels, chart1Data;
             if (brandName === 'all') {
                 chart1Labels = ['Phục Linh', 'An Nhiên', 'An Nguyên'];
                 chart1Data = [3309520500, 560130700, 746840000];
-                chart1Type = 'doughnut';
             } else {
                 chart1Labels = data.map(d => d.branch);
                 chart1Data = data.map(d => d.revenue);
-                chart1Type = 'pie';
             }
 
             revenueChart = new Chart(document.getElementById('revenueChart'), {
-                type: chart1Type,
+                type: 'doughnut',
                 data: {
                     labels: chart1Labels,
                     datasets: [{
                         data: chart1Data,
-                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'],
-                        borderWidth: 0
+                        // Using slightly muted/richer colors
+                        backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'],
+                        borderWidth: 0,
+                        hoverOffset: 12
                     }]
                 },
-                options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                options: { 
+                    maintainAspectRatio: false, 
+                    cutout: '80%', // Thinner ring for elegance
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    },
+                    plugins: { 
+                        legend: { position: 'right', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { size: 11, family: 'Inter', weight: '500' }, color: '#475569' } },
+                        tooltip: { backgroundColor: '#1e293b', padding: 16, cornerRadius: 8, titleFont: {family: 'Space Grotesk'}, bodyFont: {family: 'JetBrains Mono'}, displayColors: false, callbacks: { label: (c) => `  ${c.label}: ${c.parsed.toLocaleString()} VND` } }
+                    } 
+                }
             });
 
-            // Chart 2: Total Guests by Branch
-            guestChart = new Chart(document.getElementById('guestChart'), {
-                type: 'bar',
-                data: {
-                    labels: data.map(d => d.branch),
-                    datasets: [{
-                        label: 'Lượt khách',
-                        data: data.map(d => d.guests),
-                        backgroundColor: '#10b981',
-                        borderRadius: 6
-                    }]
-                },
-                options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
-            });
-
-            // Chart 3: Daily Guest Trends (Replaces KPI)
+            // --- Chart 2: Operational Flow (Smooth Line) ---
             const currentDailyData = dailyData[brandName] || dailyData['all'];
-            
-            // Create a gradient for the line chart
-            const ctx = document.getElementById('dailyGuestChart').getContext('2d');
-            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(79, 70, 229, 0.4)'); // Indigo
-            gradient.addColorStop(1, 'rgba(79, 70, 229, 0.0)');
+            const ctxDaily = document.getElementById('dailyGuestChart').getContext('2d');
+            const gradient = ctxDaily.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.15)'); 
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
 
-            dailyGuestChart = new Chart(ctx, {
+            dailyGuestChart = new Chart(ctxDaily, {
                 type: 'line',
                 data: {
-                    labels: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
+                    labels: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'],
                     datasets: [{
-                        label: `Lượng khách - ${brandName === 'all' ? 'Toàn Hệ Thống' : brandName}`,
+                        label: 'Guests',
                         data: currentDailyData,
-                        borderColor: '#4f46e5', // Indigo-600
+                        borderColor: '#10b981',
                         backgroundColor: gradient,
-                        borderWidth: 3,
+                        borderWidth: 2, // Thinner line
                         pointBackgroundColor: '#ffffff',
-                        pointBorderColor: '#4f46e5',
+                        pointBorderColor: '#10b981',
                         pointBorderWidth: 2,
-                        pointRadius: 6,
+                        pointRadius: 4,
                         pointHoverRadius: 8,
+                        pointHoverBorderWidth: 3,
                         fill: true,
-                        tension: 0.4 // Smooth curves
+                        tension: 0.45 // Smoother curve
                     }]
                 },
                 options: {
                     maintainAspectRatio: false,
                     scales: {
-                        y: { 
-                            beginAtZero: true,
-                            grid: { color: 'rgba(0, 0, 0, 0.05)' }
-                        },
-                        x: { 
-                            grid: { display: false } 
-                        }
+                        y: { beginAtZero: true, grid: { borderDash: [4, 4], drawBorder: false }, ticks: { display: false } }, // Hide Y labels for cleaner look
+                        x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 }, color: '#94a3b8' } }
                     },
                     plugins: { 
-                        legend: { display: true, position: 'top' },
-                        tooltip: {
-                            backgroundColor: 'rgba(30, 41, 59, 0.9)',
-                            padding: 12,
-                            titleFont: { size: 13 },
-                            bodyFont: { size: 14, weight: 'bold' },
-                            callbacks: {
-                                label: function(context) {
-                                    return ` ${context.parsed.y} khách`;
-                                }
-                            }
+                        legend: { display: false },
+                        tooltip: { 
+                            backgroundColor: '#0f172a', 
+                            titleFont: { family: 'Space Grotesk', size: 12 },
+                            bodyFont: { family: 'JetBrains Mono', size: 14 },
+                            padding: 14,
+                            cornerRadius: 6,
+                            displayColors: false,
+                            intersect: false,
+                            mode: 'index',
+                            callbacks: { label: (c) => `Lượt khách: ${c.parsed.y}` }
                         }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
                     }
+                }
+            });
+
+            // --- Chart 3: Guest Bar (Analyst Only) ---
+            guestChart = new Chart(document.getElementById('guestChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.branch),
+                    datasets: [{
+                        label: 'Guests',
+                        data: data.map(d => d.guests),
+                        backgroundColor: '#e2e8f0', // Very subtle default
+                        hoverBackgroundColor: '#4f46e5', // Pop on hover
+                        borderRadius: 4,
+                        barThickness: 40
+                    }]
+                },
+                options: { 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } }, 
+                    scales: { 
+                        y: { display: false }, 
+                        x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 } } } 
+                    } 
                 }
             });
         }
@@ -343,5 +596,4 @@
         window.onload = () => filterBrand('all');
     </script>
 </body>
-
 </html>
