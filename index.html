@@ -3,53 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Báo Cáo Tài Chính Chiến Lược - T12/2025</title>
+    <title>Không Gian Quản Trị Trị Liệu - T12/2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Premium Font Stack -->
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Zen Font Stack: Quicksand (Rounded Display) + Nunito (Rounded Sans) -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        display: ['Space Grotesk', 'sans-serif'],
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Quicksand', 'sans-serif'],
+                        sans: ['Nunito', 'sans-serif'],
                     },
                     colors: {
-                        slate: { 850: '#1e293b', 900: '#0f172a' },
-                        // Desaturated Luxury Palette
-                        indigo: { 
-                            500: '#6366f1', 
-                            600: '#4f46e5',
-                            900: '#312e81',
-                            'muted': '#818cf8' 
-                        },
-                        emerald: {
-                            'luxury': '#10b981', // Keeping it slightly vibrant for positive KPI
-                            'muted': '#6ee7b7'
+                        zen: {
+                            bg: '#F7F5F2',       // Beige nền nã
+                            card: '#FAFAF8',     // Trắng sứ ấm
+                            sage: '#8FAF9F',     // Xanh lá xám (Sage Green)
+                            tea: '#6B8F71',      // Xanh trà đạo
+                            wood: '#CBBFA3',     // Nâu gỗ sáng
+                            earth: '#7A6A53',    // Nâu đất trầm
+                            text: '#3F3F3F',     // Chữ xám đậm (không đen kịt)
+                            muted: '#8B8B8B',    // Chữ phụ
+                            accent: '#D4A373'    // Điểm nhấn nhẹ (cam đất)
                         }
                     },
                     boxShadow: {
-                        // 3-Layer Luxury Shadow
-                        'luxury': '0 1px 2px rgba(15,23,42,0.04), 0 8px 20px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.6)',
-                        'luxury-hover': '0 20px 40px -10px rgba(15,23,42,0.1), 0 10px 20px -5px rgba(15,23,42,0.04), inset 0 1px 0 rgba(255,255,255,0.8)',
-                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)'
+                        'zen': '0 8px 24px -6px rgba(122, 106, 83, 0.08), 0 2px 6px -2px rgba(122, 106, 83, 0.04)',
+                        'zen-hover': '0 20px 40px -10px rgba(122, 106, 83, 0.12), 0 12px 20px -8px rgba(122, 106, 83, 0.06)',
+                        'inner-light': 'inset 0 1px 0 rgba(255,255,255,0.8)'
                     },
                     animation: {
-                        'blob': 'blob 20s infinite', // Slower animation
-                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'breathe': 'breathe 8s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in': 'fadeIn 1.2s ease-out forwards',
                     },
                     keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        breathe: {
+                            '0%, 100%': { transform: 'scale(1)', opacity: '0.3' },
+                            '50%': { transform: 'scale(1.05)', opacity: '0.5' },
                         },
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
@@ -58,91 +58,89 @@
         }
     </script>
     <style>
-        body { background-color: #f8fafc; color: #1e293b; }
+        body { background-color: #F7F5F2; color: #3F3F3F; }
         .chart-container { position: relative; height: 320px; width: 100%; }
         .daily-chart-container { position: relative; height: 380px; width: 100%; }
-        /* Dynamic height handled by JS, min-height set here */
         .product-chart-container { position: relative; min-height: 400px; width: 100%; }
         
-        /* Glassmorphism Refined */
+        /* Zen Card Style */
         .glass-card { 
-            background: rgba(255, 255, 255, 0.85); 
-            backdrop-filter: blur(16px); 
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-top: 1px solid rgba(255, 255, 255, 0.8);
+            background: #FAFAF8; 
+            border-radius: 24px;
+            border: 1px solid rgba(143, 175, 159, 0.15); /* Viền xanh sage rất mờ */
+            box-shadow: 0 4px 20px rgba(122, 106, 83, 0.03);
         }
 
         .nav-btn-active { 
-            background-color: #0f172a !important; 
-            color: white !important; 
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15); 
+            background-color: #6B8F71 !important; /* Zen Tea */
+            color: #F7F5F2 !important; 
+            box-shadow: 0 4px 12px rgba(107, 143, 113, 0.2); 
             border-color: transparent !important;
         }
         
-        .transition-luxury { transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .transition-zen { transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
         
-        /* Thin Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
+        /* Custom Scrollbar - Mảnh & Màu gỗ */
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb { background: #CBBFA3; border-radius: 3px; }
     </style>
 </head>
-<body class="pb-20 antialiased selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden">
+<body class="pb-24 antialiased selection:bg-zen-sage selection:text-white overflow-x-hidden font-sans">
 
-    <!-- Top Strategic Bar -->
-    <div class="w-full bg-white border-b border-slate-100 py-2">
+    <!-- Top Bar -->
+    <div class="w-full bg-zen-card/80 border-b border-zen-sage/10 py-3">
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold">Báo cáo Tài chính Chiến lược • Tháng 12/2025</p>
+            <p class="font-sans text-[11px] uppercase tracking-[0.2em] text-zen-muted font-bold">Không Gian Quản Trị • Tháng 12, 2025</p>
             <div class="flex items-center space-x-2">
-                <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span class="font-mono text-[10px] uppercase tracking-widest text-slate-400">Kết nối trực tiếp</span>
+                <div class="w-2 h-2 rounded-full bg-zen-tea animate-pulse"></div>
+                <span class="font-sans text-[11px] uppercase tracking-widest text-zen-muted">Nhịp điệu: Ổn định</span>
             </div>
         </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/60 transition-all duration-300">
+    <nav class="sticky top-0 z-50 bg-zen-bg/90 backdrop-blur-sm border-b border-zen-sage/10 transition-all duration-500">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center h-20">
-                <div class="flex items-center space-x-8">
+            <div class="flex flex-col md:flex-row justify-between items-center h-24">
+                <div class="flex items-center space-x-10">
                     <!-- Logo Section -->
-                    <div class="flex items-center">
-                        <img src="1.png" alt="Company Logo" class="h-16 w-auto object-contain"> 
+                    <div class="flex items-center group cursor-pointer">
+                        <img src="1.png" alt="Logo" class="h-16 w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-700"> 
                     </div>
                     
-                    <!-- View Mode Toggle -->
-                    <div class="hidden md:flex items-center bg-slate-100/80 rounded-full p-1 border border-slate-200">
-                        <button onclick="setViewMode('executive')" id="btn-view-exec" class="px-5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide transition-all bg-white shadow-sm text-slate-800 border border-slate-200/50">Tổng Quan</button>
-                        <button onclick="setViewMode('analyst')" id="btn-view-analyst" class="px-5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide transition-all text-slate-400 hover:text-slate-600">Chi Tiết</button>
+                    <!-- View Mode Toggle (Zen Style) -->
+                    <div class="hidden md:flex items-center bg-white rounded-full p-1 border border-zen-sage/20 shadow-sm">
+                        <button onclick="setViewMode('executive')" id="btn-view-exec" class="px-6 py-2 rounded-full text-[12px] font-sans font-bold uppercase tracking-wider transition-zen bg-zen-sage/10 text-zen-earth">Tổng Quan</button>
+                        <button onclick="setViewMode('analyst')" id="btn-view-analyst" class="px-6 py-2 rounded-full text-[12px] font-sans font-bold uppercase tracking-wider transition-zen text-zen-muted hover:text-zen-earth">Chi Tiết</button>
                     </div>
                 </div>
 
-                <div class="flex space-x-2 mt-4 md:mt-0 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
-                    <button onclick="filterBrand('all')" id="btn-all" class="nav-btn px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 transition-luxury nav-btn-active">Tổng Hệ Thống</button>
-                    <button onclick="filterBrand('Phục Linh')" id="btn-phuc-linh" class="nav-btn px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 transition-luxury">Phục Linh</button>
-                    <button onclick="filterBrand('An Nhiên')" id="btn-an-nhien" class="nav-btn px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 transition-luxury">An Nhiên</button>
-                    <button onclick="filterBrand('An Nguyên')" id="btn-an-nguyen" class="nav-btn px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 transition-luxury">An Nguyên</button>
+                <div class="flex space-x-3 mt-4 md:mt-0 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+                    <button onclick="filterBrand('all')" id="btn-all" class="nav-btn px-5 py-2.5 rounded-xl text-[12px] font-sans font-bold uppercase tracking-wider border border-zen-sage/20 text-zen-earth hover:bg-white transition-zen nav-btn-active">Hệ Thống</button>
+                    <button onclick="filterBrand('Phục Linh')" id="btn-phuc-linh" class="nav-btn px-5 py-2.5 rounded-xl text-[12px] font-sans font-bold uppercase tracking-wider bg-transparent border border-zen-sage/20 text-zen-muted hover:bg-white hover:text-zen-earth transition-zen">Phục Linh</button>
+                    <button onclick="filterBrand('An Nhiên')" id="btn-an-nhien" class="nav-btn px-5 py-2.5 rounded-xl text-[12px] font-sans font-bold uppercase tracking-wider bg-transparent border border-zen-sage/20 text-zen-muted hover:bg-white hover:text-zen-earth transition-zen">An Nhiên</button>
+                    <button onclick="filterBrand('An Nguyên')" id="btn-an-nguyen" class="nav-btn px-5 py-2.5 rounded-xl text-[12px] font-sans font-bold uppercase tracking-wider bg-transparent border border-zen-sage/20 text-zen-muted hover:bg-white hover:text-zen-earth transition-zen">An Nguyên</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="relative bg-slate-50 py-20 px-6 mb-12 overflow-hidden border-b border-slate-200">
-        <!-- Subtle Animated Background -->
-        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-200/20 rounded-full mix-blend-multiply filter blur-[100px] animate-blob"></div>
-        <div class="absolute -bottom-32 -left-32 w-[400px] h-[400px] bg-emerald-100/40 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-2000"></div>
+    <!-- Hero Section: Zen & Wellness -->
+    <header class="relative py-24 px-6 mb-12 overflow-hidden">
+        <!-- Abstract Zen Background Elements -->
+        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-zen-sage rounded-full mix-blend-multiply filter blur-[120px] opacity-20 animate-breathe"></div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-zen-wood rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-breathe" style="animation-delay: 4s;"></div>
 
-        <div class="max-w-7xl mx-auto relative z-10 animate-fade-in-up">
+        <div class="max-w-7xl mx-auto relative z-10 animate-fade-in">
             <div class="flex flex-col lg:flex-row justify-between items-end">
                 <div class="max-w-4xl">
-                    <!-- Editorial Typography -->
-                    <h1 id="main-headline" class="font-display text-4xl md:text-[52px] leading-[1.05] font-bold tracking-tight text-slate-900 mb-6">
-                        Tháng 12 đạt <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">4,616,491,200 VND</span><br>Tăng trưởng tập trung nhóm Key Accounts.
+                    <h1 id="main-headline" class="font-display text-5xl md:text-[64px] leading-[1.1] font-medium text-zen-text mb-6">
+                        Tháng 12 đạt <span class="text-zen-earth font-bold">4,616,491,200 VND</span><br>
+                        Tăng trưởng tập trung nhóm Key Accounts.
                     </h1>
                     
-                    <p id="sub-headline" class="font-sans text-slate-500 text-lg md:text-xl font-light leading-relaxed max-w-2xl border-l-2 border-indigo-500 pl-6">
+                    <p id="sub-headline" class="font-sans text-zen-earth text-lg font-medium leading-relaxed max-w-2xl border-l-4 border-zen-sage/50 pl-6 rounded-sm">
                         Dữ liệu xác thực cho thấy Phục Linh chiếm ưu thế tuyệt đối (72%), trong khi An Nguyên đạt hiệu suất vận hành trên mỗi điểm bán tốt nhất hệ thống.
                     </p>
                 </div>
@@ -150,88 +148,82 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 lg:px-8 -mt-8">
+    <main class="max-w-7xl mx-auto px-6 lg:px-8 -mt-4">
         
-        <!-- 1. Smart KPIs: Insight Driven (Luxury Cards) -->
-        <div id="summary-stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 relative z-20">
+        <!-- 1. Smart KPIs: Gentle & Round -->
+        <div id="summary-stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20 relative z-20">
             <!-- Dynamic Content -->
         </div>
 
-        <!-- 2. Strategic Narrative Charts -->
-        <div id="executive-charts" class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8 animate-fade-in-up" style="animation-delay: 0.2s;">
+        <!-- 2. Charts: Flow & Rhythm -->
+        <div id="executive-charts" class="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-12 animate-fade-in" style="animation-delay: 0.2s;">
             <!-- Revenue Mix -->
-            <div class="lg:col-span-1 glass-card p-8 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury transform hover:-translate-y-1">
-                <div class="flex justify-between items-start mb-8">
-                    <div>
-                        <h3 class="font-display text-lg font-bold text-slate-800">Cơ Cấu Doanh Thu</h3>
-                        <p class="font-sans text-[11px] text-slate-400 mt-1 uppercase tracking-wide">Phân bổ nguồn tiền</p>
-                    </div>
+            <div class="lg:col-span-1 glass-card p-10 shadow-zen hover:shadow-zen-hover transition-zen hover:-translate-y-1 duration-700">
+                <div class="mb-8">
+                    <h3 class="font-display text-2xl font-bold text-zen-earth">Cơ Cấu Doanh Thu</h3>
+                    <p class="font-sans text-[12px] text-zen-muted mt-2 tracking-wide font-bold">Phân bổ nguồn tiền</p>
                 </div>
-                <div class="chart-container" style="height: 240px;">
+                <div class="chart-container" style="height: 260px;">
                     <canvas id="revenueChart"></canvas>
                 </div>
-                <div class="mt-8 pt-6 border-t border-slate-100">
-                    <div class="flex items-start space-x-3">
-                        <div class="w-1 h-8 bg-indigo-500 rounded-full mt-1"></div>
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">NHẬN ĐỊNH</p>
-                            <p id="revenue-insight" class="font-sans text-sm text-slate-700 font-medium leading-snug">Phục Linh chi phối 72% tổng doanh thu. Rủi ro tập trung cao.</p>
-                        </div>
+                <div class="mt-8 pt-6 border-t border-zen-sage/10">
+                    <div class="flex items-start space-x-4">
+                        <span class="text-2xl text-zen-sage font-display">❝</span>
+                        <p id="revenue-insight" class="font-sans text-lg text-zen-text font-medium italic leading-relaxed">Phục Linh chi phối 72% tổng doanh thu. Rủi ro tập trung cao.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Operational Trend -->
-            <div class="lg:col-span-2 glass-card p-8 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury transform hover:-translate-y-1">
+            <div class="lg:col-span-2 glass-card p-10 shadow-zen hover:shadow-zen-hover transition-zen hover:-translate-y-1 duration-700">
                 <div class="flex justify-between items-start mb-8">
                     <div>
-                        <h3 class="font-display text-lg font-bold text-slate-800">Nhịp Điệu Vận Hành</h3>
-                        <p class="font-sans text-[11px] text-slate-400 mt-1 uppercase tracking-wide">Biến động lượng khách tuần hoàn</p>
+                        <h3 class="font-display text-2xl font-bold text-zen-earth">Nhịp Điệu Vận Hành</h3>
+                        <p class="font-sans text-[12px] text-zen-muted mt-2 tracking-wide font-bold">Biến động lượng khách tuần hoàn</p>
                     </div>
-                    <div class="flex items-center space-x-2 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
-                        <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                        <span class="font-mono text-[10px] font-bold text-slate-500">XU HƯỚNG THỰC</span>
+                    <div class="px-4 py-1.5 rounded-full bg-zen-sage/10 border border-zen-sage/20">
+                        <span class="font-sans text-[11px] font-bold text-zen-tea uppercase tracking-widest">XU HƯỚNG THỰC</span>
                     </div>
                 </div>
-                <div class="daily-chart-container" style="height: 320px;">
+                <div class="daily-chart-container" style="height: 340px;">
                     <canvas id="dailyGuestChart"></canvas>
                 </div>
             </div>
         </div>
 
         <!-- NEW: Product Performance Chart Section (Dynamic Injection) -->
-        <div id="product-chart-area" class="grid grid-cols-1 mb-16 animate-fade-in-up" style="animation-delay: 0.3s;">
+        <div id="product-chart-area" class="grid grid-cols-1 mb-20 animate-fade-in" style="animation-delay: 0.3s;">
             <!-- Content will be injected here by JS -->
         </div>
 
-        <!-- 3. Analyst View Details (Hidden by default) -->
-        <div id="analyst-section" class="hidden opacity-0 transition-opacity duration-700 ease-in-out">
-            <div class="flex items-center space-x-4 mb-8">
-                <h3 class="font-display text-xl font-bold text-slate-900">Chi Tiết Vận Hành (Chế độ Phân tích)</h3>
-                <div class="h-px flex-1 bg-slate-200"></div>
+        <!-- 3. Analyst View (Hidden by default) -->
+        <div id="analyst-section" class="hidden opacity-0 transition-opacity duration-1000 ease-in-out">
+            <div class="flex items-center space-x-6 mb-10">
+                <h3 class="font-display text-3xl font-bold text-zen-text">Chi Tiết Vận Hành (Chế độ Phân tích)</h3>
+                <div class="h-px flex-1 bg-zen-sage/20"></div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-                <!-- Guest Comparison Bar -->
-                <div class="glass-card p-8 rounded-[24px] shadow-luxury">
-                    <h4 class="font-display font-bold text-slate-700 mb-6">So Sánh Lượng Khách</h4>
-                    <div class="chart-container" style="height: 250px;">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-20">
+                <!-- Guest Comparison -->
+                <div class="glass-card p-10 shadow-zen">
+                    <h4 class="font-display text-xl font-bold text-zen-earth mb-8">So Sánh Lượng Khách</h4>
+                    <div class="chart-container" style="height: 280px;">
                         <canvas id="guestChart"></canvas>
                     </div>
                 </div>
 
                 <!-- Detailed Table -->
-                <div class="glass-card rounded-[24px] shadow-luxury overflow-hidden border border-white">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-50/80 text-slate-500 font-mono text-[10px] uppercase tracking-wider font-semibold border-b border-slate-100">
+                <div class="glass-card shadow-zen overflow-hidden border border-white/50">
+                    <table class="w-full text-left">
+                        <thead class="bg-zen-sage/5 text-zen-earth font-sans text-[11px] uppercase tracking-wider font-bold border-b border-zen-sage/10">
                             <tr>
-                                <th class="p-5 pl-8">Cơ sở</th>
-                                <th class="p-5 text-center">Ngày Đông Nhất</th>
-                                <th class="p-5 text-right">Khách Tối Đa</th>
-                                <th class="p-5 text-right pr-8">TBB (VNĐ)</th>
+                                <th class="p-6 pl-8 font-bold">Cơ sở</th>
+                                <th class="p-6 text-center font-bold">Ngày Đông Nhất</th>
+                                <th class="p-6 text-right font-bold">Khách Tối Đa</th>
+                                <th class="p-6 text-right pr-8 font-bold">TBB (VNĐ)</th>
                             </tr>
                         </thead>
-                        <tbody id="detail-table-body" class="divide-y divide-slate-50 font-mono text-xs text-slate-600">
+                        <tbody id="detail-table-body" class="divide-y divide-zen-sage/5 font-sans text-sm text-zen-text font-medium">
                             <!-- JS Inject -->
                         </tbody>
                     </table>
@@ -239,66 +231,51 @@
             </div>
         </div>
 
-        <!-- 4. Key Takeaways: CEO Box -->
-        <div id="key-takeaways" class="glass-card p-10 rounded-[32px] shadow-2xl bg-slate-900 text-white mb-20 relative overflow-hidden group">
-            <!-- Ambient Glow -->
-            <div class="absolute top-0 right-0 p-40 bg-indigo-500/20 rounded-full blur-[100px] transform translate-x-1/2 -translate-y-1/2 transition-all duration-1000 group-hover:bg-indigo-500/30"></div>
-            <div class="absolute bottom-0 left-0 p-32 bg-emerald-500/10 rounded-full blur-[80px] transform -translate-x-1/2 translate-y-1/2"></div>
+        <!-- 4. Key Takeaways: Zen Wisdom Box -->
+        <div id="key-takeaways" class="glass-card p-12 rounded-[32px] bg-[#F3F1ED] border-none shadow-inner-light mb-24 relative overflow-hidden group">
+            <!-- Decorative Leaf/Stone abstract -->
+            <div class="absolute -right-10 -top-10 w-64 h-64 bg-zen-wood/20 rounded-full blur-3xl"></div>
             
             <div class="relative z-10">
-                <div class="flex items-center space-x-3 mb-8">
-                    <div class="p-2 bg-white/10 rounded-lg backdrop-blur-sm">
-                        <svg class="w-5 h-5 text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </div>
-                    <h3 class="font-display text-xl font-bold tracking-tight">TÓM TẮT ĐIỀU HÀNH</h3>
+                <div class="flex items-center space-x-4 mb-10">
+                    <div class="w-1 h-8 bg-zen-earth rounded-full"></div>
+                    <h3 class="font-display text-3xl font-bold text-zen-text tracking-wide">TÓM TẮT ĐIỀU HÀNH</h3>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div class="space-y-6">
-                        <div class="flex items-start group/item">
-                            <span class="font-mono text-emerald-400 font-bold mr-4 text-sm mt-1 group-hover/item:text-emerald-300 transition-colors">01</span>
-                            <div>
-                                <h4 class="font-display font-bold text-lg text-white mb-1">Phục Linh là trụ cột (Cash Cow)</h4>
-                                <p class="font-sans text-sm text-slate-400 leading-relaxed font-light">Đóng góp <strong class="text-white font-medium">72% doanh thu</strong> toàn hệ thống. Cần chính sách giữ chân khách hàng VIP tại Xã Đàn & Cầu Giấy để bảo vệ dòng tiền.</p>
-                            </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="space-y-8">
+                        <div class="group/item cursor-default">
+                            <h4 class="font-display text-xl font-bold text-zen-earth mb-2 group-hover/item:text-zen-tea transition-colors">1. Trụ Cột Vững Chãi</h4>
+                            <p class="font-sans text-sm text-zen-text/80 leading-relaxed font-medium">Phục Linh đóng vai trò như gốc rễ, cung cấp <strong class="text-zen-earth">72% năng lượng</strong> tài chính. Cần vun đắp nhóm khách hàng thân thiết tại Xã Đàn & Cầu Giấy.</p>
                         </div>
-                        <div class="flex items-start group/item">
-                            <span class="font-mono text-yellow-400 font-bold mr-4 text-sm mt-1 group-hover/item:text-yellow-300 transition-colors">02</span>
-                            <div>
-                                <h4 class="font-display font-bold text-lg text-white mb-1">Điểm nghẽn giá trị tại An Nhiên</h4>
-                                <p class="font-sans text-sm text-slate-400 leading-relaxed font-light">TBB thấp hơn <strong class="text-white font-medium">32%</strong> so với mức trung bình. Cần gói dịch vụ Up-sell mới cho phân khúc này.</p>
-                            </div>
+                        <div class="group/item cursor-default">
+                            <h4 class="font-display text-xl font-bold text-zen-earth mb-2 group-hover/item:text-zen-tea transition-colors">2. Khơi Thông Dòng Chảy</h4>
+                            <p class="font-sans text-sm text-zen-text/80 leading-relaxed font-medium">An Nhiên cần thêm các liệu trình chuyên sâu để nâng cao giá trị mỗi buổi trị liệu (TBB), giúp dòng tiền lưu thông mạnh mẽ hơn.</p>
                         </div>
                     </div>
-                    <div class="space-y-6">
-                        <div class="flex items-start group/item">
-                            <span class="font-mono text-indigo-400 font-bold mr-4 text-sm mt-1 group-hover/item:text-indigo-300 transition-colors">03</span>
-                            <div>
-                                <h4 class="font-display font-bold text-lg text-white mb-1">An Nguyên: Mô hình hiệu suất cao</h4>
-                                <p class="font-sans text-sm text-slate-400 leading-relaxed font-light">Chỉ 1 cơ sở nhưng lượng khách ngang ngửa top Phục Linh. Mô hình tinh gọn <strong class="text-white font-medium">cần nhân rộng (Scalable)</strong>.</p>
-                            </div>
+                    <div class="space-y-8">
+                        <div class="group/item cursor-default">
+                            <h4 class="font-display text-xl font-bold text-zen-earth mb-2 group-hover/item:text-zen-tea transition-colors">3. Mô Hình Tinh Gọn</h4>
+                            <p class="font-sans text-sm text-zen-text/80 leading-relaxed font-medium">An Nguyên tại Long Biên là ví dụ điển hình của sự cân bằng: quy mô nhỏ nhưng hiệu suất cao, tựa như một khu vườn Zen được chăm sóc kỹ lưỡng.</p>
                         </div>
-                        <div class="flex items-start group/item">
-                            <span class="font-mono text-pink-400 font-bold mr-4 text-sm mt-1 group-hover/item:text-pink-300 transition-colors">04</span>
-                            <div>
-                                <h4 class="font-display font-bold text-lg text-white mb-1">Cảnh báo vận hành cuối tuần</h4>
-                                <p class="font-sans text-sm text-slate-400 leading-relaxed font-light">Chủ Nhật là Ngày Cao Điểm tại 50% cơ sở. Cần phương án điều phối nhân sự linh hoạt để đảm bảo trải nghiệm khách hàng.</p>
-                            </div>
+                        <div class="group/item cursor-default">
+                            <h4 class="font-display text-xl font-bold text-zen-earth mb-2 group-hover/item:text-zen-tea transition-colors">4. Điều Hòa Nhịp Điệu</h4>
+                            <p class="font-sans text-sm text-zen-text/80 leading-relaxed font-medium">Chủ Nhật là thời điểm năng lượng tập trung cao nhất. Cần điều phối nhân sự uyển chuyển để không gian luôn giữ được sự tĩnh tại cho khách hàng.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <footer class="flex justify-between items-center pt-8 border-t border-slate-200">
-            <p class="font-mono text-[10px] text-slate-400 uppercase tracking-widest">Tài liệu mật • Chỉ lưu hành nội bộ</p>
-            <p class="font-mono text-[10px] text-slate-400">Hệ thống v2.4 • Được tạo bởi FinanceHub</p>
+        <footer class="text-center pt-10 border-t border-zen-sage/10">
+            <p class="font-display text-lg text-zen-wood italic font-medium">"Cân bằng tài chính, nuôi dưỡng thành công"</p>
+            <p class="font-sans text-[10px] text-zen-muted mt-2 uppercase tracking-widest font-bold">Tài liệu mật • Chỉ lưu hành nội bộ</p>
         </footer>
 
     </main>
 
     <script>
-        // --- DATA LAYER (UNCHANGED) ---
+        // --- DATA LAYER ---
         const rawData = [
             { brand: 'Phục Linh', branch: 'Xã Đàn', guests: 220, revenue: 1064449000, tbb: 4838405, peakDay: 'Thứ Hai', peakGuests: 41 },
             { brand: 'Phục Linh', branch: 'Cầu Giấy', guests: 194, revenue: 941188000, tbb: 4851485, peakDay: 'Thứ Tư', peakGuests: 35 },
@@ -316,9 +293,6 @@
             'An Nguyên': [34, 46, 28, 25, 19, 30, 25]
         };
 
-        // --- REAL PRODUCT DATA ---
-        // Extracted & Processed from TongHop.csv
-        // Structure: All > Brand > Branch (if applicable)
         const productData = {
           "all": {
             "labels": ["SP50", "SP18", "SP78", "SP51", "SP20", "SP19", "SP75", "SP79", "SP74", "SP24", "SP76", "SP21", "SP77", "HH10", "SP15", "SP17", "SP25"],
@@ -383,7 +357,7 @@
         const SYSTEM_AVG_TBB = 3879400;
 
         let revenueChart, dailyGuestChart, guestChart;
-        let productCharts = []; // Array to store multiple product charts
+        let productCharts = [];
 
         // --- UI LOGIC ---
 
@@ -396,21 +370,20 @@
                 analystSection.classList.add('hidden', 'opacity-0');
                 analystSection.classList.remove('block', 'opacity-100');
                 
-                // Toggle Styles
-                btnExec.classList.add('bg-white', 'shadow-sm', 'text-slate-800', 'border-slate-200/50');
-                btnExec.classList.remove('text-slate-400');
+                btnExec.classList.remove('bg-transparent', 'text-zen-muted');
+                btnExec.classList.add('bg-white', 'text-zen-earth', 'shadow-sm');
                 
-                btnAnalyst.classList.remove('bg-white', 'shadow-sm', 'text-slate-800', 'border-slate-200/50');
-                btnAnalyst.classList.add('text-slate-400');
+                btnAnalyst.classList.add('bg-transparent', 'text-zen-muted');
+                btnAnalyst.classList.remove('bg-white', 'text-zen-earth', 'shadow-sm');
             } else {
                 analystSection.classList.remove('hidden');
                 setTimeout(() => analystSection.classList.remove('opacity-0'), 20);
                 
-                btnAnalyst.classList.add('bg-white', 'shadow-sm', 'text-slate-800', 'border-slate-200/50');
-                btnAnalyst.classList.remove('text-slate-400');
+                btnAnalyst.classList.remove('bg-transparent', 'text-zen-muted');
+                btnAnalyst.classList.add('bg-white', 'text-zen-earth', 'shadow-sm');
 
-                btnExec.classList.remove('bg-white', 'shadow-sm', 'text-slate-800', 'border-slate-200/50');
-                btnExec.classList.add('text-slate-400');
+                btnExec.classList.add('bg-transparent', 'text-zen-muted');
+                btnExec.classList.remove('bg-white', 'text-zen-earth', 'shadow-sm');
                 
                 analystSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
@@ -421,14 +394,14 @@
             updateUI(filteredData, brand);
             
             document.querySelectorAll('.nav-btn').forEach(b => {
-                b.classList.remove('nav-btn-active', 'bg-slate-900', 'text-white');
-                b.classList.add('bg-white', 'text-slate-500');
+                b.classList.remove('nav-btn-active', 'bg-zen-tea', 'text-white', 'border-transparent');
+                b.classList.add('bg-transparent', 'text-zen-muted', 'border-zen-sage/20');
             });
             
             const btnId = brand === 'all' ? 'btn-all' : 'btn-' + brand.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
             const activeBtn = document.getElementById(btnId);
             activeBtn.classList.add('nav-btn-active');
-            activeBtn.classList.remove('bg-white', 'text-slate-500');
+            activeBtn.classList.remove('bg-transparent', 'text-zen-muted', 'border-zen-sage/20');
         }
 
         function updateUI(data, brandName) {
@@ -436,87 +409,88 @@
             const totalGuests = data.reduce((s, d) => s + d.guests, 0);
             const avgTbb = Math.round(totalRev / totalGuests);
 
+            // Headlines updated with Zen language
             if (brandName === 'all') {
-                document.getElementById('main-headline').innerHTML = `Tháng 12 đạt <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">${totalRev.toLocaleString()} VND</span><br>Tăng trưởng tập trung nhóm Key Accounts.`;
+                document.getElementById('main-headline').innerHTML = `Tháng 12 đạt <span class="text-zen-earth font-bold">${totalRev.toLocaleString()} VND</span><br>Tăng trưởng tập trung nhóm Key Accounts.`;
                 document.getElementById('sub-headline').innerText = "Dữ liệu xác thực cho thấy Phục Linh chiếm ưu thế tuyệt đối (72%), trong khi An Nguyên đạt hiệu suất vận hành trên mỗi điểm bán tốt nhất hệ thống.";
             } else if (brandName === 'Phục Linh') {
-                document.getElementById('main-headline').innerHTML = `Phục Linh: <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">${totalRev.toLocaleString()} VND</span><br>Chiếm lĩnh 72% thị phần hệ thống.`;
+                document.getElementById('main-headline').innerHTML = `Phục Linh: <span class="text-zen-earth font-bold">${totalRev.toLocaleString()} VND</span><br>Chiếm lĩnh 72% thị phần hệ thống.`;
                 document.getElementById('sub-headline').innerText = "Cơ sở Xã Đàn và Cầu Giấy đang dẫn đầu về hiệu suất tài chính (TBB > 4.8M), đóng vai trò Cash Cow.";
             } else if (brandName === 'An Nhiên') {
-                document.getElementById('main-headline').innerHTML = `An Nhiên: <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-500">${totalRev.toLocaleString()} VND</span><br>Tiềm năng tối ưu hóa giá trị đơn hàng.`;
+                document.getElementById('main-headline').innerHTML = `An Nhiên: <span class="text-zen-earth font-bold">${totalRev.toLocaleString()} VND</span><br>Tiềm năng tối ưu hóa giá trị đơn hàng.`;
                 document.getElementById('sub-headline').innerText = "TBB hiện tại thấp hơn mức trung bình hệ thống, đây là dư địa tăng trưởng lớn nhất cho Q1/2026.";
             } else {
-                document.getElementById('main-headline').innerHTML = `An Nguyên: <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-400">MÔ HÌNH HIỆU QUẢ CAO</span><br>1 cơ sở tạo ra doanh thu ngang Top 3.`;
+                document.getElementById('main-headline').innerHTML = `An Nguyên: <span class="text-zen-earth font-bold">MÔ HÌNH HIỆU QUẢ CAO</span><br>1 cơ sở tạo ra doanh thu ngang Top 3.`;
                 document.getElementById('sub-headline').innerText = "Long Biên chứng minh hiệu quả vận hành vượt trội với lượng khách ổn định và chi phí tối ưu.";
             }
 
+            // Calculations
             let revShare = ((totalRev / SYSTEM_TOTAL_REV) * 100).toFixed(1);
             let tbbDiff = ((avgTbb - SYSTEM_AVG_TBB) / SYSTEM_AVG_TBB * 100).toFixed(1);
-            let tbbColor = tbbDiff >= 0 ? 'text-emerald-luxury' : 'text-red-500';
-            let tbbBg = tbbDiff >= 0 ? 'bg-emerald-50' : 'bg-red-50';
-            let tbbIcon = tbbDiff >= 0 ? '▲' : '▼';
+            let tbbIcon = tbbDiff >= 0 ? '+' : '';
 
+            // --- ZEN KPI CARDS ---
             document.getElementById('summary-stats').innerHTML = `
-                <div class="glass-card p-6 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury hover:scale-[1.02] cursor-default border-l-4 border-indigo-600">
-                    <p class="font-sans text-[10px] font-bold text-slate-400 uppercase tracking-[0.18em] mb-2">Tổng Doanh Thu</p>
-                    <div class="flex items-baseline space-x-1">
-                        <p class="font-mono text-[24px] font-bold text-slate-800 tracking-tighter">${totalRev.toLocaleString()}</p>
-                        <span class="font-sans text-sm text-slate-400 font-medium">VND</span>
+                <!-- Revenue -->
+                <div class="glass-card p-8 hover:-translate-y-1 transition-zen duration-700">
+                    <p class="font-sans text-[11px] text-zen-muted uppercase tracking-[0.2em] mb-3 font-bold">Tổng Doanh Thu</p>
+                    <div class="flex flex-col">
+                        <p class="font-display text-[28px] text-zen-text leading-none font-bold">${totalRev.toLocaleString()}</p>
+                        <span class="font-sans text-xs text-zen-sage mt-1 font-bold italic">VND</span>
                     </div>
-                    <div class="mt-3 flex items-center">
-                         <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-[10px] font-bold uppercase tracking-wider rounded border border-indigo-100">
-                            Đóng góp ${revShare}%
-                         </span>
-                    </div>
-                </div>
-                <div class="glass-card p-6 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury hover:scale-[1.02] cursor-default border-l-4 border-emerald-500">
-                    <p class="font-sans text-[10px] font-bold text-slate-400 uppercase tracking-[0.18em] mb-2">Tổng Lượt Khách</p>
-                    <div class="flex items-baseline space-x-1">
-                        <p class="font-mono text-[24px] font-bold text-slate-800 tracking-tighter">${totalGuests.toLocaleString()}</p>
-                        <span class="font-sans text-sm text-slate-400 font-medium">Khách</span>
-                    </div>
-                    <div class="mt-3 flex items-center">
-                         <span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider rounded border border-emerald-100">
-                            Lưu lượng ổn định
-                         </span>
+                    <div class="mt-4 pt-4 border-t border-zen-sage/10">
+                         <p class="text-xs text-zen-muted font-medium">Đóng góp <span class="text-zen-earth font-bold">${revShare}%</span></p>
                     </div>
                 </div>
-                <div class="glass-card p-6 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury hover:scale-[1.02] cursor-default border-l-4 border-amber-400">
-                    <p class="font-sans text-[10px] font-bold text-slate-400 uppercase tracking-[0.18em] mb-2">Giá Trị Bill TB (TBB)</p>
-                    <div class="flex items-baseline space-x-1">
-                        <p class="font-mono text-[24px] font-bold text-slate-800 tracking-tighter">${avgTbb.toLocaleString()}</p>
-                        <span class="font-sans text-sm text-slate-400 font-medium">VND</span>
+
+                <!-- Guests -->
+                <div class="glass-card p-8 hover:-translate-y-1 transition-zen duration-700">
+                    <p class="font-sans text-[11px] text-zen-muted uppercase tracking-[0.2em] mb-3 font-bold">Tổng Lượt Khách</p>
+                    <div class="flex flex-col">
+                        <p class="font-display text-[28px] text-zen-text leading-none font-bold">${totalGuests.toLocaleString()}</p>
+                        <span class="font-sans text-xs text-zen-sage mt-1 font-bold italic">Khách</span>
                     </div>
-                    <div class="mt-3 flex items-center">
-                         <span class="px-2 py-1 ${tbbBg} ${tbbColor} text-[10px] font-bold uppercase tracking-wider rounded border border-slate-100">
-                            ${tbbIcon} ${Math.abs(tbbDiff)}% so với TB hệ thống
-                         </span>
+                    <div class="mt-4 pt-4 border-t border-zen-sage/10">
+                         <p class="text-xs text-zen-muted font-medium">Lưu lượng ổn định</p>
                     </div>
                 </div>
-                <div class="glass-card p-6 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury hover:scale-[1.02] cursor-default border-l-4 border-slate-400">
-                    <p class="font-sans text-[10px] font-bold text-slate-400 uppercase tracking-[0.18em] mb-2">Hiệu Suất Vận Hành</p>
-                    <div class="flex items-baseline space-x-1">
-                        <p class="font-mono text-[24px] font-bold text-slate-800 tracking-tighter">${Math.round(totalGuests/data.length)}</p>
-                        <span class="font-sans text-sm text-slate-400 font-medium">Khách / Cơ sở</span>
+
+                <!-- TBB -->
+                <div class="glass-card p-8 hover:-translate-y-1 transition-zen duration-700">
+                    <p class="font-sans text-[11px] text-zen-muted uppercase tracking-[0.2em] mb-3 font-bold">Giá Trị Bill TB (TBB)</p>
+                    <div class="flex flex-col">
+                        <p class="font-display text-[28px] text-zen-text leading-none font-bold">${avgTbb.toLocaleString()}</p>
+                        <span class="font-sans text-xs text-zen-sage mt-1 font-bold italic">VND</span>
                     </div>
-                    <div class="mt-3 flex items-center">
-                         <span class="px-2 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider rounded border border-slate-200">
-                            Tải vận hành
-                         </span>
+                    <div class="mt-4 pt-4 border-t border-zen-sage/10">
+                         <p class="text-xs text-zen-muted font-medium">${tbbIcon}${Math.abs(tbbDiff)}% so với TB hệ thống</p>
+                    </div>
+                </div>
+
+                <!-- Efficiency -->
+                <div class="glass-card p-8 hover:-translate-y-1 transition-zen duration-700">
+                    <p class="font-sans text-[11px] text-zen-muted uppercase tracking-[0.2em] mb-3 font-bold">Hiệu Suất Vận Hành</p>
+                    <div class="flex flex-col">
+                        <p class="font-display text-[28px] text-zen-text leading-none font-bold">${Math.round(totalGuests/data.length)}</p>
+                        <span class="font-sans text-xs text-zen-sage mt-1 font-bold italic">Khách / Cơ sở</span>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-zen-sage/10">
+                         <p class="text-xs text-zen-muted font-medium">Tải vận hành</p>
                     </div>
                 </div>
             `;
 
+            // Update Table
             let tableHTML = '';
             data.forEach(d => {
                 tableHTML += `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="p-5 pl-8 font-sans font-semibold text-slate-700 border-r border-slate-100/50">${d.branch}</td>
-                        <td class="p-5 text-center text-indigo-600 font-bold">
-                            <span class="bg-indigo-50 px-3 py-1 rounded-full text-[11px] uppercase tracking-wide">${d.peakDay}</span>
+                    <tr class="hover:bg-zen-sage/5 transition-colors group">
+                        <td class="p-6 pl-8 font-sans text-zen-text font-bold border-b border-zen-sage/5 group-last:border-none">${d.branch}</td>
+                        <td class="p-6 text-center border-b border-zen-sage/5 group-last:border-none">
+                            <span class="text-zen-tea font-display text-lg italic font-bold">${d.peakDay}</span>
                         </td>
-                        <td class="p-5 text-right font-mono text-slate-600">${d.peakGuests}</td>
-                        <td class="p-5 pr-8 text-right font-mono font-bold text-emerald-600">${d.tbb.toLocaleString()}</td>
+                        <td class="p-6 text-right font-sans text-zen-muted border-b border-zen-sage/5 group-last:border-none font-medium">${d.peakGuests}</td>
+                        <td class="p-6 pr-8 text-right font-sans text-zen-earth font-bold border-b border-zen-sage/5 group-last:border-none">${d.tbb.toLocaleString()}</td>
                     </tr>
                 `;
             });
@@ -530,15 +504,15 @@
             if (dailyGuestChart) dailyGuestChart.destroy();
             if (guestChart) guestChart.destroy();
             
-            // Destroy existing product charts
             productCharts.forEach(c => c.destroy());
             productCharts = [];
 
-            Chart.defaults.font.family = "'Inter', sans-serif";
-            Chart.defaults.color = '#94a3b8';
-            Chart.defaults.scale.grid.color = '#f1f5f9';
+            // ZEN CHART CONFIG
+            Chart.defaults.font.family = "'Nunito', sans-serif";
+            Chart.defaults.color = '#8B8B8B'; // Muted text
+            Chart.defaults.scale.grid.color = '#F0F0F0'; // Very light grid
 
-            // 1. Revenue Chart
+            // 1. Revenue Chart (Soft Earth Tones)
             let chart1Labels, chart1Data;
             if (brandName === 'all') {
                 chart1Labels = ['Phục Linh', 'An Nhiên', 'An Nguyên'];
@@ -554,86 +528,71 @@
                     labels: chart1Labels,
                     datasets: [{
                         data: chart1Data,
-                        backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'],
+                        // Zen Palette: Sage, Tea, Wood, Earth, Sand
+                        backgroundColor: ['#8FAF9F', '#D4A373', '#CBBFA3', '#6B8F71', '#A89F91'],
                         borderWidth: 0,
-                        hoverOffset: 12
+                        hoverOffset: 8
                     }]
                 },
                 options: { 
                     maintainAspectRatio: false, 
-                    cutout: '80%',
-                    animation: { animateScale: true, animateRotate: true },
+                    cutout: '85%', // Very thin elegant ring
+                    animation: { animateScale: true, animateRotate: true, duration: 2000, easing: 'easeOutQuart' },
                     plugins: { 
-                        legend: { position: 'right', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { size: 11, family: 'Inter', weight: '500' }, color: '#475569' } },
-                        tooltip: { backgroundColor: '#1e293b', padding: 16, cornerRadius: 8, titleFont: {family: 'Space Grotesk'}, bodyFont: {family: 'JetBrains Mono'}, displayColors: false, callbacks: { label: (c) => `  ${c.label}: ${c.parsed.toLocaleString()} VND` } }
+                        legend: { position: 'right', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { size: 13, weight: '600' }, color: '#7A6A53' } },
+                        tooltip: { backgroundColor: '#FAFAF8', titleColor: '#3F3F3F', bodyColor: '#7A6A53', borderColor: '#E5E5E5', borderWidth: 1, padding: 12, displayColors: true, callbacks: { label: (c) => ` ${c.label}` } }
                     } 
                 }
             });
 
-            // 2. Daily Guest Chart
+            // 2. Daily Guest Chart (Organic Line)
             const currentDailyData = dailyData[brandName] || dailyData['all'];
             const ctxDaily = document.getElementById('dailyGuestChart').getContext('2d');
             const gradient = ctxDaily.createLinearGradient(0, 0, 0, 300);
-            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.15)'); 
-            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+            gradient.addColorStop(0, 'rgba(107, 143, 113, 0.2)'); // Tea color low opacity
+            gradient.addColorStop(1, 'rgba(107, 143, 113, 0.0)');
 
             dailyGuestChart = new Chart(ctxDaily, {
                 type: 'line',
                 data: {
                     labels: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'],
                     datasets: [{
-                        label: 'Guests',
+                        label: 'Khách',
                         data: currentDailyData,
-                        borderColor: '#10b981',
+                        borderColor: '#6B8F71', // Zen Tea
                         backgroundColor: gradient,
-                        borderWidth: 2,
-                        pointBackgroundColor: '#ffffff',
-                        pointBorderColor: '#10b981',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#FAFAF8',
+                        pointBorderColor: '#6B8F71',
                         pointBorderWidth: 2,
-                        pointRadius: 4,
-                        pointHoverRadius: 8,
-                        pointHoverBorderWidth: 3,
-                        fill: true,
-                        tension: 0.45
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        tension: 0.5 // Very smooth organic curve
                     }]
                 },
                 options: {
                     maintainAspectRatio: false,
                     scales: {
-                        y: { beginAtZero: true, grid: { borderDash: [4, 4], drawBorder: false }, ticks: { display: false } },
-                        x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 }, color: '#94a3b8' } }
+                        y: { beginAtZero: true, grid: { borderDash: [8, 8], drawBorder: false }, ticks: { display: false } },
+                        x: { grid: { display: false }, ticks: { color: '#8B8B8B', font: { size: 12, weight: '600' } } }
                     },
                     plugins: { 
                         legend: { display: false },
-                        tooltip: { 
-                            backgroundColor: '#0f172a', 
-                            titleFont: { family: 'Space Grotesk', size: 12 },
-                            bodyFont: { family: 'JetBrains Mono', size: 14 },
-                            padding: 14,
-                            cornerRadius: 6,
-                            displayColors: false,
-                            intersect: false,
-                            mode: 'index',
-                            callbacks: { label: (c) => `Lượt khách: ${c.parsed.y}` }
-                        }
-                    },
-                    interaction: { mode: 'nearest', axis: 'x', intersect: false }
+                        tooltip: { backgroundColor: '#FAFAF8', titleColor: '#3F3F3F', bodyColor: '#6B8F71', borderColor: '#E5E5E5', borderWidth: 1, padding: 14 }
+                    }
                 }
             });
 
-            // 3. PRODUCT CHARTS (Dynamic Injection for multiple branches)
+            // 3. PRODUCT CHARTS (Zen Bars)
             const productChartArea = document.getElementById('product-chart-area');
-            productChartArea.innerHTML = ''; // Clear previous
+            productChartArea.innerHTML = '';
 
             if (brandName === 'all') {
-                // Show 1 big chart for All
                 const html = `
-                    <div class="glass-card p-8 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury transform hover:-translate-y-1 border-l-4 border-indigo-500">
-                        <div class="flex justify-between items-start mb-6">
-                            <div>
-                                <h3 class="font-display text-lg font-bold text-slate-800">Toàn Bộ Danh Mục Sản Phẩm (Hệ Thống)</h3>
-                                <p class="font-sans text-[11px] text-slate-400 mt-1 uppercase tracking-wide">Tổng hợp số lượng bán ra</p>
-                            </div>
+                    <div class="glass-card p-10 shadow-zen">
+                        <div class="mb-8 border-b border-zen-sage/10 pb-4">
+                            <h3 class="font-display text-2xl font-bold text-zen-earth">Toàn Bộ Danh Mục Sản Phẩm (Hệ Thống)</h3>
+                            <p class="font-sans text-[12px] text-zen-muted mt-1 uppercase tracking-wide font-bold">Tổng hợp số lượng bán ra</p>
                         </div>
                         <div class="product-chart-container" id="container-all" style="height: 500px;">
                             <canvas id="productChart-all"></canvas>
@@ -645,25 +604,20 @@
                 createProductChart(ctx, productData['all'].labels, productData['all'].data);
 
             } else {
-                // Show multiple charts for branches
                 const brandInfo = productData[brandName];
                 if (brandInfo && brandInfo.branches) {
-                    // Grid layout for multiple charts if needed, or stacked vertical
-                    productChartArea.className = "grid grid-cols-1 gap-8 mb-16 animate-fade-in-up";
+                    productChartArea.className = "grid grid-cols-1 gap-10 mb-20 animate-fade-in";
                     
                     brandInfo.branches.forEach((branch, index) => {
                         const canvasId = `productChart-${index}`;
                         const containerId = `container-${index}`;
-                        // Calculate height based on items
-                        const height = Math.max(250, branch.labels.length * 35); 
+                        const height = Math.max(250, branch.labels.length * 40); 
 
                         const html = `
-                            <div class="glass-card p-8 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury transform hover:-translate-y-1 border-l-4 border-indigo-500">
-                                <div class="flex justify-between items-start mb-6">
-                                    <div>
-                                        <h3 class="font-display text-lg font-bold text-slate-800">${branch.name}</h3>
-                                        <p class="font-sans text-[11px] text-slate-400 mt-1 uppercase tracking-wide">Chi tiết mã hàng bán ra</p>
-                                    </div>
+                            <div class="glass-card p-10 shadow-zen">
+                                <div class="mb-8 border-b border-zen-sage/10 pb-4">
+                                    <h3 class="font-display text-2xl font-bold text-zen-earth">${branch.name}</h3>
+                                    <p class="font-sans text-[12px] text-zen-muted mt-1 uppercase tracking-wide font-bold">Chi tiết mã hàng bán ra</p>
                                 </div>
                                 <div class="product-chart-container" id="${containerId}" style="height: ${height}px;">
                                     <canvas id="${canvasId}"></canvas>
@@ -685,13 +639,17 @@
                     datasets: [{
                         label: 'Guests',
                         data: data.map(d => d.guests),
-                        backgroundColor: '#e2e8f0', 
-                        hoverBackgroundColor: '#4f46e5',
+                        backgroundColor: '#CBBFA3', // Wood color
+                        hoverBackgroundColor: '#8FAF9F', // Sage hover
                         borderRadius: 4,
-                        barThickness: 40
+                        barThickness: 30
                     }]
                 },
-                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 } } } } }
+                options: { 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } }, 
+                    scales: { y: { display: false }, x: { grid: { display: false } } } 
+                }
             });
         }
 
@@ -701,28 +659,24 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Số lượng bán',
+                        label: 'Số lượng',
                         data: data,
-                        backgroundColor: '#6366f1',
-                        borderRadius: 4,
-                        barThickness: 15
+                        backgroundColor: '#8FAF9F', // Sage Green
+                        hoverBackgroundColor: '#6B8F71', // Tea Green
+                        borderRadius: 6,
+                        barThickness: 14
                     }]
                 },
                 options: {
                     indexAxis: 'y',
                     maintainAspectRatio: false,
                     scales: {
-                        x: { beginAtZero: true, grid: { borderDash: [4, 4] } },
-                        y: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11, weight: '500' }, color: '#475569' } }
+                        x: { beginAtZero: true, grid: { borderDash: [4, 4] }, ticks: { display: false } },
+                        y: { grid: { display: false }, ticks: { font: { family: 'Nunito', size: 13, weight: '600' }, color: '#3F3F3F' } }
                     },
                     plugins: {
                         legend: { display: false },
-                        tooltip: {
-                            backgroundColor: '#1e293b',
-                            padding: 12,
-                            cornerRadius: 6,
-                            callbacks: { label: (c) => `  Đã bán: ${c.parsed.x}` }
-                        }
+                        tooltip: { backgroundColor: '#FAFAF8', titleColor: '#3F3F3F', bodyColor: '#6B8F71', borderColor: '#E5E5E5', borderWidth: 1, padding: 12 }
                     }
                 }
             });
