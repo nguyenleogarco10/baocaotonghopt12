@@ -61,6 +61,8 @@
         body { background-color: #f8fafc; color: #1e293b; }
         .chart-container { position: relative; height: 320px; width: 100%; }
         .daily-chart-container { position: relative; height: 380px; width: 100%; }
+        /* Dynamic height handled by JS, min-height set here */
+        .product-chart-container { position: relative; min-height: 400px; width: 100%; }
         
         /* Glassmorphism Refined */
         .glass-card { 
@@ -156,7 +158,7 @@
         </div>
 
         <!-- 2. Strategic Narrative Charts -->
-        <div id="executive-charts" class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 animate-fade-in-up" style="animation-delay: 0.2s;">
+        <div id="executive-charts" class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8 animate-fade-in-up" style="animation-delay: 0.2s;">
             <!-- Revenue Mix -->
             <div class="lg:col-span-1 glass-card p-8 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury transform hover:-translate-y-1">
                 <div class="flex justify-between items-start mb-8">
@@ -195,6 +197,11 @@
                     <canvas id="dailyGuestChart"></canvas>
                 </div>
             </div>
+        </div>
+
+        <!-- NEW: Product Performance Chart Section (Dynamic Injection) -->
+        <div id="product-chart-area" class="grid grid-cols-1 mb-16 animate-fade-in-up" style="animation-delay: 0.3s;">
+            <!-- Content will be injected here by JS -->
         </div>
 
         <!-- 3. Analyst View Details (Hidden by default) -->
@@ -309,10 +316,74 @@
             'An Nguyên': [34, 46, 28, 25, 19, 30, 25]
         };
 
+        // --- REAL PRODUCT DATA ---
+        // Extracted & Processed from TongHop.csv
+        // Structure: All > Brand > Branch (if applicable)
+        const productData = {
+          "all": {
+            "labels": ["SP50", "SP18", "SP78", "SP51", "SP20", "SP19", "SP75", "SP79", "SP74", "SP24", "SP76", "SP21", "SP77", "HH10", "SP15", "SP17", "SP25"],
+            "data": [2319, 194, 164, 125, 81, 46, 16, 14, 14, 12, 11, 8, 2, 2, 1, 1, 1]
+          },
+          "An Nhiên": {
+            "labels": ["SP18", "SP17", "SP20", "SP24"],
+            "data": [4, 1, 1, 1],
+            "branches": [
+                {
+                    "name": "An Nhiên - ADV",
+                    "labels": ["SP18", "SP20", "SP24"],
+                    "data": [4, 1, 1]
+                },
+                {
+                    "name": "An Nhiên - CMT8",
+                    "labels": ["SP17"],
+                    "data": [1]
+                }
+            ]
+          },
+          "An Nguyên": {
+            "labels": ["SP18", "SP24", "SP20", "SP21", "HH10", "SP15", "SP25"],
+            "data": [188, 11, 10, 6, 2, 1, 1],
+            "branches": [
+                {
+                    "name": "An Nguyên - Long Biên",
+                    "labels": ["SP18", "SP24", "SP20", "SP21", "HH10", "SP15", "SP25"],
+                    "data": [188, 11, 10, 6, 2, 1, 1]
+                }
+            ]
+          },
+          "Phục Linh": {
+            "labels": ["SP50", "SP78", "SP51", "SP20", "SP19", "SP75", "SP74", "SP79", "SP76", "SP18", "SP21", "SP77"],
+            "data": [2319, 164, 125, 70, 46, 16, 14, 14, 11, 2, 2, 2],
+            "branches": [
+                {
+                    "name": "Phục Linh - Xã Đàn",
+                    "labels": ["SP50", "SP78", "SP51", "SP19", "SP74", "SP75", "SP20", "SP76", "SP18", "SP77", "SP79"],
+                    "data": [783, 40, 19, 12, 10, 10, 9, 9, 1, 1, 1]
+                },
+                {
+                    "name": "Phục Linh - Cầu Giấy",
+                    "labels": ["SP50", "SP78", "SP51", "SP20", "SP75", "SP79", "SP19", "SP21", "SP77"],
+                    "data": [588, 101, 46, 12, 6, 5, 4, 1, 1]
+                },
+                {
+                    "name": "Phục Linh - Hà Đông",
+                    "labels": ["SP50", "SP20", "SP19", "SP78", "SP79", "SP74", "SP76", "SP21"],
+                    "data": [889, 41, 22, 13, 6, 3, 2, 1]
+                },
+                {
+                    "name": "Phục Linh - Hải Phòng",
+                    "labels": ["SP51", "SP50", "SP78", "SP19", "SP20", "SP79", "SP18", "SP74"],
+                    "data": [60, 59, 10, 8, 8, 2, 1, 1]
+                }
+            ]
+          }
+        };
+
         const SYSTEM_TOTAL_REV = 4616491200;
         const SYSTEM_AVG_TBB = 3879400;
 
         let revenueChart, dailyGuestChart, guestChart;
+        let productCharts = []; // Array to store multiple product charts
 
         // --- UI LOGIC ---
 
@@ -333,7 +404,6 @@
                 btnAnalyst.classList.add('text-slate-400');
             } else {
                 analystSection.classList.remove('hidden');
-                // Allow DOM to update before transition
                 setTimeout(() => analystSection.classList.remove('opacity-0'), 20);
                 
                 btnAnalyst.classList.add('bg-white', 'shadow-sm', 'text-slate-800', 'border-slate-200/50');
@@ -350,7 +420,6 @@
             const filteredData = brand === 'all' ? rawData : rawData.filter(d => d.brand === brand);
             updateUI(filteredData, brand);
             
-            // Refined Nav Button States
             document.querySelectorAll('.nav-btn').forEach(b => {
                 b.classList.remove('nav-btn-active', 'bg-slate-900', 'text-white');
                 b.classList.add('bg-white', 'text-slate-500');
@@ -367,7 +436,6 @@
             const totalGuests = data.reduce((s, d) => s + d.guests, 0);
             const avgTbb = Math.round(totalRev / totalGuests);
 
-            // Update Headlines
             if (brandName === 'all') {
                 document.getElementById('main-headline').innerHTML = `Tháng 12 đạt <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">${totalRev.toLocaleString()} VND</span><br>Tăng trưởng tập trung nhóm Key Accounts.`;
                 document.getElementById('sub-headline').innerText = "Dữ liệu xác thực cho thấy Phục Linh chiếm ưu thế tuyệt đối (72%), trong khi An Nguyên đạt hiệu suất vận hành trên mỗi điểm bán tốt nhất hệ thống.";
@@ -382,17 +450,13 @@
                 document.getElementById('sub-headline').innerText = "Long Biên chứng minh hiệu quả vận hành vượt trội với lượng khách ổn định và chi phí tối ưu.";
             }
 
-            // Calculations
             let revShare = ((totalRev / SYSTEM_TOTAL_REV) * 100).toFixed(1);
             let tbbDiff = ((avgTbb - SYSTEM_AVG_TBB) / SYSTEM_AVG_TBB * 100).toFixed(1);
-            let tbbColor = tbbDiff >= 0 ? 'text-emerald-luxury' : 'text-red-500'; // Using luxury emerald
+            let tbbColor = tbbDiff >= 0 ? 'text-emerald-luxury' : 'text-red-500';
             let tbbBg = tbbDiff >= 0 ? 'bg-emerald-50' : 'bg-red-50';
             let tbbIcon = tbbDiff >= 0 ? '▲' : '▼';
 
-            // --- Luxury KPI Cards ---
-            // Pattern: Label (Small/Wide) | Number (Big/Mono) | Context Badge
             document.getElementById('summary-stats').innerHTML = `
-                <!-- Total Revenue -->
                 <div class="glass-card p-6 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury hover:scale-[1.02] cursor-default border-l-4 border-indigo-600">
                     <p class="font-sans text-[10px] font-bold text-slate-400 uppercase tracking-[0.18em] mb-2">Tổng Doanh Thu</p>
                     <div class="flex items-baseline space-x-1">
@@ -405,8 +469,6 @@
                          </span>
                     </div>
                 </div>
-
-                <!-- Total Guests -->
                 <div class="glass-card p-6 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury hover:scale-[1.02] cursor-default border-l-4 border-emerald-500">
                     <p class="font-sans text-[10px] font-bold text-slate-400 uppercase tracking-[0.18em] mb-2">Tổng Lượt Khách</p>
                     <div class="flex items-baseline space-x-1">
@@ -419,8 +481,6 @@
                          </span>
                     </div>
                 </div>
-
-                <!-- Avg Bill -->
                 <div class="glass-card p-6 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury hover:scale-[1.02] cursor-default border-l-4 border-amber-400">
                     <p class="font-sans text-[10px] font-bold text-slate-400 uppercase tracking-[0.18em] mb-2">Giá Trị Bill TB (TBB)</p>
                     <div class="flex items-baseline space-x-1">
@@ -433,8 +493,6 @@
                          </span>
                     </div>
                 </div>
-
-                <!-- Efficiency -->
                 <div class="glass-card p-6 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury hover:scale-[1.02] cursor-default border-l-4 border-slate-400">
                     <p class="font-sans text-[10px] font-bold text-slate-400 uppercase tracking-[0.18em] mb-2">Hiệu Suất Vận Hành</p>
                     <div class="flex items-baseline space-x-1">
@@ -449,7 +507,6 @@
                 </div>
             `;
 
-            // Update Table
             let tableHTML = '';
             data.forEach(d => {
                 tableHTML += `
@@ -472,12 +529,16 @@
             if (revenueChart) revenueChart.destroy();
             if (dailyGuestChart) dailyGuestChart.destroy();
             if (guestChart) guestChart.destroy();
+            
+            // Destroy existing product charts
+            productCharts.forEach(c => c.destroy());
+            productCharts = [];
 
             Chart.defaults.font.family = "'Inter', sans-serif";
             Chart.defaults.color = '#94a3b8';
             Chart.defaults.scale.grid.color = '#f1f5f9';
 
-            // --- Chart 1: Revenue Doughnut (Desaturated Colors) ---
+            // 1. Revenue Chart
             let chart1Labels, chart1Data;
             if (brandName === 'all') {
                 chart1Labels = ['Phục Linh', 'An Nhiên', 'An Nguyên'];
@@ -493,7 +554,6 @@
                     labels: chart1Labels,
                     datasets: [{
                         data: chart1Data,
-                        // Using slightly muted/richer colors
                         backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'],
                         borderWidth: 0,
                         hoverOffset: 12
@@ -501,11 +561,8 @@
                 },
                 options: { 
                     maintainAspectRatio: false, 
-                    cutout: '80%', // Thinner ring for elegance
-                    animation: {
-                        animateScale: true,
-                        animateRotate: true
-                    },
+                    cutout: '80%',
+                    animation: { animateScale: true, animateRotate: true },
                     plugins: { 
                         legend: { position: 'right', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { size: 11, family: 'Inter', weight: '500' }, color: '#475569' } },
                         tooltip: { backgroundColor: '#1e293b', padding: 16, cornerRadius: 8, titleFont: {family: 'Space Grotesk'}, bodyFont: {family: 'JetBrains Mono'}, displayColors: false, callbacks: { label: (c) => `  ${c.label}: ${c.parsed.toLocaleString()} VND` } }
@@ -513,7 +570,7 @@
                 }
             });
 
-            // --- Chart 2: Operational Flow (Smooth Line) ---
+            // 2. Daily Guest Chart
             const currentDailyData = dailyData[brandName] || dailyData['all'];
             const ctxDaily = document.getElementById('dailyGuestChart').getContext('2d');
             const gradient = ctxDaily.createLinearGradient(0, 0, 0, 300);
@@ -529,7 +586,7 @@
                         data: currentDailyData,
                         borderColor: '#10b981',
                         backgroundColor: gradient,
-                        borderWidth: 2, // Thinner line
+                        borderWidth: 2,
                         pointBackgroundColor: '#ffffff',
                         pointBorderColor: '#10b981',
                         pointBorderWidth: 2,
@@ -537,13 +594,13 @@
                         pointHoverRadius: 8,
                         pointHoverBorderWidth: 3,
                         fill: true,
-                        tension: 0.45 // Smoother curve
+                        tension: 0.45
                     }]
                 },
                 options: {
                     maintainAspectRatio: false,
                     scales: {
-                        y: { beginAtZero: true, grid: { borderDash: [4, 4], drawBorder: false }, ticks: { display: false } }, // Hide Y labels for cleaner look
+                        y: { beginAtZero: true, grid: { borderDash: [4, 4], drawBorder: false }, ticks: { display: false } },
                         x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 }, color: '#94a3b8' } }
                     },
                     plugins: { 
@@ -560,15 +617,67 @@
                             callbacks: { label: (c) => `Lượt khách: ${c.parsed.y}` }
                         }
                     },
-                    interaction: {
-                        mode: 'nearest',
-                        axis: 'x',
-                        intersect: false
-                    }
+                    interaction: { mode: 'nearest', axis: 'x', intersect: false }
                 }
             });
 
-            // --- Chart 3: Guest Bar (Analyst Only) ---
+            // 3. PRODUCT CHARTS (Dynamic Injection for multiple branches)
+            const productChartArea = document.getElementById('product-chart-area');
+            productChartArea.innerHTML = ''; // Clear previous
+
+            if (brandName === 'all') {
+                // Show 1 big chart for All
+                const html = `
+                    <div class="glass-card p-8 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury transform hover:-translate-y-1 border-l-4 border-indigo-500">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="font-display text-lg font-bold text-slate-800">Toàn Bộ Danh Mục Sản Phẩm (Hệ Thống)</h3>
+                                <p class="font-sans text-[11px] text-slate-400 mt-1 uppercase tracking-wide">Tổng hợp số lượng bán ra</p>
+                            </div>
+                        </div>
+                        <div class="product-chart-container" id="container-all" style="height: 500px;">
+                            <canvas id="productChart-all"></canvas>
+                        </div>
+                    </div>`;
+                productChartArea.insertAdjacentHTML('beforeend', html);
+                
+                const ctx = document.getElementById('productChart-all');
+                createProductChart(ctx, productData['all'].labels, productData['all'].data);
+
+            } else {
+                // Show multiple charts for branches
+                const brandInfo = productData[brandName];
+                if (brandInfo && brandInfo.branches) {
+                    // Grid layout for multiple charts if needed, or stacked vertical
+                    productChartArea.className = "grid grid-cols-1 gap-8 mb-16 animate-fade-in-up";
+                    
+                    brandInfo.branches.forEach((branch, index) => {
+                        const canvasId = `productChart-${index}`;
+                        const containerId = `container-${index}`;
+                        // Calculate height based on items
+                        const height = Math.max(250, branch.labels.length * 35); 
+
+                        const html = `
+                            <div class="glass-card p-8 rounded-[24px] shadow-luxury hover:shadow-luxury-hover transition-luxury transform hover:-translate-y-1 border-l-4 border-indigo-500">
+                                <div class="flex justify-between items-start mb-6">
+                                    <div>
+                                        <h3 class="font-display text-lg font-bold text-slate-800">${branch.name}</h3>
+                                        <p class="font-sans text-[11px] text-slate-400 mt-1 uppercase tracking-wide">Chi tiết mã hàng bán ra</p>
+                                    </div>
+                                </div>
+                                <div class="product-chart-container" id="${containerId}" style="height: ${height}px;">
+                                    <canvas id="${canvasId}"></canvas>
+                                </div>
+                            </div>`;
+                        productChartArea.insertAdjacentHTML('beforeend', html);
+                        
+                        const ctx = document.getElementById(canvasId);
+                        createProductChart(ctx, branch.labels, branch.data);
+                    });
+                }
+            }
+
+            // 4. Guest Bar (Analyst)
             guestChart = new Chart(document.getElementById('guestChart'), {
                 type: 'bar',
                 data: {
@@ -576,21 +685,48 @@
                     datasets: [{
                         label: 'Guests',
                         data: data.map(d => d.guests),
-                        backgroundColor: '#e2e8f0', // Very subtle default
-                        hoverBackgroundColor: '#4f46e5', // Pop on hover
+                        backgroundColor: '#e2e8f0', 
+                        hoverBackgroundColor: '#4f46e5',
                         borderRadius: 4,
                         barThickness: 40
                     }]
                 },
-                options: { 
-                    maintainAspectRatio: false, 
-                    plugins: { legend: { display: false } }, 
-                    scales: { 
-                        y: { display: false }, 
-                        x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 } } } 
-                    } 
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 } } } } }
+            });
+        }
+
+        function createProductChart(ctx, labels, data) {
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Số lượng bán',
+                        data: data,
+                        backgroundColor: '#6366f1',
+                        borderRadius: 4,
+                        barThickness: 15
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { beginAtZero: true, grid: { borderDash: [4, 4] } },
+                        y: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11, weight: '500' }, color: '#475569' } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            padding: 12,
+                            cornerRadius: 6,
+                            callbacks: { label: (c) => `  Đã bán: ${c.parsed.x}` }
+                        }
+                    }
                 }
             });
+            productCharts.push(chart);
         }
 
         window.onload = () => filterBrand('all');
