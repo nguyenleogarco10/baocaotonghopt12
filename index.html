@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Không Gian Quản Trị Trị Liệu - T12/2025</title>
+    <title>Không Gian Quản Trị - An Nhiên 2026 (Premium)</title>
+    
+    <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Zen Font Stack: Quicksand (Rounded Display) + Nunito (Rounded Sans) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Zen Font Stack -->
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
@@ -18,39 +23,24 @@
                     },
                     colors: {
                         zen: {
-                            bg: '#F7F5F2',       // Beige nền n
-                            card: '#FAFAF8',     // Trắng sứ ấm
-                            sage: '#8FAF9F',     // Xanh lá xám (Sage Green)
-                            tea: '#6B8F71',      // Xanh trà đạo
-                            wood: '#CBBFA3',     // Nâu gỗ sáng
-                            earth: '#7A6A53',    // Nâu đất trầmm
-                            text: '#3F3F3F',     // Chữ xám đậm
-                            muted: '#8B8B8B',    // Chữ phụ
-                            accent: '#D4A373'    // Điểm nhấn nhẹ (cam đất)
+                            bg: '#F7F5F2',
+                            card: '#FAFAF8',
+                            sage: '#8FAF9F',
+                            tea: '#6B8F71',
+                            dark: '#3F3F3F',
+                            wood: '#CBBFA3',
+                            gray: '#E5E5E5',
+                            red: '#DFA7A7',
+                            gold: '#D4AF37'
                         }
                     },
-                    boxShadow: {
-                        'zen': '0 8px 24px -6px rgba(122, 106, 83, 0.08), 0 2px 6px -2px rgba(122, 106, 83, 0.04)',
-                        'zen-hover': '0 20px 40px -10px rgba(122, 106, 83, 0.12), 0 12px 20px -8px rgba(122, 106, 83, 0.06)',
-                        'inner-light': 'inset 0 1px 0 rgba(255,255,255,0.8)'
-                    },
                     animation: {
-                        'breathe': 'breathe 8s ease-in-out infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                        'fade-in': 'fadeIn 1.2s ease-out forwards',
+                        'float': 'float 3s ease-in-out infinite',
                     },
                     keyframes: {
-                        breathe: {
-                            '0%, 100%': { transform: 'scale(1)', opacity: '0.3' },
-                            '50%': { transform: 'scale(1.05)', opacity: '0.5' },
-                        },
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
                         }
                     }
                 }
@@ -59,634 +49,621 @@
     </script>
     <style>
         body { background-color: #F7F5F2; color: #3F3F3F; }
-        .chart-container { position: relative; height: 320px; width: 100%; }
-        .daily-chart-container { position: relative; height: 380px; width: 100%; }
-        .product-chart-container { position: relative; min-height: 400px; width: 100%; }
         
-        /* Zen Card Style */
-        .glass-card { 
-            background: #FAFAF8; 
-            border-radius: 24px;
-            border: 1px solid rgba(143, 175, 159, 0.15); /* Viền xanh sage rất mờ */
-            box-shadow: 0 4px 20px rgba(122, 106, 83, 0.03);
+        /* Utils */
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #CBBFA3; }
+
+        /* Sidebar Item */
+        .sidebar-item { position: relative; transition: color 0.3s ease; z-index: 1; overflow: hidden; }
+        .sidebar-item::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%;
+            background-color: #FAFAF8; z-index: -1; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar-item:hover::before { width: 100%; }
+        .sidebar-item.active { color: #6B8F71; font-weight: 700; background-color: #FAFAF8; }
+        .sidebar-item.active::after {
+            content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+            width: 4px; height: 20px; background-color: #6B8F71;
+            border-top-left-radius: 4px; border-bottom-left-radius: 4px;
         }
 
-        .nav-btn-active { 
-            background-color: #6B8F71 !important; /* Zen Tea */
-            color: #F7F5F2 !important; 
-            box-shadow: 0 4px 12px rgba(107, 143, 113, 0.2); 
-            border-color: transparent !important;
+        /* Animations */
+        .reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+        
+        .progress-bar-bg { background-color: #F0F0F0; border-radius: 999px; overflow: hidden; height: 10px; }
+        .progress-bar-fill { height: 100%; border-radius: 999px; width: 0%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
+
+        /* Top 1 Card */
+        .card-top-1 {
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            background: linear-gradient(145deg, #fffcf5 0%, #ffffff 100%);
+            box-shadow: 0 20px 25px -5px rgba(212, 175, 55, 0.15);
+            transform: translateY(-4px); position: relative;
         }
-        
-        .transition-zen { transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
-        
-        /* Custom Scrollbar - Mảnh & Màu gỗ */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #CBBFA3; border-radius: 3px; }
+        .card-top-1::before {
+            content: '👑'; position: absolute; top: -15px; right: 20px; font-size: 24px;
+            animation: float 3s ease-in-out infinite; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+        .card-hover { transition: all 0.3s ease; will-change: transform, box-shadow; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.08); }
+
+        /* Table Styling */
+        .zen-table th { font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; color: #9CA3AF; padding: 1rem; text-align: left; }
+        .zen-table td { padding: 1rem; border-top: 1px solid #F3F4F6; color: #3F3F3F; font-size: 0.875rem; }
+        .zen-table tr:hover td { background-color: #FAFAF8; }
     </style>
 </head>
-<body class="pb-24 antialiased selection:bg-zen-sage selection:text-white overflow-x-hidden font-sans">
+<body class="font-sans h-screen flex overflow-hidden text-zen-dark bg-zen-bg">
 
-    <!-- Top Bar -->
-    <div class="w-full bg-zen-card/80 border-b border-zen-sage/10 py-3">
-        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <p class="font-sans text-[11px] uppercase tracking-[0.2em] text-zen-muted font-bold">Không Gian Quản Trị • Tháng 12, 2025</p>
-            <div class="flex items-center space-x-2">
-                <div class="w-2 h-2 rounded-full bg-zen-tea animate-pulse"></div>
-                <span class="font-sans text-[11px] uppercase tracking-widest text-zen-muted">Nhịp điệu: Ổn định</span>
-            </div>
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white border-r border-zen-gray flex-col hidden md:flex z-20 shadow-sm relative">
+        <div class="p-8 pb-4">
+            <h1 class="font-display text-2xl font-bold text-zen-tea flex items-center gap-2">
+                <i data-lucide="flower-2"></i> An Nhiên
+            </h1>
+            <p class="text-xs text-gray-400 mt-1 pl-8 tracking-wider">ECOSYSTEM 2026</p>
         </div>
-    </div>
 
-    <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-zen-bg/90 backdrop-blur-sm border-b border-zen-sage/10 transition-all duration-500">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center h-24">
-                <div class="flex items-center space-x-10">
-                    <!-- Logo Section -->
-                    <div class="flex items-center group cursor-pointer">
-                        <img src="1.png" alt="Logo" class="h-16 w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-700"> 
-                    </div>
-                    
-                    <!-- View Mode Toggle (Zen Style) -->
-                    <div class="hidden md:flex items-center bg-white rounded-full p-1 border border-zen-sage/20 shadow-sm">
-                        <button onclick="setViewMode('executive')" id="btn-view-exec" class="px-6 py-2 rounded-full text-[12px] font-sans font-bold uppercase tracking-wider transition-zen bg-zen-sage/10 text-zen-earth">Tổng Quan</button>
-                        <button onclick="setViewMode('analyst')" id="btn-view-analyst" class="px-6 py-2 rounded-full text-[12px] font-sans font-bold uppercase tracking-wider transition-zen text-zen-muted hover:text-zen-earth">Chi Tiết</button>
-                    </div>
-                </div>
-
-                <div class="flex space-x-3 mt-4 md:mt-0 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
-                    <button onclick="filterBrand('all')" id="btn-all" class="nav-btn px-5 py-2.5 rounded-xl text-[12px] font-sans font-bold uppercase tracking-wider border border-zen-sage/20 text-zen-earth hover:bg-white transition-zen nav-btn-active">Hệ Thống</button>
-                    <button onclick="filterBrand('Phục Linh')" id="btn-phuc-linh" class="nav-btn px-5 py-2.5 rounded-xl text-[12px] font-sans font-bold uppercase tracking-wider bg-transparent border border-zen-sage/20 text-zen-muted hover:bg-white hover:text-zen-earth transition-zen">Phục Linh</button>
-                    <button onclick="filterBrand('An Nhiên')" id="btn-an-nhien" class="nav-btn px-5 py-2.5 rounded-xl text-[12px] font-sans font-bold uppercase tracking-wider bg-transparent border border-zen-sage/20 text-zen-muted hover:bg-white hover:text-zen-earth transition-zen">An Nhiên</button>
-                    <button onclick="filterBrand('An Nguyên')" id="btn-an-nguyen" class="nav-btn px-5 py-2.5 rounded-xl text-[12px] font-sans font-bold uppercase tracking-wider bg-transparent border border-zen-sage/20 text-zen-muted hover:bg-white hover:text-zen-earth transition-zen">An Nguyên</button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section: Zen & Wellness -->
-    <header class="relative py-24 px-6 mb-12 overflow-hidden">
-        <!-- Abstract Zen Background Elements -->
-        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-zen-sage rounded-full mix-blend-multiply filter blur-[120px] opacity-20 animate-breathe"></div>
-        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-zen-wood rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-breathe" style="animation-delay: 4s;"></div>
-
-        <div class="max-w-7xl mx-auto relative z-10 animate-fade-in">
-            <div class="flex flex-col lg:flex-row justify-between items-end">
-                <div class="max-w-4xl">
-                    <h1 id="main-headline" class="font-display text-5xl md:text-[64px] leading-[1.1] font-medium text-zen-text mb-6">
-                        Tháng 12 đạt <span class="text-zen-earth font-bold">4,616,491,200 VND</span><br>
-                        Tăng trưởng tập trung nhóm Key Accounts.
-                    </h1>
-                    
-                    <p id="sub-headline" class="font-sans text-zen-earth text-lg font-medium leading-relaxed max-w-2xl border-l-4 border-zen-sage/50 pl-6 rounded-sm">
-                        Dữ liệu xác thực cho thấy Phục Linh chiếm ưu thế tuyệt đối (72%), trong khi An Nguyên đạt hiệu suất vận hành trên mỗi điểm bán tốt nhất hệ thống.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-6 lg:px-8 -mt-4">
+        <nav class="flex-1 overflow-y-auto py-4 space-y-1">
+            <div class="px-6 mb-2 text-xs font-bold text-gray-400 uppercase tracking-wider">Thương Hiệu</div>
+            <a href="#" onclick="filterBrand('all')" class="sidebar-item active flex items-center gap-3 px-8 py-3 text-sm rounded-r-xl mr-2">
+                <i data-lucide="layout-grid" class="w-4 h-4"></i> Tổng Hợp
+            </a>
+            <a href="#" onclick="filterBrand('AN NGUYÊN')" class="sidebar-item flex items-center gap-3 px-8 py-3 text-sm rounded-r-xl mr-2">
+                <i data-lucide="sprout" class="w-4 h-4"></i> An Nguyên
+            </a>
+            <a href="#" onclick="filterBrand('AN NHIÊN')" class="sidebar-item flex items-center gap-3 px-8 py-3 text-sm rounded-r-xl mr-2">
+                <i data-lucide="sun" class="w-4 h-4"></i> An Nhiên
+            </a>
+            <a href="#" onclick="filterBrand('PHỤC LINH')" class="sidebar-item flex items-center gap-3 px-8 py-3 text-sm rounded-r-xl mr-2">
+                <i data-lucide="heart-pulse" class="w-4 h-4"></i> Phục Linh
+            </a>
+        </nav>
         
-        <!-- 1. Smart KPIs: Gentle & Round -->
-        <div id="summary-stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20 relative z-20">
-            <!-- Dynamic Content -->
-        </div>
+        <!-- User Info Removed -->
+        
+    </aside>
 
-        <!-- 2. Charts: Flow & Rhythm -->
-        <div id="executive-charts" class="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-12 animate-fade-in" style="animation-delay: 0.2s;">
-            <!-- Revenue Mix -->
-            <div class="lg:col-span-1 glass-card p-10 shadow-zen hover:shadow-zen-hover transition-zen hover:-translate-y-1 duration-700">
-                <div class="mb-8">
-                    <h3 class="font-display text-2xl font-bold text-zen-earth">Cơ Cấu Doanh Thu</h3>
-                    <p class="font-sans text-[12px] text-zen-muted mt-2 tracking-wide font-bold">Phân bổ nguồn tiền</p>
-                </div>
-                <div class="chart-container" style="height: 260px;">
-                    <canvas id="revenueChart"></canvas>
-                </div>
-                <div class="mt-8 pt-6 border-t border-zen-sage/10">
-                    <div class="flex items-start space-x-4">
-                        <span class="text-2xl text-zen-sage font-display">❝</span>
-                        <p id="revenue-insight" class="font-sans text-lg text-zen-text font-medium italic leading-relaxed">Phục Linh chi phối 72% tổng doanh thu. Rủi ro tập trung cao.</p>
-                    </div>
-                </div>
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col overflow-hidden relative" id="main-scroll-container">
+        
+        <!-- HEADER -->
+        <header id="main-header" class="bg-white/70 backdrop-blur-sm border-b border-zen-gray px-8 py-4 flex justify-between items-center z-10 sticky top-0 transition-all duration-300">
+            <div>
+                <h2 class="font-display text-xl font-bold" id="pageTitle">Tổng Quan Tháng <span id="displayMonth">1</span>/2026</h2>
+                <p class="text-xs text-gray-400 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    Dữ liệu thực tế
+                </p>
             </div>
-
-            <!-- Operational Trend -->
-            <div class="lg:col-span-2 glass-card p-10 shadow-zen hover:shadow-zen-hover transition-zen hover:-translate-y-1 duration-700">
-                <div class="flex justify-between items-start mb-8">
-                    <div>
-                        <h3 class="font-display text-2xl font-bold text-zen-earth">Nhịp Điệu Vận Hành</h3>
-                        <p class="font-sans text-[12px] text-zen-muted mt-2 tracking-wide font-bold">Biến động lượng khách tuần hoàn</p>
-                    </div>
-                    <div class="px-4 py-1.5 rounded-full bg-zen-sage/10 border border-zen-sage/20">
-                        <span class="font-sans text-[11px] font-bold text-zen-tea uppercase tracking-widest">XU HƯỚNG THỰC</span>
-                    </div>
-                </div>
-                <div class="daily-chart-container" style="height: 340px;">
-                    <canvas id="dailyGuestChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- NEW: Product Performance Chart Section (Dynamic Injection) -->
-        <div id="product-chart-area" class="grid grid-cols-1 mb-20 animate-fade-in" style="animation-delay: 0.3s;">
-            <!-- Content will be injected here by JS -->
-        </div>
-
-        <!-- 3. Analyst View (Hidden by default) -->
-        <div id="analyst-section" class="hidden opacity-0 transition-opacity duration-1000 ease-in-out">
-            <div class="flex items-center space-x-6 mb-10">
-                <h3 class="font-display text-3xl font-bold text-zen-text">Chi Tiết Vận Hành (Chế độ Phân tích)</h3>
-                <div class="h-px flex-1 bg-zen-sage/20"></div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-20">
-                <!-- Guest Comparison -->
-                <div class="glass-card p-10 shadow-zen">
-                    <h4 class="font-display text-xl font-bold text-zen-earth mb-8">So Sánh Lượng Khách</h4>
-                    <div class="chart-container" style="height: 280px;">
-                        <canvas id="guestChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Detailed Table -->
-                <div class="glass-card shadow-zen overflow-hidden border border-white/50">
-                    <table class="w-full text-left">
-                        <thead class="bg-zen-sage/5 text-zen-earth font-sans text-[11px] uppercase tracking-wider font-bold border-b border-zen-sage/10">
-                            <tr>
-                                <th class="p-6 pl-8 font-bold">Cơ sở</th>
-                                <th class="p-6 text-center font-bold">Ngày Đông Nhất</th>
-                                <th class="p-6 text-right font-bold">Khách Tối Đa</th>
-                                <th class="p-6 text-right pr-8 font-bold">TBB (VNĐ)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="detail-table-body" class="divide-y divide-zen-sage/5 font-sans text-sm text-zen-text font-medium">
-                            <!-- JS Inject -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4. Key Takeaways: Zen Wisdom Box -->
-        <div id="key-takeaways" class="glass-card p-12 rounded-[32px] bg-[#F3F1ED] border-none shadow-inner-light mb-24 relative overflow-hidden group">
-            <!-- Decorative Leaf/Stone abstract -->
-            <div class="absolute -right-10 -top-10 w-64 h-64 bg-zen-wood/20 rounded-full blur-3xl"></div>
             
-            <div class="relative z-10">
-                <div class="flex items-center space-x-4 mb-10">
-                    <div class="w-1 h-8 bg-zen-earth rounded-full"></div>
-                    <h3 class="font-display text-3xl font-bold text-zen-text tracking-wide">TÓM TẮT ĐIỀU HÀNH</h3>
-                </div>
+            <div class="flex items-center gap-2 bg-zen-bg p-1 rounded-xl overflow-x-auto hide-scroll max-w-md border border-zen-gray/50">
+                <button onclick="setMonth(1)" id="btn-m1" class="month-btn px-3 py-1 text-xs font-bold rounded-lg bg-zen-tea text-white shadow-sm transition-all">T1</button>
+                <button onclick="setMonth(2)" id="btn-m2" class="month-btn px-3 py-1 text-xs font-bold rounded-lg text-gray-500 hover:bg-white hover:text-zen-tea transition-all">T2</button>
+                <button onclick="setMonth(3)" id="btn-m3" class="month-btn px-3 py-1 text-xs font-bold rounded-lg text-gray-500 hover:bg-white hover:text-zen-tea transition-all">T3</button>
+                <span class="text-gray-300 text-xs px-2">...</span>
+            </div>
+        </header>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div class="space-y-8">
-                        <div class="group/item cursor-default">
-                            <h4 class="font-display text-xl font-bold text-zen-earth mb-2 group-hover/item:text-zen-tea transition-colors">1. Trụ Cột Vững Chãi</h4>
-                            <p class="font-sans text-sm text-zen-text/80 leading-relaxed font-medium">Phục Linh đóng vai trò như gốc rễ, cung cấp <strong class="text-zen-earth">72% năng lượng</strong> tài chính. Cần vun đắp nhóm khách hàng thân thiết tại Xã Đàn & Cầu Giấy.</p>
+        <!-- DASHBOARD BODY -->
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scroll scroll-smooth" id="scroll-body">
+            
+            <!-- KPI CARDS -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <!-- KPI 1 -->
+                <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray card-hover reveal-on-scroll" style="transition-delay: 0ms;">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-xs font-bold uppercase tracking-wide">Doanh Thu Thực Đạt</p>
+                            <h3 class="text-2xl font-display font-bold mt-2 text-zen-dark" id="kpi-revenue">0</h3>
                         </div>
-                        <div class="group/item cursor-default">
-                            <h4 class="font-display text-xl font-bold text-zen-earth mb-2 group-hover/item:text-zen-tea transition-colors">2. Khơi Thông Dòng Chảy</h4>
-                            <p class="font-sans text-sm text-zen-text/80 leading-relaxed font-medium">An Nhiên cần thêm các liệu trình chuyên sâu để nâng cao giá trị mỗi buổi trị liệu (TBB), giúp dòng tiền lưu thông mạnh mẽ hơn.</p>
+                        <div class="p-2 bg-zen-tea/10 rounded-lg text-zen-tea ring-1 ring-zen-tea/20">
+                            <i data-lucide="banknote" class="w-5 h-5"></i>
                         </div>
                     </div>
-                    <div class="space-y-8">
-                        <div class="group/item cursor-default">
-                            <h4 class="font-display text-xl font-bold text-zen-earth mb-2 group-hover/item:text-zen-tea transition-colors">3. Mô Hình Tinh Gọn</h4>
-                            <p class="font-sans text-sm text-zen-text/80 leading-relaxed font-medium">An Nguyên tại Long Biên là ví dụ điển hình của sự cân bằng: quy mô nhỏ nhưng hiệu suất cao, tựa như một khu vườn Zen được chăm sóc kỹ lưỡng.</p>
+                </div>
+                <!-- KPI 2 -->
+                <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray card-hover reveal-on-scroll" style="transition-delay: 100ms;">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-xs font-bold uppercase tracking-wide">Tổng Lượng Khách</p>
+                            <h3 class="text-2xl font-display font-bold mt-2 text-zen-dark" id="kpi-customers">0</h3>
                         </div>
-                        <div class="group/item cursor-default">
-                            <h4 class="font-display text-xl font-bold text-zen-earth mb-2 group-hover/item:text-zen-tea transition-colors">4. Điều Hòa Nhịp Điệu</h4>
-                            <p class="font-sans text-sm text-zen-text/80 leading-relaxed font-medium">Chủ Nhật là thời điểm năng lượng tập trung cao nhất. Cần điều phối nhân sự uyển chuyển để không gian luôn giữ được sự tĩnh tại cho khách hàng.</p>
+                        <div class="p-2 bg-blue-100 rounded-lg text-blue-600 ring-1 ring-blue-600/20">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- KPI 3 -->
+                <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray card-hover reveal-on-scroll" style="transition-delay: 200ms;">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-xs font-bold uppercase tracking-wide">Chi Phí Ads</p>
+                            <h3 class="text-2xl font-display font-bold mt-2 text-zen-dark" id="kpi-ads">0</h3>
+                        </div>
+                        <div class="p-2 bg-red-100 rounded-lg text-red-600 ring-1 ring-red-600/20">
+                            <i data-lucide="megaphone" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- KPI 4 -->
+                <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray card-hover reveal-on-scroll" style="transition-delay: 300ms;">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-xs font-bold uppercase tracking-wide">Trung Bình Bill</p>
+                            <h3 class="text-2xl font-display font-bold mt-2 text-zen-dark" id="kpi-bill">0</h3>
+                        </div>
+                        <div class="p-2 bg-orange-100 rounded-lg text-orange-600 ring-1 ring-orange-600/20">
+                            <i data-lucide="pie-chart" class="w-5 h-5"></i>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- MAIN CHART & TARGET -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- CHART -->
+                <div class="lg:col-span-2 bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray reveal-on-scroll group" style="transition-delay: 100ms;">
+                    <h3 class="font-display font-bold text-lg text-zen-dark mb-6 flex items-center gap-2">
+                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-zen-tea"></i>
+                        Biểu Đồ Doanh Thu Ngày
+                    </h3>
+                    <div class="h-80 w-full relative transition-transform duration-700 ease-out transform group-hover:scale-[1.01]">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+                <!-- TARGET COMPARISON -->
+                <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray flex flex-col reveal-on-scroll" style="transition-delay: 200ms;">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-display font-bold text-lg text-zen-dark">Tiến Độ Target</h3>
+                        <div class="bg-zen-bg p-2 rounded-full">
+                            <i data-lucide="trophy" class="w-5 h-5 text-zen-gold"></i>
+                        </div>
+                    </div>
+                    <div id="targetContainer" class="flex-1 space-y-5 overflow-y-auto pr-2 custom-scroll">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- BRANCH DETAILS CARDS -->
+            <div class="mb-10">
+                <div class="flex justify-between items-center mb-6 px-1 reveal-on-scroll">
+                    <h3 class="font-display font-bold text-lg text-zen-dark flex items-center gap-2">
+                        <i data-lucide="store" class="w-5 h-5 text-zen-dark"></i>
+                        Chi Tiết Hiệu Quả Kinh Doanh
+                    </h3>
+                    <div class="flex gap-2">
+                         <span class="text-xs text-zen-tea bg-white px-3 py-1 rounded-full border border-zen-tea font-bold shadow-sm">Thực đạt</span>
+                         <span class="text-xs text-gray-400 bg-white px-3 py-1 rounded-full border border-zen-gray">Target</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="branchContainer">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- ADS COST TABLE SECTION -->
+            <div class="mb-10 reveal-on-scroll">
+                <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-display font-bold text-lg text-zen-dark flex items-center gap-2">
+                            <i data-lucide="badge-dollar-sign" class="w-5 h-5 text-red-500"></i>
+                            Bảng Chi Phí Ads & Hiệu Quả (CIR)
+                        </h3>
+                        <span class="text-xs text-gray-400">Dữ liệu Ads cập nhật T1/2026</span>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full zen-table">
+                            <thead>
+                                <tr>
+                                    <th class="w-10"></th>
+                                    <th>Cơ Sở</th>
+                                    <!-- Use !text-right to force alignment -->
+                                    <th class="!text-right">Chi Phí Ads</th>
+                                    <th class="!text-right">Doanh Thu</th>
+                                    <th class="!text-right">CIR (%)</th>
+                                    <th class="!text-right w-24">Đánh Giá</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adsTableBody">
+                                <!-- Filled by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="h-8"></div>
         </div>
-
-        <footer class="text-center pt-10 border-t border-zen-sage/10">
-            <p class="font-display text-lg text-zen-wood italic font-medium">"Cân bằng tài chính, nuôi dưỡng thành công"</p>
-            <p class="font-sans text-[10px] text-zen-muted mt-2 uppercase tracking-widest font-bold">Tài liệu mật • Chỉ lưu hành nội bộ</p>
-        </footer>
-
     </main>
 
     <script>
-        // --- DATA LAYER ---
-        const rawData = [
-            { brand: 'Phục Linh', branch: 'Xã Đàn', guests: 220, revenue: 1064449000, tbb: 4838405, peakDay: 'Thứ Hai', peakGuests: 41 },
-            { brand: 'Phục Linh', branch: 'Cầu Giấy', guests: 194, revenue: 941188000, tbb: 4851485, peakDay: 'Thứ Tư', peakGuests: 35 },
-            { brand: 'Phục Linh', branch: 'Hà Đông', guests: 195, revenue: 860443000, tbb: 4412528, peakDay: 'Thứ Bảy', peakGuests: 33 },
-            { brand: 'Phục Linh', branch: 'Hải Phòng', guests: 163, revenue: 443440500, tbb: 2720494, peakDay: 'Chủ Nhật', peakGuests: 36 },
-            { brand: 'An Nhiên', branch: 'CMT8', guests: 99, revenue: 295630000, tbb: 2986162, peakDay: 'Thứ Sáu', peakGuests: 17 },
-            { brand: 'An Nhiên', branch: 'ADV', guests: 112, revenue: 264500700, tbb: 2361613, peakDay: 'Chủ Nhật', peakGuests: 25 },
-            { brand: 'An Nguyên', branch: 'Long Biên', guests: 207, revenue: 746840000, tbb: 3607923, peakDay: 'Thứ Ba', peakGuests: 46 }
+        // --- 1. CSV RAW DATA (Daily Revenue) ---
+        const csvRaw = `
+AN NGUYÊN,LONG BIÊN,2026-01-01,0,0
+AN NGUYÊN,LONG BIÊN,2026-01-02,4,19800000
+AN NGUYÊN,LONG BIÊN,2026-01-03,7,4600000
+AN NGUYÊN,LONG BIÊN,2026-01-04,10,23900000
+AN NGUYÊN,LONG BIÊN,2026-01-05,12,60300000
+AN NGUYÊN,LONG BIÊN,2026-01-06,4,10199000
+AN NGUYÊN,LONG BIÊN,2026-01-07,6,27300000
+AN NGUYÊN,LONG BIÊN,2026-01-08,10,23200000
+AN NGUYÊN,LONG BIÊN,2026-01-09,6,31400000
+AN NGUYÊN,LONG BIÊN,2026-01-10,7,22600000
+AN NGUYÊN,LONG BIÊN,2026-01-11,5,15000000
+AN NGUYÊN,LONG BIÊN,2026-01-12,9,46300000
+PHỤC LINH,HÀ ĐÔNG,2026-01-01,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-01-02,7,21300000
+PHỤC LINH,HÀ ĐÔNG,2026-01-03,5,15400000
+PHỤC LINH,HÀ ĐÔNG,2026-01-04,8,22100000
+PHỤC LINH,HÀ ĐÔNG,2026-01-05,6,18900000
+PHỤC LINH,HÀ ĐÔNG,2026-01-06,2,30600000
+PHỤC LINH,HÀ ĐÔNG,2026-01-07,8,33200000
+PHỤC LINH,HÀ ĐÔNG,2026-01-08,13,41600000
+PHỤC LINH,HÀ ĐÔNG,2026-01-09,8,7300000
+PHỤC LINH,HÀ ĐÔNG,2026-01-10,8,14699000
+PHỤC LINH,HÀ ĐÔNG,2026-01-11,6,45100000
+PHỤC LINH,HÀ ĐÔNG,2026-01-12,7,23800000
+PHỤC LINH,HÀ ĐÔNG,2026-01-13,1,6660000
+PHỤC LINH,CẦU GIẤY,2026-01-06,8,35200000
+PHỤC LINH,CẦU GIẤY,2026-01-07,4,22500000
+PHỤC LINH,CẦU GIẤY,2026-01-08,7,13020000
+PHỤC LINH,CẦU GIẤY,2026-01-09,4,34700000
+PHỤC LINH,CẦU GIẤY,2026-01-10,5,60100000
+PHỤC LINH,CẦU GIẤY,2026-01-11,6,60200000
+PHỤC LINH,CẦU GIẤY,2026-01-12,8,24880000
+PHỤC LINH,CẦU GIẤY,2026-01-13,6,35049000
+AN NHIÊN,CMT8,2026-01-02,15,50000000
+AN NHIÊN,CMT8,2026-01-03,22,50400000
+AN NHIÊN,ADV,2026-01-02,15,40000000
+AN NHIÊN,ADV,2026-01-04,19,56200000
+PHỤC LINH,XÃ ĐÀN,2026-01-09,30,150000000
+PHỤC LINH,XÃ ĐÀN,2026-01-10,35,250000000
+PHỤC LINH,XÃ ĐÀN,2026-01-11,31,180428000
+PHỤC LINH,HẢI PHÒNG,2026-01-12,40,60000000
+PHỤC LINH,HẢI PHÒNG,2026-01-13,42,64850000
+`;
+
+        // --- 2. CSV RAW DATA (Ads Cost) - UPDATED FROM USER INPUT ---
+        // Data provided: An Nguyen (92.8m), An Nhien (74.7m), Phuc Linh (11.3m)
+        const csvAdsRaw = `
+AN NGUYÊN,LONG BIÊN,2026-01-31,92881063
+AN NHIÊN,ADV,2026-01-31,46288549
+AN NHIÊN,CMT8,2026-01-31,28428176
+PHỤC LINH,XÃ ĐÀN,2026-01-31,4873241
+PHỤC LINH,CẦU GIẤY,2026-01-31,2170365
+PHỤC LINH,HẢI PHÒNG,2026-01-31,2155534
+PHỤC LINH,HÀ ĐÔNG,2026-01-31,2120984
+`;
+
+        // --- 3. SUMMARY TARGETS ---
+        const summaryData = [
+            { brand: 'AN NGUYÊN', branch: 'LONG BIÊN',  target: 700000000 },
+            { brand: 'AN NHIÊN',  branch: 'CMT8',       target: 500000000 },
+            { brand: 'AN NHIÊN',  branch: 'ADV',        target: 500000000 },
+            { brand: 'PHỤC LINH', branch: 'XÃ ĐÀN',     target: 1080000000 },
+            { brand: 'PHỤC LINH', branch: 'CẦU GIẤY',   target: 880000000 },
+            { brand: 'PHỤC LINH', branch: 'HÀ ĐÔNG',    target: 800000000 },
+            { brand: 'PHỤC LINH', branch: 'HẢI PHÒNG',  target: 400000000 }
         ];
 
-        const dailyData = {
-            'all': [189, 200, 177, 146, 131, 165, 182],
-            'Phục Linh': [120, 121, 118, 100, 81, 107, 125],
-            'An Nhiên': [35, 33, 31, 21, 31, 28, 32],
-            'An Nguyên': [34, 46, 28, 25, 19, 30, 25]
-        };
-
-        const productData = {
-          "all": {
-            "labels": ["SP50", "SP18", "SP78", "SP51", "SP20", "SP19", "SP75", "SP79", "SP74", "SP24", "SP76", "SP21", "SP77", "HH10", "SP15", "SP17", "SP25"],
-            "data": [2319, 194, 164, 125, 81, 46, 16, 14, 14, 12, 11, 8, 2, 2, 1, 1, 1]
-          },
-          "An Nhiên": {
-            "labels": ["SP18", "SP17", "SP20", "SP24"],
-            "data": [4, 1, 1, 1],
-            "branches": [
-                {
-                    "name": "An Nhiên - ADV",
-                    "labels": ["SP18", "SP20", "SP24"],
-                    "data": [4, 1, 1]
-                },
-                {
-                    "name": "An Nhiên - CMT8",
-                    "labels": ["SP17"],
-                    "data": [1]
+        // --- GLOBAL STATE ---
+        let currentMonth = 1; 
+        let currentBrand = 'all';
+        let parsedDailyData = [];
+        let parsedAdsData = [];
+        let chartInstances = {};
+        
+        // --- OBSERVER ---
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    const progressBars = entry.target.querySelectorAll('.progress-bar-fill');
+                    progressBars.forEach(bar => {
+                        const targetWidth = bar.getAttribute('data-width');
+                        setTimeout(() => { bar.style.width = targetWidth + '%'; }, 200);
+                    });
+                    revealObserver.unobserve(entry.target);
                 }
-            ]
-          },
-          "An Nguyên": {
-            "labels": ["SP18", "SP24", "SP20", "SP21", "HH10", "SP15", "SP25"],
-            "data": [188, 11, 10, 6, 2, 1, 1],
-            "branches": [
-                {
-                    "name": "An Nguyên - Long Biên",
-                    "labels": ["SP18", "SP24", "SP20", "SP21", "HH10", "SP15", "SP25"],
-                    "data": [188, 11, 10, 6, 2, 1, 1]
-                }
-            ]
-          },
-          "Phục Linh": {
-            "labels": ["SP50", "SP78", "SP51", "SP20", "SP19", "SP75", "SP74", "SP79", "SP76", "SP18", "SP21", "SP77"],
-            "data": [2319, 164, 125, 70, 46, 16, 14, 14, 11, 2, 2, 2],
-            "branches": [
-                {
-                    "name": "Phục Linh - Xã Đàn",
-                    "labels": ["SP50", "SP78", "SP51", "SP19", "SP74", "SP75", "SP20", "SP76", "SP18", "SP77", "SP79"],
-                    "data": [783, 40, 19, 12, 10, 10, 9, 9, 1, 1, 1]
-                },
-                {
-                    "name": "Phục Linh - Cầu Giấy",
-                    "labels": ["SP50", "SP78", "SP51", "SP20", "SP75", "SP79", "SP19", "SP21", "SP77"],
-                    "data": [588, 101, 46, 12, 6, 5, 4, 1, 1]
-                },
-                {
-                    "name": "Phục Linh - Hà Đông",
-                    "labels": ["SP50", "SP20", "SP19", "SP78", "SP79", "SP74", "SP76", "SP21"],
-                    "data": [889, 41, 22, 13, 6, 3, 2, 1]
-                },
-                {
-                    "name": "Phục Linh - Hải Phòng",
-                    "labels": ["SP51", "SP50", "SP78", "SP19", "SP20", "SP79", "SP18", "SP74"],
-                    "data": [60, 59, 10, 8, 8, 2, 1, 1]
-                }
-            ]
-          }
-        };
+            });
+        }, { root: document.getElementById('scroll-body'), threshold: 0.1 });
 
-        const SYSTEM_TOTAL_REV = 4616491200;
-        const SYSTEM_AVG_TBB = 3879400;
-
-        let revenueChart, dailyGuestChart, guestChart;
-        let productCharts = [];
-
-        // --- UI LOGIC ---
-
-        function setViewMode(mode) {
-            const analystSection = document.getElementById('analyst-section');
-            const btnExec = document.getElementById('btn-view-exec');
-            const btnAnalyst = document.getElementById('btn-view-analyst');
-
-            if (mode === 'executive') {
-                analystSection.classList.add('hidden', 'opacity-0');
-                analystSection.classList.remove('block', 'opacity-100');
-                
-                btnExec.classList.remove('bg-transparent', 'text-zen-muted');
-                btnExec.classList.add('bg-white', 'text-zen-earth', 'shadow-sm');
-                
-                btnAnalyst.classList.add('bg-transparent', 'text-zen-muted');
-                btnAnalyst.classList.remove('bg-white', 'text-zen-earth', 'shadow-sm');
+        // Header Scroll
+        document.getElementById('scroll-body').addEventListener('scroll', function() {
+            const header = document.getElementById('main-header');
+            if (this.scrollTop > 20) {
+                header.classList.add('bg-white/90', 'backdrop-blur-md', 'shadow-sm');
+                header.classList.remove('bg-white/70', 'backdrop-blur-sm');
             } else {
-                analystSection.classList.remove('hidden');
-                setTimeout(() => analystSection.classList.remove('opacity-0'), 20);
-                
-                btnAnalyst.classList.remove('bg-transparent', 'text-zen-muted');
-                btnAnalyst.classList.add('bg-white', 'text-zen-earth', 'shadow-sm');
-
-                btnExec.classList.add('bg-transparent', 'text-zen-muted');
-                btnExec.classList.remove('bg-white', 'text-zen-earth', 'shadow-sm');
-                
-                analystSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                header.classList.add('bg-white/70', 'backdrop-blur-sm');
+                header.classList.remove('bg-white/90', 'backdrop-blur-md', 'shadow-sm');
             }
+        });
+
+        // --- PARSERS ---
+        function parseCSV(raw, type) {
+            const lines = raw.trim().split('\n');
+            const data = [];
+            lines.forEach(line => {
+                const cols = line.split(',');
+                if(cols.length < 3) return;
+                const brand = cols[0].trim();
+                const branch = cols[1].trim();
+                const dateStr = cols[2].trim();
+                if(dateStr.startsWith('2026')) {
+                    const val = parseFloat(cols[3]) || 0;
+                    data.push({
+                        brand, branch, date: dateStr,
+                        month: parseInt(dateStr.split('-')[1]),
+                        day: parseInt(dateStr.split('-')[2]),
+                        value1: val, // Cust or Ads
+                        value2: parseFloat(cols[4]) || 0 // Rev or 0
+                    });
+                }
+            });
+            return data;
+        }
+
+        function setMonth(m) {
+            currentMonth = m;
+            document.querySelectorAll('.month-btn').forEach((btn, idx) => {
+                const monthId = idx + 1;
+                if(monthId === m) {
+                    btn.classList.remove('bg-white', 'text-gray-500', 'hover:bg-white', 'hover:text-zen-tea');
+                    btn.classList.add('bg-zen-tea', 'text-white');
+                } else {
+                    btn.classList.add('bg-white', 'text-gray-500', 'hover:bg-white', 'hover:text-zen-tea');
+                    btn.classList.remove('bg-zen-tea', 'text-white');
+                }
+            });
+            updateDashboard();
         }
 
         function filterBrand(brand) {
-            const filteredData = brand === 'all' ? rawData : rawData.filter(d => d.brand === brand);
-            updateUI(filteredData, brand);
-            
-            document.querySelectorAll('.nav-btn').forEach(b => {
-                b.classList.remove('nav-btn-active', 'bg-zen-tea', 'text-white', 'border-transparent');
-                b.classList.add('bg-transparent', 'text-zen-muted', 'border-zen-sage/20');
+            currentBrand = brand;
+            document.querySelectorAll('.sidebar-item').forEach(el => {
+                const onclickVal = el.getAttribute('onclick');
+                if(onclickVal && onclickVal.includes(`'${brand}'`)) el.classList.add('active');
+                else el.classList.remove('active');
             });
-            
-            const btnId = brand === 'all' ? 'btn-all' : 'btn-' + brand.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
-            const activeBtn = document.getElementById(btnId);
-            activeBtn.classList.add('nav-btn-active');
-            activeBtn.classList.remove('bg-transparent', 'text-zen-muted', 'border-zen-sage/20');
+            updateDashboard();
         }
 
-        function updateUI(data, brandName) {
-            const totalRev = data.reduce((s, d) => s + d.revenue, 0);
-            const totalGuests = data.reduce((s, d) => s + d.guests, 0);
-            const avgTbb = Math.round(totalRev / totalGuests);
+        // --- MAIN LOGIC ---
+        function updateDashboard() {
+            // 1. Filter Data
+            let dailyRev = parsedDailyData.filter(d => d.month === currentMonth);
+            let dailyAds = parsedAdsData.filter(d => d.month === currentMonth);
 
-            // Headlines updated with Zen language
-            if (brandName === 'all') {
-                document.getElementById('main-headline').innerHTML = `Tháng 12 đạt <span class="text-zen-earth font-bold">${totalRev.toLocaleString()} VND</span><br>Tăng trưởng tập trung nhóm Key Accounts.`;
-                document.getElementById('sub-headline').innerText = "Dữ liệu xác thực cho thấy Phục Linh chiếm ưu thế tuyệt đối (72%), trong khi An Nguyên đạt hiệu suất vận hành trên mỗi điểm bán tốt nhất hệ thống.";
-            } else if (brandName === 'Phục Linh') {
-                document.getElementById('main-headline').innerHTML = `Phục Linh: <span class="text-zen-earth font-bold">${totalRev.toLocaleString()} VND</span><br>Chiếm lĩnh 72% thị phần hệ thống.`;
-                document.getElementById('sub-headline').innerText = "Cơ sở Xã Đàn và Cầu Giấy đang dẫn đầu về hiệu suất tài chính (TBB > 4.8M), đóng vai trò Cash Cow.";
-            } else if (brandName === 'An Nhiên') {
-                document.getElementById('main-headline').innerHTML = `An Nhiên: <span class="text-zen-earth font-bold">${totalRev.toLocaleString()} VND</span><br>Tiềm năng tối ưu hóa giá trị đơn hàng.`;
-                document.getElementById('sub-headline').innerText = "TBB hiện tại thấp hơn mức trung bình hệ thống, đây là dư địa tăng trưởng lớn nhất cho Q1/2026.";
-            } else {
-                document.getElementById('main-headline').innerHTML = `An Nguyên: <span class="text-zen-earth font-bold">MÔ HÌNH HIỆU QUẢ CAO</span><br>1 cơ sở tạo ra doanh thu ngang Top 3.`;
-                document.getElementById('sub-headline').innerText = "Long Biên chứng minh hiệu quả vận hành vượt trội với lượng khách ổn định và chi phí tối ưu.";
+            if (currentBrand !== 'all') {
+                dailyRev = dailyRev.filter(d => d.brand === currentBrand);
+                dailyAds = dailyAds.filter(d => d.brand === currentBrand);
             }
 
-            // Calculations
-            let revShare = ((totalRev / SYSTEM_TOTAL_REV) * 100).toFixed(1);
-            let tbbDiff = ((avgTbb - SYSTEM_AVG_TBB) / SYSTEM_AVG_TBB * 100).toFixed(1);
-            let tbbIcon = tbbDiff >= 0 ? '+' : '';
+            // 2. Aggregate Data by Branch
+            const branchMap = {};
 
-            // --- ZEN KPI CARDS ---
-            document.getElementById('summary-stats').innerHTML = `
-                <!-- Revenue -->
-                <div class="glass-card p-8 hover:-translate-y-1 transition-zen duration-700">
-                    <p class="font-sans text-[11px] text-zen-muted uppercase tracking-[0.2em] mb-3 font-bold">Tổng Doanh Thu</p>
-                    <div class="flex flex-col">
-                        <p class="font-display text-[28px] text-zen-text leading-none font-bold">${totalRev.toLocaleString()}</p>
-                        <span class="font-sans text-xs text-zen-sage mt-1 font-bold italic">VND</span>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-zen-sage/10">
-                         <p class="text-xs text-zen-muted font-medium">Đóng góp <span class="text-zen-earth font-bold">${revShare}%</span></p>
-                    </div>
-                </div>
-
-                <!-- Guests -->
-                <div class="glass-card p-8 hover:-translate-y-1 transition-zen duration-700">
-                    <p class="font-sans text-[11px] text-zen-muted uppercase tracking-[0.2em] mb-3 font-bold">Tổng Lượt Khách</p>
-                    <div class="flex flex-col">
-                        <p class="font-display text-[28px] text-zen-text leading-none font-bold">${totalGuests.toLocaleString()}</p>
-                        <span class="font-sans text-xs text-zen-sage mt-1 font-bold italic">Khách</span>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-zen-sage/10">
-                         <p class="text-xs text-zen-muted font-medium">Lưu lượng ổn định</p>
-                    </div>
-                </div>
-
-                <!-- TBB -->
-                <div class="glass-card p-8 hover:-translate-y-1 transition-zen duration-700">
-                    <p class="font-sans text-[11px] text-zen-muted uppercase tracking-[0.2em] mb-3 font-bold">Giá Trị Bill TB (TBB)</p>
-                    <div class="flex flex-col">
-                        <p class="font-display text-[28px] text-zen-text leading-none font-bold">${avgTbb.toLocaleString()}</p>
-                        <span class="font-sans text-xs text-zen-sage mt-1 font-bold italic">VND</span>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-zen-sage/10">
-                         <p class="text-xs text-zen-muted font-medium">${tbbIcon}${Math.abs(tbbDiff)}% so với TB hệ thống</p>
-                    </div>
-                </div>
-
-                <!-- Efficiency -->
-                <div class="glass-card p-8 hover:-translate-y-1 transition-zen duration-700">
-                    <p class="font-sans text-[11px] text-zen-muted uppercase tracking-[0.2em] mb-3 font-bold">Hiệu Suất Vận Hành</p>
-                    <div class="flex flex-col">
-                        <p class="font-display text-[28px] text-zen-text leading-none font-bold">${Math.round(totalGuests/data.length)}</p>
-                        <span class="font-sans text-xs text-zen-sage mt-1 font-bold italic">Khách / Cơ sở</span>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-zen-sage/10">
-                         <p class="text-xs text-zen-muted font-medium">Tải vận hành</p>
-                    </div>
-                </div>
-            `;
-
-            // Update Table
-            let tableHTML = '';
-            data.forEach(d => {
-                tableHTML += `
-                    <tr class="hover:bg-zen-sage/5 transition-colors group">
-                        <td class="p-6 pl-8 font-sans text-zen-text font-bold border-b border-zen-sage/5 group-last:border-none">${d.branch}</td>
-                        <td class="p-6 text-center border-b border-zen-sage/5 group-last:border-none">
-                            <span class="text-zen-tea font-display text-lg italic font-bold">${d.peakDay}</span>
-                        </td>
-                        <td class="p-6 text-right font-sans text-zen-muted border-b border-zen-sage/5 group-last:border-none font-medium">${d.peakGuests}</td>
-                        <td class="p-6 pr-8 text-right font-sans text-zen-earth font-bold border-b border-zen-sage/5 group-last:border-none">${d.tbb.toLocaleString()}</td>
-                    </tr>
-                `;
-            });
-            document.getElementById('detail-table-body').innerHTML = tableHTML;
-
-            updateCharts(data, brandName);
-        }
-
-        function updateCharts(data, brandName) {
-            if (revenueChart) revenueChart.destroy();
-            if (dailyGuestChart) dailyGuestChart.destroy();
-            if (guestChart) guestChart.destroy();
+            // Init from summary (Targets)
+            let filteredSummary = summaryData;
+            if (currentBrand !== 'all') filteredSummary = summaryData.filter(d => d.brand === currentBrand);
             
-            productCharts.forEach(c => c.destroy());
-            productCharts = [];
+            filteredSummary.forEach(s => {
+                branchMap[s.branch] = { 
+                    brand: s.brand, 
+                    branch: s.branch, 
+                    target: s.target, 
+                    revenue: 0, 
+                    customers: 0, 
+                    ads: 0 
+                };
+            });
 
-            // ZEN CHART CONFIG
-            Chart.defaults.font.family = "'Nunito', sans-serif";
-            Chart.defaults.color = '#8B8B8B'; // Muted text
-            Chart.defaults.scale.grid.color = '#F0F0F0'; // Very light grid
-
-            // 1. Revenue Chart (Soft Earth Tones)
-            let chart1Labels, chart1Data;
-            if (brandName === 'all') {
-                chart1Labels = ['Phục Linh', 'An Nhiên', 'An Nguyên'];
-                chart1Data = [3309520500, 560130700, 746840000];
-            } else {
-                chart1Labels = data.map(d => d.branch);
-                chart1Data = data.map(d => d.revenue);
-            }
-
-            revenueChart = new Chart(document.getElementById('revenueChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: chart1Labels,
-                    datasets: [{
-                        data: chart1Data,
-                        // Zen Palette: Sage, Tea, Wood, Earth, Sand
-                        backgroundColor: ['#8FAF9F', '#D4A373', '#CBBFA3', '#6B8F71', '#A89F91'],
-                        borderWidth: 0,
-                        hoverOffset: 8
-                    }]
-                },
-                options: { 
-                    maintainAspectRatio: false, 
-                    cutout: '85%', // Very thin elegant ring
-                    animation: { animateScale: true, animateRotate: true, duration: 2000, easing: 'easeOutQuart' },
-                    plugins: { 
-                        legend: { position: 'right', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { size: 13, weight: '600' }, color: '#7A6A53' } },
-                        tooltip: { backgroundColor: '#FAFAF8', titleColor: '#3F3F3F', bodyColor: '#7A6A53', borderColor: '#E5E5E5', borderWidth: 1, padding: 12, displayColors: true, callbacks: { label: (c) => ` ${c.label}` } }
-                    } 
+            // Fill Revenue & Cust
+            dailyRev.forEach(d => {
+                if(branchMap[d.branch]) {
+                    branchMap[d.branch].revenue += d.value2; // col 4 is rev
+                    branchMap[d.branch].customers += d.value1; // col 3 is cust
                 }
             });
 
-            // 2. Daily Guest Chart (Organic Line)
-            const currentDailyData = dailyData[brandName] || dailyData['all'];
-            const ctxDaily = document.getElementById('dailyGuestChart').getContext('2d');
-            const gradient = ctxDaily.createLinearGradient(0, 0, 0, 300);
-            gradient.addColorStop(0, 'rgba(107, 143, 113, 0.2)'); // Tea color low opacity
-            gradient.addColorStop(1, 'rgba(107, 143, 113, 0.0)');
-
-            dailyGuestChart = new Chart(ctxDaily, {
-                type: 'line',
-                data: {
-                    labels: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'],
-                    datasets: [{
-                        label: 'Khách',
-                        data: currentDailyData,
-                        borderColor: '#6B8F71', // Zen Tea
-                        backgroundColor: gradient,
-                        borderWidth: 3,
-                        pointBackgroundColor: '#FAFAF8',
-                        pointBorderColor: '#6B8F71',
-                        pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                        tension: 0.5 // Very smooth organic curve
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: true, grid: { borderDash: [8, 8], drawBorder: false }, ticks: { display: false } },
-                        x: { grid: { display: false }, ticks: { color: '#8B8B8B', font: { size: 12, weight: '600' } } }
-                    },
-                    plugins: { 
-                        legend: { display: false },
-                        tooltip: { backgroundColor: '#FAFAF8', titleColor: '#3F3F3F', bodyColor: '#6B8F71', borderColor: '#E5E5E5', borderWidth: 1, padding: 14 }
-                    }
+            // Fill Ads
+            dailyAds.forEach(d => {
+                if(branchMap[d.branch]) {
+                    branchMap[d.branch].ads += d.value1; // col 3 is ads in ads csv
                 }
             });
 
-            // 3. PRODUCT CHARTS (Zen Bars)
-            const productChartArea = document.getElementById('product-chart-area');
-            productChartArea.innerHTML = '';
+            const aggregatedData = Object.values(branchMap);
 
-            if (brandName === 'all') {
-                const html = `
-                    <div class="glass-card p-10 shadow-zen">
-                        <div class="mb-8 border-b border-zen-sage/10 pb-4">
-                            <h3 class="font-display text-2xl font-bold text-zen-earth">Toàn Bộ Danh Mục Sản Phẩm (Hệ Thống)</h3>
-                            <p class="font-sans text-[12px] text-zen-muted mt-1 uppercase tracking-wide font-bold">Tổng hợp số lượng bán ra</p>
-                        </div>
-                        <div class="product-chart-container" id="container-all" style="height: 500px;">
-                            <canvas id="productChart-all"></canvas>
-                        </div>
-                    </div>`;
-                productChartArea.insertAdjacentHTML('beforeend', html);
+            // 3. Totals
+            const totalRevenue = aggregatedData.reduce((sum, d) => sum + d.revenue, 0);
+            const totalCustomers = aggregatedData.reduce((sum, d) => sum + d.customers, 0);
+            const totalAds = aggregatedData.reduce((sum, d) => sum + d.ads, 0);
+            const avgBill = totalCustomers > 0 ? Math.round(totalRevenue / totalCustomers) : 0;
+
+            // 4. Update KPIs
+            animateValue("kpi-revenue", parseInt(document.getElementById('kpi-revenue').innerText.replace(/\D/g,'')) || 0, totalRevenue, 1000);
+            animateValue("kpi-customers", parseInt(document.getElementById('kpi-customers').innerText.replace(/\D/g,'')) || 0, totalCustomers, 1000);
+            animateValue("kpi-ads", parseInt(document.getElementById('kpi-ads').innerText.replace(/\D/g,'')) || 0, totalAds, 1000);
+            animateValue("kpi-bill", parseInt(document.getElementById('kpi-bill').innerText.replace(/\D/g,'')) || 0, avgBill, 1000);
+
+            // 5. Render All
+            renderMainChart(dailyRev);
+            renderTargetProgress(aggregatedData);
+            renderBranchCards(aggregatedData);
+            renderAdsTable(aggregatedData); // New
+            
+            setTimeout(() => {
+                document.querySelectorAll('.reveal-on-scroll').forEach(el => revealObserver.observe(el));
+                lucide.createIcons();
+            }, 100);
+        }
+
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            const obj = document.getElementById(id);
+            const range = end - start;
+            let current = start;
+            const stepTime = Math.abs(Math.floor(duration / (range / (range > 100 ? 100 : 1))));
+            const steps = 20; const stepVal = range / steps;
+            let stepCount = 0;
+            const timer = setInterval(function() {
+                stepCount++; current += stepVal;
+                obj.innerText = new Intl.NumberFormat('vi-VN').format(Math.round(current));
+                if (stepCount >= steps) { obj.innerText = new Intl.NumberFormat('vi-VN').format(end); clearInterval(timer); }
+            }, duration / steps);
+        }
+
+        // --- RENDERERS ---
+
+        function renderTargetProgress(data) {
+            const container = document.getElementById('targetContainer');
+            container.innerHTML = '';
+            if(data.length === 0) { container.innerHTML = '<p class="text-sm text-gray-400 text-center mt-10">Chưa có dữ liệu</p>'; return; }
+            const sorted = [...data].sort((a, b) => (b.revenue/b.target) - (a.revenue/a.target));
+            sorted.forEach((item, index) => {
+                const percent = item.target > 0 ? (item.revenue / item.target) * 100 : 0;
+                let barWidth = percent > 100 ? 100 : percent;
+                let barColor = 'bg-zen-tea';
+                if(percent < 30) barColor = 'bg-red-400'; else if(percent < 70) barColor = 'bg-orange-400'; if(percent >= 100) barColor = 'bg-green-500';
                 
-                const ctx = document.getElementById('productChart-all');
-                createProductChart(ctx, productData['all'].labels, productData['all'].data);
-
-            } else {
-                const brandInfo = productData[brandName];
-                if (brandInfo && brandInfo.branches) {
-                    productChartArea.className = "grid grid-cols-1 gap-10 mb-20 animate-fade-in";
-                    
-                    brandInfo.branches.forEach((branch, index) => {
-                        const canvasId = `productChart-${index}`;
-                        const containerId = `container-${index}`;
-                        const height = Math.max(250, branch.labels.length * 40); 
-
-                        const html = `
-                            <div class="glass-card p-10 shadow-zen">
-                                <div class="mb-8 border-b border-zen-sage/10 pb-4">
-                                    <h3 class="font-display text-2xl font-bold text-zen-earth">${branch.name}</h3>
-                                    <p class="font-sans text-[12px] text-zen-muted mt-1 uppercase tracking-wide font-bold">Chi tiết mã hàng bán ra</p>
-                                </div>
-                                <div class="product-chart-container" id="${containerId}" style="height: ${height}px;">
-                                    <canvas id="${canvasId}"></canvas>
-                                </div>
-                            </div>`;
-                        productChartArea.insertAdjacentHTML('beforeend', html);
-                        
-                        const ctx = document.getElementById(canvasId);
-                        createProductChart(ctx, branch.labels, branch.data);
-                    });
-                }
-            }
-
-            // 4. Guest Bar (Analyst)
-            guestChart = new Chart(document.getElementById('guestChart'), {
-                type: 'bar',
-                data: {
-                    labels: data.map(d => d.branch),
-                    datasets: [{
-                        label: 'Guests',
-                        data: data.map(d => d.guests),
-                        backgroundColor: '#CBBFA3', // Wood color
-                        hoverBackgroundColor: '#8FAF9F', // Sage hover
-                        borderRadius: 4,
-                        barThickness: 30
-                    }]
-                },
-                options: { 
-                    maintainAspectRatio: false, 
-                    plugins: { legend: { display: false } }, 
-                    scales: { y: { display: false }, x: { grid: { display: false } } } 
-                }
+                const isTop1 = index === 0;
+                const topIndicator = isTop1 ? '<span class="ml-2 text-xs text-yellow-500 animate-pulse">👑 Top 1</span>' : '';
+                const nameStyle = isTop1 ? 'font-bold text-zen-tea' : 'text-zen-dark';
+                const div = document.createElement('div');
+                div.className = `reveal-on-scroll`; div.style.transitionDelay = `${index * 100}ms`;
+                const formatShort = (n) => { if(n >= 1000000000) return (n/1000000000).toFixed(1) + ' tỷ'; if(n >= 1000000) return (n/1000000).toFixed(0) + 'tr'; return new Intl.NumberFormat('vi-VN').format(n); }
+                div.innerHTML = `
+                    <div class="flex justify-between items-end mb-1">
+                        <div><span class="text-sm ${nameStyle} block flex items-center">${index + 1}. ${item.branch} ${topIndicator}</span></div>
+                        <div class="text-right"><span class="text-xs font-bold ${percent >= 100 ? 'text-green-600' : 'text-gray-500'}">${percent.toFixed(1)}%</span></div>
+                    </div>
+                    <div class="progress-bar-bg relative mb-1 w-full bg-gray-100">
+                        <div class="progress-bar-fill ${barColor} shadow-sm" style="width: 0%" data-width="${barWidth}"></div>
+                    </div>
+                    <div class="flex justify-between text-[10px] text-gray-400"><span>${formatShort(item.revenue)}</span><span>MT: ${formatShort(item.target)}</span></div>
+                `;
+                container.appendChild(div);
             });
         }
 
-        function createProductChart(ctx, labels, data) {
-            const chart = new Chart(ctx, {
+        function renderBranchCards(data) {
+            const container = document.getElementById('branchContainer');
+            container.innerHTML = '';
+            const sorted = [...data].sort((a,b) => b.revenue - a.revenue);
+            if (sorted.length === 0) { container.innerHTML = '<p class="text-gray-400 col-span-full text-center py-4">Chưa có dữ liệu.</p>'; return; }
+            sorted.forEach((item, idx) => {
+                const percent = item.target > 0 ? (item.revenue / item.target) * 100 : 0;
+                const isTop1 = idx === 0;
+                const card = document.createElement('div');
+                const baseClasses = "bg-zen-card p-5 rounded-xl border flex flex-col justify-between reveal-on-scroll";
+                const borderClass = isTop1 ? "card-top-1 z-10" : "border-zen-gray card-hover shadow-sm";
+                card.className = `${baseClasses} ${borderClass}`; card.style.transitionDelay = `${idx * 150}ms`;
+                let brandColor = 'text-zen-tea'; let brandBg = 'bg-zen-sage/20';
+                if(item.brand === 'AN NHIÊN') { brandColor = 'text-orange-600'; brandBg = 'bg-orange-100'; }
+                if(item.brand === 'PHỤC LINH') { brandColor = 'text-blue-600'; brandBg = 'bg-blue-100'; }
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-bold text-zen-dark text-lg ${isTop1 ? 'text-yellow-600' : ''}">${item.branch}</h4>
+                            <span class="text-[10px] font-bold ${brandColor} ${brandBg} px-2 py-1 rounded-md uppercase tracking-wide">${item.brand}</span>
+                        </div>
+                        <div class="flex flex-col gap-1 mb-2">
+                             <div class="flex justify-between items-baseline"><span class="text-gray-400 text-xs">Doanh thu</span><span class="text-xl font-bold text-zen-dark">${new Intl.NumberFormat('vi-VN').format(item.revenue)}</span></div>
+                             ${item.target > 0 ? `<div class="flex justify-between items-baseline"><span class="text-gray-400 text-xs">Target</span><span class="text-xs font-bold text-gray-500">${new Intl.NumberFormat('vi-VN').format(item.target)}</span></div>` : ''}
+                        </div>
+                    </div>
+                    ${item.target > 0 ? `<div class="mt-2 pt-2 border-t border-gray-100"><div class="w-full bg-gray-200 rounded-full h-1.5 mb-2 overflow-hidden"><div class="progress-bar-fill ${isTop1 ? 'bg-yellow-500' : 'bg-zen-tea'} h-1.5 rounded-full" style="width: 0%" data-width="${Math.min(percent, 100)}"></div></div><div class="flex justify-between items-center text-xs"><span class="${percent >= 100 ? 'text-green-600' : 'text-gray-500'} font-bold">Đạt ${percent.toFixed(1)}%</span><div class="flex items-center text-gray-500"><i data-lucide="users" class="w-3 h-3 mr-1"></i> ${item.customers}</div></div></div>` : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderAdsTable(data) {
+            const tbody = document.getElementById('adsTableBody');
+            tbody.innerHTML = '';
+            // Sort by ads spend desc
+            const sorted = [...data].sort((a, b) => b.ads - a.ads);
+            
+            sorted.forEach(item => {
+                if(item.ads === 0 && item.revenue === 0) return; // Skip empty rows
+
+                const tr = document.createElement('tr');
+                const cir = item.revenue > 0 ? (item.ads / item.revenue) * 100 : 0;
+                
+                let brandIcon = 'sprout';
+                let brandColor = 'text-zen-tea';
+                if(item.brand === 'AN NHIÊN') { brandIcon = 'sun'; brandColor = 'text-orange-500'; }
+                if(item.brand === 'PHỤC LINH') { brandIcon = 'heart-pulse'; brandColor = 'text-blue-500'; }
+
+                let cirClass = 'text-zen-dark';
+                let cirBadge = '<span class="px-2 py-1 rounded bg-gray-100 text-gray-500 text-xs font-bold">Ổn định</span>';
+                
+                if(cir > 20) {
+                    cirClass = 'text-red-500 font-bold';
+                    cirBadge = '<span class="px-2 py-1 rounded bg-red-100 text-red-600 text-xs font-bold">Cao</span>';
+                } else if(cir < 10 && cir > 0) {
+                    cirClass = 'text-green-600 font-bold';
+                    cirBadge = '<span class="px-2 py-1 rounded bg-green-100 text-green-600 text-xs font-bold">Tốt</span>';
+                }
+
+                tr.innerHTML = `
+                    <td><i data-lucide="${brandIcon}" class="w-4 h-4 ${brandColor}"></i></td>
+                    <td class="font-bold text-zen-dark">${item.branch}</td>
+                    <td class="text-right font-mono">${new Intl.NumberFormat('vi-VN').format(item.ads)}</td>
+                    <td class="text-right text-gray-500">${new Intl.NumberFormat('vi-VN').format(item.revenue)}</td>
+                    <td class="text-right ${cirClass}">${cir.toFixed(2)}%</td>
+                    <td class="text-right">${cirBadge}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderMainChart(dailyData) {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            const daysInMonth = new Date(2026, currentMonth, 0).getDate();
+            const labels = Array.from({length: daysInMonth}, (_, i) => i + 1);
+            const revData = new Array(daysInMonth).fill(0);
+            const custData = new Array(daysInMonth).fill(0);
+            dailyData.forEach(d => { revData[d.day - 1] += d.value2; custData[d.day - 1] += d.value1; });
+            if(chartInstances.main) chartInstances.main.destroy();
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(107, 143, 113, 0.4)'); gradient.addColorStop(1, 'rgba(107, 143, 113, 0.0)');
+            chartInstances.main = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
-                    datasets: [{
-                        label: 'Số lượng',
-                        data: data,
-                        backgroundColor: '#8FAF9F', // Sage Green
-                        hoverBackgroundColor: '#6B8F71', // Tea Green
-                        borderRadius: 6,
-                        barThickness: 14
-                    }]
+                    datasets: [
+                        { label: 'Doanh Thu Ngày', data: revData, type: 'line', borderColor: '#6B8F71', backgroundColor: gradient, borderWidth: 2, tension: 0.4, fill: true, yAxisID: 'y', pointRadius: 0, pointHoverRadius: 6, pointBackgroundColor: '#6B8F71' },
+                        { label: 'Lượng Khách', data: custData, type: 'bar', backgroundColor: 'rgba(203, 191, 163, 0.5)', hoverBackgroundColor: '#CBBFA3', borderRadius: 2, yAxisID: 'y1' }
+                    ]
                 },
                 options: {
-                    indexAxis: 'y',
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { beginAtZero: true, grid: { borderDash: [4, 4] }, ticks: { display: false } },
-                        y: { grid: { display: false }, ticks: { font: { family: 'Nunito', size: 13, weight: '600' }, color: '#3F3F3F' } }
+                    responsive: true, maintainAspectRatio: false, animation: { duration: 2000, easing: 'easeOutQuart' }, interaction: { mode: 'index', intersect: false },
+                    plugins: { 
+                        legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, usePointStyle: true, font: {size: 11, family: 'Nunito'} } },
+                        tooltip: { backgroundColor: 'rgba(255, 255, 255, 0.95)', titleColor: '#3F3F3F', bodyColor: '#3F3F3F', borderColor: '#E5E5E5', borderWidth: 1, padding: 10, displayColors: true, callbacks: { label: function(context) { let label = context.dataset.label || ''; if (label) { label += ': '; } if (context.parsed.y !== null) { if(context.dataset.type === 'line') { label += new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(context.parsed.y); } else { label += context.parsed.y; } } return label; } } }
                     },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { backgroundColor: '#FAFAF8', titleColor: '#3F3F3F', bodyColor: '#6B8F71', borderColor: '#E5E5E5', borderWidth: 1, padding: 12 }
-                    }
+                    scales: { x: { grid: { display: false }, ticks: { font: {size: 10} } }, y: { type: 'linear', display: true, position: 'left', grid: { borderDash: [4, 4], color: '#f0f0f0' }, ticks: { callback: v => v/1000000 + 'M', font: {size: 10} } }, y1: { display: false } }
                 }
             });
-            productCharts.push(chart);
         }
 
-        window.onload = () => filterBrand('all');
+        window.onload = function() {
+            lucide.createIcons();
+            parsedDailyData = parseCSV(csvRaw, 'rev'); 
+            parsedAdsData = parseCSV(csvAdsRaw, 'ads');
+            setMonth(1); 
+        };
     </script>
 </body>
 </html>
-
-
-
