@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Không Gian Quản Trị - An Nhiên 2026 (Premium)</title>
     
-    <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Zen Font Stack -->
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <script>
@@ -101,7 +99,6 @@
 </head>
 <body class="font-sans h-screen flex overflow-hidden text-zen-dark bg-zen-bg">
 
-    <!-- SIDEBAR -->
     <aside class="w-64 bg-white border-r border-zen-gray flex-col hidden md:flex z-20 shadow-sm relative">
         <div class="p-8 pb-4">
             <h1 class="font-display text-2xl font-bold text-zen-tea flex items-center gap-2">
@@ -126,14 +123,10 @@
             </a>
         </nav>
         
-        <!-- User Info Removed -->
-        
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="flex-1 flex flex-col overflow-hidden relative" id="main-scroll-container">
         
-        <!-- HEADER -->
         <header id="main-header" class="bg-white/70 backdrop-blur-sm border-b border-zen-gray px-8 py-4 flex justify-between items-center z-10 sticky top-0 transition-all duration-300">
             <div>
                 <h2 class="font-display text-xl font-bold" id="pageTitle">Tổng Quan Tháng <span id="displayMonth">1</span>/2026</h2>
@@ -151,12 +144,9 @@
             </div>
         </header>
 
-        <!-- DASHBOARD BODY -->
         <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scroll scroll-smooth" id="scroll-body">
             
-            <!-- KPI CARDS -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <!-- KPI 1 -->
                 <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray card-hover reveal-on-scroll" style="transition-delay: 0ms;">
                     <div class="flex justify-between items-start">
                         <div>
@@ -168,7 +158,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- KPI 2 -->
                 <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray card-hover reveal-on-scroll" style="transition-delay: 100ms;">
                     <div class="flex justify-between items-start">
                         <div>
@@ -180,7 +169,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- KPI 3 -->
                 <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray card-hover reveal-on-scroll" style="transition-delay: 200ms;">
                     <div class="flex justify-between items-start">
                         <div>
@@ -192,7 +180,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- KPI 4 -->
                 <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray card-hover reveal-on-scroll" style="transition-delay: 300ms;">
                     <div class="flex justify-between items-start">
                         <div>
@@ -206,9 +193,7 @@
                 </div>
             </div>
 
-            <!-- MAIN CHART & TARGET -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                <!-- CHART -->
                 <div class="lg:col-span-2 bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray reveal-on-scroll group" style="transition-delay: 100ms;">
                     <h3 class="font-display font-bold text-lg text-zen-dark mb-6 flex items-center gap-2">
                         <i data-lucide="bar-chart-2" class="w-4 h-4 text-zen-tea"></i>
@@ -218,7 +203,6 @@
                         <canvas id="mainChart"></canvas>
                     </div>
                 </div>
-                <!-- TARGET COMPARISON -->
                 <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray flex flex-col reveal-on-scroll" style="transition-delay: 200ms;">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-display font-bold text-lg text-zen-dark">Tiến Độ Target</h3>
@@ -227,12 +211,10 @@
                         </div>
                     </div>
                     <div id="targetContainer" class="flex-1 space-y-5 overflow-y-auto pr-2 custom-scroll">
-                        <!-- Filled by JS -->
-                    </div>
+                        </div>
                 </div>
             </div>
 
-            <!-- BRANCH DETAILS CARDS -->
             <div class="mb-10">
                 <div class="flex justify-between items-center mb-6 px-1 reveal-on-scroll">
                     <h3 class="font-display font-bold text-lg text-zen-dark flex items-center gap-2">
@@ -245,11 +227,9 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="branchContainer">
-                    <!-- Filled by JS -->
-                </div>
+                    </div>
             </div>
 
-            <!-- ADS COST TABLE SECTION -->
             <div class="mb-10 reveal-on-scroll">
                 <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray">
                     <div class="flex justify-between items-center mb-6">
@@ -266,7 +246,6 @@
                                 <tr>
                                     <th class="w-10"></th>
                                     <th>Cơ Sở</th>
-                                    <!-- Use !text-right to force alignment -->
                                     <th class="!text-right">Chi Phí Ads</th>
                                     <th class="!text-right">Doanh Thu</th>
                                     <th class="!text-right">CIR (%)</th>
@@ -274,8 +253,7 @@
                                 </tr>
                             </thead>
                             <tbody id="adsTableBody">
-                                <!-- Filled by JS -->
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
@@ -286,9 +264,8 @@
     </main>
 
     <script>
-        // --- 1. CSV RAW DATA (Daily Revenue) ---
+        // --- 1. CSV RAW DATA (Daily Revenue) - UPDATED FROM "CHI TIET" FILE ---
         const csvRaw = `
-AN NGUYÊN,LONG BIÊN,2026-01-01,0,0
 AN NGUYÊN,LONG BIÊN,2026-01-02,4,19800000
 AN NGUYÊN,LONG BIÊN,2026-01-03,7,4600000
 AN NGUYÊN,LONG BIÊN,2026-01-04,10,23900000
@@ -298,21 +275,56 @@ AN NGUYÊN,LONG BIÊN,2026-01-07,6,27300000
 AN NGUYÊN,LONG BIÊN,2026-01-08,10,23200000
 AN NGUYÊN,LONG BIÊN,2026-01-09,6,31400000
 AN NGUYÊN,LONG BIÊN,2026-01-10,7,22600000
-AN NGUYÊN,LONG BIÊN,2026-01-11,5,15000000
-AN NGUYÊN,LONG BIÊN,2026-01-12,9,46300000
-PHỤC LINH,HÀ ĐÔNG,2026-01-01,0,0
-PHỤC LINH,HÀ ĐÔNG,2026-01-02,7,21300000
-PHỤC LINH,HÀ ĐÔNG,2026-01-03,5,15400000
-PHỤC LINH,HÀ ĐÔNG,2026-01-04,8,22100000
-PHỤC LINH,HÀ ĐÔNG,2026-01-05,6,18900000
-PHỤC LINH,HÀ ĐÔNG,2026-01-06,2,30600000
-PHỤC LINH,HÀ ĐÔNG,2026-01-07,8,33200000
-PHỤC LINH,HÀ ĐÔNG,2026-01-08,13,41600000
-PHỤC LINH,HÀ ĐÔNG,2026-01-09,8,7300000
-PHỤC LINH,HÀ ĐÔNG,2026-01-10,8,14699000
-PHỤC LINH,HÀ ĐÔNG,2026-01-11,6,45100000
-PHỤC LINH,HÀ ĐÔNG,2026-01-12,7,23800000
-PHỤC LINH,HÀ ĐÔNG,2026-01-13,1,6660000
+AN NGUYÊN,LONG BIÊN,2026-01-11,1,4800000
+AN NGUYÊN,LONG BIÊN,2026-01-12,7,30400000
+AN NGUYÊN,LONG BIÊN,2026-01-13,3,23500000
+AN NGUYÊN,LONG BIÊN,2026-01-14,4,11600000
+AN NGUYÊN,LONG BIÊN,2026-01-15,9,43100000
+AN NHIÊN,CMT8,2026-01-02,3,7000000
+AN NHIÊN,CMT8,2026-01-03,3,11900000
+AN NHIÊN,CMT8,2026-01-04,5,9500000
+AN NHIÊN,CMT8,2026-01-05,4,16900000
+AN NHIÊN,CMT8,2026-01-06,3,1500000
+AN NHIÊN,CMT8,2026-01-07,1,6100000
+AN NHIÊN,CMT8,2026-01-08,5,28000000
+AN NHIÊN,CMT8,2026-01-09,3,10000000
+AN NHIÊN,CMT8,2026-01-10,3,3000000
+AN NHIÊN,CMT8,2026-01-11,0,0
+AN NHIÊN,CMT8,2026-01-12,4,3000000
+AN NHIÊN,CMT8,2026-01-13,3,3500000
+AN NHIÊN,CMT8,2026-01-14,4,8000000
+AN NHIÊN,ADV,2026-01-02,3,13900000
+AN NHIÊN,ADV,2026-01-03,2,6500000
+AN NHIÊN,ADV,2026-01-04,4,13000000
+AN NHIÊN,ADV,2026-01-05,4,4800000
+AN NHIÊN,ADV,2026-01-06,3,6600000
+AN NHIÊN,ADV,2026-01-07,1,5200000
+AN NHIÊN,ADV,2026-01-08,3,2800000
+AN NHIÊN,ADV,2026-01-09,2,15100000
+AN NHIÊN,ADV,2026-01-10,1,2500000
+AN NHIÊN,ADV,2026-01-11,5,10800000
+AN NHIÊN,ADV,2026-01-12,4,14000000
+AN NHIÊN,ADV,2026-01-13,2,1000000
+AN NHIÊN,ADV,2026-01-14,9,14500000
+AN NHIÊN,ADV,2026-01-15,2,3500000
+PHỤC LINH,XÃ ĐÀN,2026-01-02,3,35500000
+PHỤC LINH,XÃ ĐÀN,2026-01-03,9,39699000
+PHỤC LINH,XÃ ĐÀN,2026-01-04,14,80800000
+PHỤC LINH,XÃ ĐÀN,2026-01-05,10,40150000
+PHỤC LINH,XÃ ĐÀN,2026-01-06,3,10000000
+PHỤC LINH,XÃ ĐÀN,2026-01-07,6,15800000
+PHỤC LINH,XÃ ĐÀN,2026-01-08,8,40260000
+PHỤC LINH,XÃ ĐÀN,2026-01-09,11,71300000
+PHỤC LINH,XÃ ĐÀN,2026-01-10,7,88440000
+PHỤC LINH,XÃ ĐÀN,2026-01-11,8,14299000
+PHỤC LINH,XÃ ĐÀN,2026-01-12,2,21460000
+PHỤC LINH,XÃ ĐÀN,2026-01-13,9,40700000
+PHỤC LINH,XÃ ĐÀN,2026-01-14,7,101000000
+PHỤC LINH,XÃ ĐÀN,2026-01-15,7,8300000
+PHỤC LINH,CẦU GIẤY,2026-01-02,3,12000000
+PHỤC LINH,CẦU GIẤY,2026-01-03,8,33000000
+PHỤC LINH,CẦU GIẤY,2026-01-04,9,42700000
+PHỤC LINH,CẦU GIẤY,2026-01-05,6,15600000
 PHỤC LINH,CẦU GIẤY,2026-01-06,8,35200000
 PHỤC LINH,CẦU GIẤY,2026-01-07,4,22500000
 PHỤC LINH,CẦU GIẤY,2026-01-08,7,13020000
@@ -321,30 +333,51 @@ PHỤC LINH,CẦU GIẤY,2026-01-10,5,60100000
 PHỤC LINH,CẦU GIẤY,2026-01-11,6,60200000
 PHỤC LINH,CẦU GIẤY,2026-01-12,8,24880000
 PHỤC LINH,CẦU GIẤY,2026-01-13,6,35049000
-AN NHIÊN,CMT8,2026-01-02,15,50000000
-AN NHIÊN,CMT8,2026-01-03,22,50400000
-AN NHIÊN,ADV,2026-01-02,15,40000000
-AN NHIÊN,ADV,2026-01-04,19,56200000
-PHỤC LINH,XÃ ĐÀN,2026-01-09,30,150000000
-PHỤC LINH,XÃ ĐÀN,2026-01-10,35,250000000
-PHỤC LINH,XÃ ĐÀN,2026-01-11,31,180428000
-PHỤC LINH,HẢI PHÒNG,2026-01-12,40,60000000
-PHỤC LINH,HẢI PHÒNG,2026-01-13,42,64850000
+PHỤC LINH,CẦU GIẤY,2026-01-14,6,50000000
+PHỤC LINH,CẦU GIẤY,2026-01-15,10,21100000
+PHỤC LINH,HÀ ĐÔNG,2026-01-02,7,21300000
+PHỤC LINH,HÀ ĐÔNG,2026-01-03,4,19200000
+PHỤC LINH,HÀ ĐÔNG,2026-01-04,8,9200000
+PHỤC LINH,HÀ ĐÔNG,2026-01-05,8,13799000
+PHỤC LINH,HÀ ĐÔNG,2026-01-06,2,30600000
+PHỤC LINH,HÀ ĐÔNG,2026-01-07,8,33200000
+PHỤC LINH,HÀ ĐÔNG,2026-01-08,13,41600000
+PHỤC LINH,HÀ ĐÔNG,2026-01-09,8,7300000
+PHỤC LINH,HÀ ĐÔNG,2026-01-10,8,14699000
+PHỤC LINH,HÀ ĐÔNG,2026-01-11,6,45100000
+PHỤC LINH,HÀ ĐÔNG,2026-01-12,7,23800000
+PHỤC LINH,HÀ ĐÔNG,2026-01-13,1,6660000
+PHỤC LINH,HÀ ĐÔNG,2026-01-14,9,30300000
+PHỤC LINH,HÀ ĐÔNG,2026-01-15,8,26600000
+PHỤC LINH,HẢI PHÒNG,2026-01-02,2,3600000
+PHỤC LINH,HẢI PHÒNG,2026-01-03,7,13500000
+PHỤC LINH,HẢI PHÒNG,2026-01-04,12,28600000
+PHỤC LINH,HẢI PHÒNG,2026-01-05,5,14200000
+PHỤC LINH,HẢI PHÒNG,2026-01-06,5,18600000
+PHỤC LINH,HẢI PHÒNG,2026-01-07,5,18100000
+PHỤC LINH,HẢI PHÒNG,2026-01-08,2,5600000
+PHỤC LINH,HẢI PHÒNG,2026-01-09,5,9700000
+PHỤC LINH,HẢI PHÒNG,2026-01-10,15,22800000
+PHỤC LINH,HẢI PHÒNG,2026-01-11,6,17100000
+PHỤC LINH,HẢI PHÒNG,2026-01-12,2,6550000
+PHỤC LINH,HẢI PHÒNG,2026-01-13,6,18800000
+PHỤC LINH,HẢI PHÒNG,2026-01-14,8,17700000
+PHỤC LINH,HẢI PHÒNG,2026-01-15,5,8800000
 `;
 
-        // --- 2. CSV RAW DATA (Ads Cost) - UPDATED FROM USER INPUT ---
-        // Data provided: An Nguyen (92.8m), An Nhien (74.7m), Phuc Linh (11.3m)
+        // --- 2. CSV RAW DATA (Ads Cost) - UPDATED FROM "TONG HOP" FILE ---
+        // Data format matches previous (Brand, Branch, Date, AdsCost)
         const csvAdsRaw = `
-AN NGUYÊN,LONG BIÊN,2026-01-31,92881063
-AN NHIÊN,ADV,2026-01-31,46288549
-AN NHIÊN,CMT8,2026-01-31,28428176
-PHỤC LINH,XÃ ĐÀN,2026-01-31,4873241
-PHỤC LINH,CẦU GIẤY,2026-01-31,2170365
-PHỤC LINH,HẢI PHÒNG,2026-01-31,2155534
-PHỤC LINH,HÀ ĐÔNG,2026-01-31,2120984
+AN NGUYÊN,LONG BIÊN,2026-01-31,97525116
+AN NHIÊN,ADV,2026-01-31,29849585
+AN NHIÊN,CMT8,2026-01-31,48602976
+PHỤC LINH,CẦU GIẤY,2026-01-31,4873241
+PHỤC LINH,HÀ ĐÔNG,2026-01-31,2170365
+PHỤC LINH,HẢI PHÒNG,2026-01-31,2120984
+PHỤC LINH,XÃ ĐÀN,2026-01-31,2155534
 `;
 
-        // --- 3. SUMMARY TARGETS ---
+        // --- 3. SUMMARY TARGETS - UPDATED FROM "TONG HOP" FILE ---
         const summaryData = [
             { brand: 'AN NGUYÊN', branch: 'LONG BIÊN',  target: 700000000 },
             { brand: 'AN NHIÊN',  branch: 'CMT8',       target: 500000000 },
@@ -352,7 +385,7 @@ PHỤC LINH,HÀ ĐÔNG,2026-01-31,2120984
             { brand: 'PHỤC LINH', branch: 'XÃ ĐÀN',     target: 1080000000 },
             { brand: 'PHỤC LINH', branch: 'CẦU GIẤY',   target: 880000000 },
             { brand: 'PHỤC LINH', branch: 'HÀ ĐÔNG',    target: 800000000 },
-            { brand: 'PHỤC LINH', branch: 'HẢI PHÒNG',  target: 400000000 }
+            { brand: 'PHỤC LINH', branch: 'HẢI PHÒNG',  target: 500000000 }
         ];
 
         // --- GLOBAL STATE ---
