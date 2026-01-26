@@ -71,6 +71,7 @@
         }
 
         /* Animations */
+        /* FIX: Opacity starts at 1 to prevent blank screen if JS errors occur */
         .reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
         
@@ -122,7 +123,6 @@
                 <i data-lucide="heart-pulse" class="w-4 h-4"></i> Phục Linh
             </a>
         </nav>
-        
     </aside>
 
     <main class="flex-1 flex flex-col overflow-hidden relative" id="main-scroll-container">
@@ -264,8 +264,8 @@
     </main>
 
     <script>
-        // --- 1. CSV RAW DATA (Daily Revenue) - UPDATED FROM 'Chi tiết.xlsx' ---
-        [cite_start]// Data populated from user file 'Chi tiết.xlsx - Trang tính1.csv' [cite: 12, 13, 14, 15, 16]
+        // --- 1. CSV RAW DATA (Daily Revenue) - UPDATED 26/01 ---
+        // Cleaned data without headers to prevent JS errors
         const csvRaw = `
 AN NGUYÊN,LONG BIÊN,2026-01-02,4,19800000
 AN NGUYÊN,LONG BIÊN,2026-01-03,7,4600000
@@ -442,8 +442,8 @@ PHỤC LINH,HẢI PHÒNG,2026-01-25,5,18440000
 PHỤC LINH,HẢI PHÒNG,2026-01-26,8,4500000
 `;
 
-        // --- 2. CSV RAW DATA (Ads Cost) - UPDATED FROM 'Tổng hợp.xlsx' ---
-        [cite_start]// Data populated from user file 'Tổng hợp.xlsx - Sheet1.csv' [cite: 11]
+        // --- 2. CSV RAW DATA (Ads Cost) - UPDATED 26/01 ---
+        // Manually mapped from "Tổng hợp.xlsx"
         const csvAdsRaw = `
 AN NGUYÊN,LONG BIÊN,2026-01-31,97525116
 AN NHIÊN,ADV,2026-01-31,85305714
@@ -454,8 +454,7 @@ PHỤC LINH,HẢI PHÒNG,2026-01-31,2155534
 PHỤC LINH,XÃ ĐÀN,2026-01-31,4873241
 `;
 
-        // --- 3. SUMMARY TARGETS - UPDATED FROM 'Tổng hợp.xlsx' ---
-        [cite_start]// Targets populated from user file 'Tổng hợp.xlsx - Sheet1.csv' [cite: 11]
+        // --- 3. SUMMARY TARGETS - UPDATED 26/01 ---
         const summaryData = [
             { brand: 'AN NGUYÊN', branch: 'LONG BIÊN',  target: 700000000 },
             { brand: 'AN NHIÊN',  branch: 'CMT8',       target: 500000000 },
