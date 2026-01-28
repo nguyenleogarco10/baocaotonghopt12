@@ -131,7 +131,7 @@
                 <h2 class="font-display text-xl font-bold" id="pageTitle">Tổng Quan Tháng <span id="displayMonth">1</span>/2026</h2>
                 <p class="text-xs text-gray-400 flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    Dữ liệu thực tế [Cập nhật 28/01]
+                    Dữ liệu thực tế [Số liệu chốt từ File Tổng Hợp]
                 </p>
             </div>
             
@@ -263,7 +263,8 @@
     </main>
 
     <script>
-        // --- 1. CSV RAW DATA (Daily Revenue) - UPDATED 28/01 ---
+        // --- 1. CSV RAW DATA (Daily Revenue) - UPDATED FROM 'Chi tiết.xlsx' ---
+        // Used for Daily Chart
         const csvRaw = `
 AN NGUYÊN,LONG BIÊN,2026-01-02,4,19800000
 AN NGUYÊN,LONG BIÊN,2026-01-03,7,4600000
@@ -455,6 +456,7 @@ PHỤC LINH,HẢI PHÒNG,2026-01-28,6,8300000
 `;
 
         // --- 2. CSV RAW DATA (Ads Cost) - UPDATED FROM 'Tổng hợp .xlsx' ---
+        // Data populated from user file 'Tổng hợp .xlsx - Sheet1.csv'
         const csvAdsRaw = `
 AN NGUYÊN,LONG BIÊN,2026-01-31,248414454
 AN NHIÊN,ADV,2026-01-31,122837657
