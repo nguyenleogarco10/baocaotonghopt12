@@ -131,7 +131,7 @@
                 <h2 class="font-display text-xl font-bold" id="pageTitle">Tổng Quan Tháng <span id="displayMonth">1</span>/2026</h2>
                 <p class="text-xs text-gray-400 flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    Dữ liệu thực tế (Cập nhật 28/01)
+                    Dữ liệu thực tế [Cập nhật 28/01]
                 </p>
             </div>
             
@@ -263,8 +263,7 @@
     </main>
 
     <script>
-        // --- 1. CSV RAW DATA (Daily Revenue) - UPDATED FROM 'Chi tiết.xlsx' ---
-        // Data populated from user file 'Chi tiết.xlsx - Trang tính1.csv'
+        // --- 1. CSV RAW DATA (Daily Revenue) - UPDATED 28/01 ---
         const csvRaw = `
 AN NGUYÊN,LONG BIÊN,2026-01-02,4,19800000
 AN NGUYÊN,LONG BIÊN,2026-01-03,7,4600000
@@ -456,7 +455,6 @@ PHỤC LINH,HẢI PHÒNG,2026-01-28,6,8300000
 `;
 
         // --- 2. CSV RAW DATA (Ads Cost) - UPDATED FROM 'Tổng hợp .xlsx' ---
-        // Data populated from user file 'Tổng hợp .xlsx - Sheet1.csv'
         const csvAdsRaw = `
 AN NGUYÊN,LONG BIÊN,2026-01-31,248414454
 AN NHIÊN,ADV,2026-01-31,122837657
@@ -467,15 +465,16 @@ PHỤC LINH,HẢI PHÒNG,2026-01-31,113235303
 PHỤC LINH,XÃ ĐÀN,2026-01-31,301046333
 `;
 
-        // --- 3. SUMMARY TARGETS - UPDATED FROM 'Tổng hợp .xlsx' ---
+        // --- 3. SUMMARY TARGETS & REAL REVENUE - FROM 'Tổng hợp .xlsx' ---
+        // Added real_revenue and real_customers to ensure Cards display correct totals from Summary file
         const summaryData = [
-            { brand: 'AN NGUYÊN', branch: 'LONG BIÊN',  target: 700000000 },
-            { brand: 'AN NHIÊN', branch: 'ADV',  target: 500000000 },
-            { brand: 'AN NHIÊN', branch: 'CMT8',  target: 500000000 },
-            { brand: 'PHỤC LINH', branch: 'CẦU GIẤY',  target: 880000000 },
-            { brand: 'PHỤC LINH', branch: 'HÀ ĐÔNG',  target: 820000000 },
-            { brand: 'PHỤC LINH', branch: 'HẢI PHÒNG',  target: 500000000 },
-            { brand: 'PHỤC LINH', branch: 'XÃ ĐÀN',  target: 1080000000 }
+            { brand: 'AN NGUYÊN', branch: 'LONG BIÊN',  target: 700000000, real_revenue: 617498000, real_customers: 159 },
+            { brand: 'AN NHIÊN', branch: 'ADV',  target: 500000000, real_revenue: 217400000, real_customers: 89 },
+            { brand: 'AN NHIÊN', branch: 'CMT8',  target: 500000000, real_revenue: 172900000, real_customers: 70 },
+            { brand: 'PHỤC LINH', branch: 'CẦU GIẤY',  target: 880000000, real_revenue: 950793999, real_customers: 180 },
+            { brand: 'PHỤC LINH', branch: 'HÀ ĐÔNG',  target: 820000000, real_revenue: 699918000, real_customers: 175 },
+            { brand: 'PHỤC LINH', branch: 'HẢI PHÒNG',  target: 500000000, real_revenue: 353590000, real_customers: 133 },
+            { brand: 'PHỤC LINH', branch: 'XÃ ĐÀN',  target: 1080000000, real_revenue: 1008627000, real_customers: 182 }
         ];
 
         // --- GLOBAL STATE ---
@@ -575,7 +574,7 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,301046333
             // 2. Aggregate Data by Branch
             const branchMap = {};
 
-            // Init from summary (Targets)
+            // Init from summary (Targets & REAL REVENUE)
             let filteredSummary = summaryData;
             if (currentBrand !== 'all') filteredSummary = summaryData.filter(d => d.brand === currentBrand);
             
@@ -584,21 +583,14 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,301046333
                     brand: s.brand, 
                     branch: s.branch, 
                     target: s.target, 
-                    revenue: 0, 
-                    customers: 0, 
+                    // Use Real Revenue & Customers from Summary File to ensure accuracy
+                    revenue: s.real_revenue || 0, 
+                    customers: s.real_customers || 0, 
                     ads: 0 
                 };
             });
 
-            // Fill Revenue & Cust
-            dailyRev.forEach(d => {
-                if(branchMap[d.branch]) {
-                    branchMap[d.branch].revenue += d.value2; // col 4 is rev
-                    branchMap[d.branch].customers += d.value1; // col 3 is cust
-                }
-            });
-
-            // Fill Ads
+            // Fill Ads from CSV
             dailyAds.forEach(d => {
                 if(branchMap[d.branch]) {
                     branchMap[d.branch].ads += d.value1; // col 3 is ads in ads csv
@@ -620,10 +612,10 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,301046333
             animateValue("kpi-bill", parseInt(document.getElementById('kpi-bill').innerText.replace(/\D/g,'')) || 0, avgBill, 1000);
 
             // 5. Render All
-            renderMainChart(dailyRev);
-            renderTargetProgress(aggregatedData);
+            renderMainChart(dailyRev); // Chart uses daily data
+            renderTargetProgress(aggregatedData); // Cards use Summary data
             renderBranchCards(aggregatedData);
-            renderAdsTable(aggregatedData); // New
+            renderAdsTable(aggregatedData);
             
             setTimeout(() => {
                 document.querySelectorAll('.reveal-on-scroll').forEach(el => revealObserver.observe(el));
