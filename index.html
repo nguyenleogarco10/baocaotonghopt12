@@ -136,7 +136,7 @@
                 <h2 class="font-display text-xl font-bold" id="pageTitle">Tổng Quan Tháng <span id="displayMonth">1</span>/2026</h2>
                 <p class="text-xs text-gray-400 flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    Dữ liệu thực tế [Cập nhật 28/01]
+                    Dữ liệu thực tế [Cập nhật mới nhất]
                 </p>
             </div>
             
@@ -209,7 +209,7 @@
                 <div class="lg:col-span-2 bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray reveal-on-scroll group" style="transition-delay: 100ms;">
                     <h3 class="font-display font-bold text-lg text-zen-dark mb-6 flex items-center gap-2">
                         <i data-lucide="bar-chart-2" class="w-4 h-4 text-zen-tea"></i>
-                        Biểu Đồ Doanh Thu Ngày
+                        Biểu Đồ Doanh Thu & Trung Bình Bill
                     </h3>
                     <div class="h-80 w-full relative transition-transform duration-700 ease-out transform group-hover:scale-[1.01]">
                         <canvas id="mainChart"></canvas>
@@ -284,199 +284,199 @@
 
     <script>
         // --- 1. CSV RAW DATA (Daily Revenue) - UPDATED FROM 'Chi tiết.xlsx' ---
-        // Data populated from user file 'Chi tiết.xlsx - Trang tính1.csv'
+        // Contains Revenue, Customers, and Average Bill (bill_col)
         const csvRaw = `
-AN NGUYÊN,LONG BIÊN,2026-01-02,4,19800000
-AN NGUYÊN,LONG BIÊN,2026-01-03,7,4600000
-AN NGUYÊN,LONG BIÊN,2026-01-04,10,23900000
-AN NGUYÊN,LONG BIÊN,2026-01-05,12,60300000
-AN NGUYÊN,LONG BIÊN,2026-01-06,4,10199000
-AN NGUYÊN,LONG BIÊN,2026-01-07,6,27300000
-AN NGUYÊN,LONG BIÊN,2026-01-08,10,23200000
-AN NGUYÊN,LONG BIÊN,2026-01-09,6,31400000
-AN NGUYÊN,LONG BIÊN,2026-01-10,7,22600000
-AN NGUYÊN,LONG BIÊN,2026-01-11,1,4800000
-AN NGUYÊN,LONG BIÊN,2026-01-12,7,30400000
-AN NGUYÊN,LONG BIÊN,2026-01-13,3,23500000
-AN NGUYÊN,LONG BIÊN,2026-01-14,4,11600000
-AN NGUYÊN,LONG BIÊN,2026-01-15,9,43100000
-AN NGUYÊN,LONG BIÊN,2026-01-16,4,14500000
-AN NGUYÊN,LONG BIÊN,2026-01-17,6,40400000
-AN NGUYÊN,LONG BIÊN,2026-01-18,6,35400000
-AN NGUYÊN,LONG BIÊN,2026-01-19,7,32100000
-AN NGUYÊN,LONG BIÊN,2026-01-20,6,35200000
-AN NGUYÊN,LONG BIÊN,2026-01-21,7,32500000
-AN NGUYÊN,LONG BIÊN,2026-01-22,6,16000000
-AN NGUYÊN,LONG BIÊN,2026-01-23,2,4499000
-AN NGUYÊN,LONG BIÊN,2026-01-24,4,11300000
-AN NGUYÊN,LONG BIÊN,2026-01-25,2,600000
-AN NGUYÊN,LONG BIÊN,2026-01-26,6,7700000
-AN NGUYÊN,LONG BIÊN,2026-01-27,7,40000000
-AN NGUYÊN,LONG BIÊN,2026-01-28,5,10600000
-AN NHIÊN ,CMT8,2026-01-02,3,7000000
-AN NHIÊN ,CMT8,2026-01-03,3,11900000
-AN NHIÊN ,CMT8,2026-01-04,5,9500000
-AN NHIÊN ,CMT8,2026-01-05,4,16900000
-AN NHIÊN ,CMT8,2026-01-06,3,1500000
-AN NHIÊN ,CMT8,2026-01-07,1,6100000
-AN NHIÊN ,CMT8,2026-01-08,5,28000000
-AN NHIÊN ,CMT8,2026-01-09,3,10000000
-AN NHIÊN ,CMT8,2026-01-10,3,3000000
-AN NHIÊN ,CMT8,2026-01-11,0,0
-AN NHIÊN ,CMT8,2026-01-12,4,3000000
-AN NHIÊN ,CMT8,2026-01-13,3,3500000
-AN NHIÊN ,CMT8,2026-01-14,2,8000000
-AN NHIÊN ,CMT8,2026-01-15,2,1000000
-AN NHIÊN ,CMT8,2026-01-16,2,1000000
-AN NHIÊN ,CMT8,2026-01-17,6,5800000
-AN NHIÊN ,CMT8,2026-01-18,0,800000
-AN NHIÊN ,CMT8,2026-01-19,2,7800000
-AN NHIÊN ,CMT8,2026-01-20,4,12500000
-AN NHIÊN ,CMT8,2026-01-21,0,0
-AN NHIÊN ,CMT8,2026-01-22,4,5000000
-AN NHIÊN ,CMT8,2026-01-23,1,1000000
-AN NHIÊN ,CMT8,2026-01-24,3,3600000
-AN NHIÊN ,CMT8,2026-01-25,1,5500000
-AN NHIÊN ,CMT8,2026-01-26,5,10000000
-AN NHIÊN ,CMT8,2026-01-27,1,10500000
-AN NHIÊN ,ADV,2026-01-02,3,13900000
-AN NHIÊN ,ADV,2026-01-03,2,6500000
-AN NHIÊN ,ADV,2026-01-04,4,13000000
-AN NHIÊN ,ADV,2026-01-05,4,4800000
-AN NHIÊN ,ADV,2026-01-06,3,6600000
-AN NHIÊN ,ADV,2026-01-07,1,5200000
-AN NHIÊN ,ADV,2026-01-08,3,2800000
-AN NHIÊN ,ADV,2026-01-09,2,15100000
-AN NHIÊN ,ADV,2026-01-10,1,2500000
-AN NHIÊN ,ADV,2026-01-11,5,10800000
-AN NHIÊN ,ADV,2026-01-12,4,14000000
-AN NHIÊN ,ADV,2026-01-13,2,1000000
-AN NHIÊN ,ADV,2026-01-14,9,14500000
-AN NHIÊN ,ADV,2026-01-15,2,3500000
-AN NHIÊN ,ADV,2026-01-16,3,10500000
-AN NHIÊN ,ADV,2026-01-17,4,15800000
-AN NHIÊN ,ADV,2026-01-18,5,8200000
-AN NHIÊN ,ADV,2026-01-19,4,10800000
-AN NHIÊN ,ADV,2026-01-20,1,4000000
-AN NHIÊN ,ADV,2026-01-21,3,13600000
-AN NHIÊN ,ADV,2026-01-22,7,9100000
-AN NHIÊN ,ADV,2026-01-23,6,1900000
-AN NHIÊN ,ADV,2026-01-24,3,6300000
-AN NHIÊN ,ADV,2026-01-25,3,3000000
-AN NHIÊN ,ADV,2026-01-26,1,6000000
-AN NHIÊN ,ADV,2026-01-27,4,14000000
-PHỤC LINH,XÃ ĐÀN,2026-01-02,3,35500000
-PHỤC LINH,XÃ ĐÀN,2026-01-03,9,39699000
-PHỤC LINH,XÃ ĐÀN,2026-01-04,14,80800000
-PHỤC LINH,XÃ ĐÀN,2026-01-05,10,40150000
-PHỤC LINH,XÃ ĐÀN,2026-01-06,3,10000000
-PHỤC LINH,XÃ ĐÀN,2026-01-07,6,15800000
-PHỤC LINH,XÃ ĐÀN,2026-01-08,8,40260000
-PHỤC LINH,XÃ ĐÀN,2026-01-09,11,71300000
-PHỤC LINH,XÃ ĐÀN,2026-01-10,7,88440000
-PHỤC LINH,XÃ ĐÀN,2026-01-11,8,14299000
-PHỤC LINH,XÃ ĐÀN,2026-01-12,2,21460000
-PHỤC LINH,XÃ ĐÀN,2026-01-13,9,40700000
-PHỤC LINH,XÃ ĐÀN,2026-01-14,7,101000000
-PHỤC LINH,XÃ ĐÀN,2026-01-15,7,9700000
-PHỤC LINH,XÃ ĐÀN,2026-01-16,8,22300000
-PHỤC LINH,XÃ ĐÀN,2026-01-17,7,45100000
-PHỤC LINH,XÃ ĐÀN,2026-01-18,7,34700000
-PHỤC LINH,XÃ ĐÀN,2026-01-19,9,42579000
-PHỤC LINH,XÃ ĐÀN,2026-01-20,6,55300000
-PHỤC LINH,XÃ ĐÀN,2026-01-21,2,32100000
-PHỤC LINH,XÃ ĐÀN,2026-01-22,1,26300000
-PHỤC LINH,XÃ ĐÀN,2026-01-23,7,15500000
-PHỤC LINH,XÃ ĐÀN,2026-01-24,6,22160000
-PHỤC LINH,XÃ ĐÀN,2026-01-25,5,17100000
-PHỤC LINH,XÃ ĐÀN,2026-01-26,6,23800000
-PHỤC LINH,XÃ ĐÀN,2026-01-27,8,35380000
-PHỤC LINH,XÃ ĐÀN,2026-01-28,9,21300000
-PHỤC LINH,CẦU GIẤY,2026-01-02,3,12000000
-PHỤC LINH,CẦU GIẤY,2026-01-03,8,33000000
-PHỤC LINH,CẦU GIẤY,2026-01-04,9,42700000
-PHỤC LINH,CẦU GIẤY,2026-01-05,6,15600000
-PHỤC LINH,CẦU GIẤY,2026-01-06,8,35200000
-PHỤC LINH,CẦU GIẤY,2026-01-07,4,22500000
-PHỤC LINH,CẦU GIẤY,2026-01-08,7,13020000
-PHỤC LINH,CẦU GIẤY,2026-01-09,4,34700000
-PHỤC LINH,CẦU GIẤY,2026-01-10,5,60100000
-PHỤC LINH,CẦU GIẤY,2026-01-11,6,60200000
-PHỤC LINH,CẦU GIẤY,2026-01-12,8,24880000
-PHỤC LINH,CẦU GIẤY,2026-01-13,6,35049000
-PHỤC LINH,CẦU GIẤY,2026-01-14,6,50000000
-PHỤC LINH,CẦU GIẤY,2026-01-15,10,21100000
-PHỤC LINH,CẦU GIẤY,2026-01-16,5,31200000
-PHỤC LINH,CẦU GIẤY,2026-01-17,8,58600000
-PHỤC LINH,CẦU GIẤY,2026-01-18,12,60799000
-PHỤC LINH,CẦU GIẤY,2026-01-19,6,36100000
-PHỤC LINH,CẦU GIẤY,2026-01-20,7,53500000
-PHỤC LINH,CẦU GIẤY,2026-01-21,7,104299999
-PHỤC LINH,CẦU GIẤY,2026-01-22,5,4700000
-PHỤC LINH,CẦU GIẤY,2026-01-23,5,4498000
-PHỤC LINH,CẦU GIẤY,2026-01-24,8,25600000
-PHỤC LINH,CẦU GIẤY,2026-01-25,10,49190000
-PHỤC LINH,CẦU GIẤY,2026-01-26,5,20210000
-PHỤC LINH,CẦU GIẤY,2026-01-27,9,26598000
-PHỤC LINH,CẦU GIẤY,2026-01-28,3,4100000
-PHỤC LINH,HÀ ĐÔNG,2026-01-02,7,21300000
-PHỤC LINH,HÀ ĐÔNG,2026-01-03,4,19200000
-PHỤC LINH,HÀ ĐÔNG,2026-01-04,8,9200000
-PHỤC LINH,HÀ ĐÔNG,2026-01-05,8,13799000
-PHỤC LINH,HÀ ĐÔNG,2026-01-06,2,30600000
-PHỤC LINH,HÀ ĐÔNG,2026-01-07,8,33200000
-PHỤC LINH,HÀ ĐÔNG,2026-01-08,13,41600000
-PHỤC LINH,HÀ ĐÔNG,2026-01-09,8,7300000
-PHỤC LINH,HÀ ĐÔNG,2026-01-10,8,14699000
-PHỤC LINH,HÀ ĐÔNG,2026-01-11,6,45100000
-PHỤC LINH,HÀ ĐÔNG,2026-01-12,7,23800000
-PHỤC LINH,HÀ ĐÔNG,2026-01-13,1,6660000
-PHỤC LINH,HÀ ĐÔNG,2026-01-14,9,30300000
-PHỤC LINH,HÀ ĐÔNG,2026-01-15,8,26600000
-PHỤC LINH,HÀ ĐÔNG,2026-01-16,6,19900000
-PHỤC LINH,HÀ ĐÔNG,2026-01-17,11,53200000
-PHỤC LINH,HÀ ĐÔNG,2026-01-18,10,46460000
-PHỤC LINH,HÀ ĐÔNG,2026-01-19,3,38400000
-PHỤC LINH,HÀ ĐÔNG,2026-01-20,2,24100000
-PHỤC LINH,HÀ ĐÔNG,2026-01-21,8,22000000
-PHỤC LINH,HÀ ĐÔNG,2026-01-22,3,42700000
-PHỤC LINH,HÀ ĐÔNG,2026-01-23,5,3700000
-PHỤC LINH,HÀ ĐÔNG,2026-01-24,6,31600000
-PHỤC LINH,HÀ ĐÔNG,2026-01-25,6,47400000
-PHỤC LINH,HÀ ĐÔNG,2026-01-26,8,14300000
-PHỤC LINH,HÀ ĐÔNG,2026-01-27,5,7300000
-PHỤC LINH,HÀ ĐÔNG,2026-01-28,6,21300000
-PHỤC LINH,HẢI PHÒNG,2026-01-02,2,3600000
-PHỤC LINH,HẢI PHÒNG,2026-01-03,7,13500000
-PHỤC LINH,HẢI PHÒNG,2026-01-04,12,28600000
-PHỤC LINH,HẢI PHÒNG,2026-01-05,5,14200000
-PHỤC LINH,HẢI PHÒNG,2026-01-06,5,18600000
-PHỤC LINH,HẢI PHÒNG,2026-01-07,5,18100000
-PHỤC LINH,HẢI PHÒNG,2026-01-08,2,5600000
-PHỤC LINH,HẢI PHÒNG,2026-01-09,5,9700000
-PHỤC LINH,HẢI PHÒNG,2026-01-10,15,22800000
-PHỤC LINH,HẢI PHÒNG,2026-01-11,6,17100000
-PHỤC LINH,HẢI PHÒNG,2026-01-12,2,6550000
-PHỤC LINH,HẢI PHÒNG,2026-01-13,6,18800000
-PHỤC LINH,HẢI PHÒNG,2026-01-14,8,17700000
-PHỤC LINH,HẢI PHÒNG,2026-01-15,5,7800000
-PHỤC LINH,HẢI PHÒNG,2026-01-16,3,2100000
-PHỤC LINH,HẢI PHÒNG,2026-01-17,5,11300000
-PHỤC LINH,HẢI PHÒNG,2026-01-18,4,29150000
-PHỤC LINH,HẢI PHÒNG,2026-01-19,4,3000000
-PHỤC LINH,HẢI PHÒNG,2026-01-20,3,6000000
-PHỤC LINH,HẢI PHÒNG,2026-01-21,4,12700000
-PHỤC LINH,HẢI PHÒNG,2026-01-22,0,5000000
-PHỤC LINH,HẢI PHÒNG,2026-01-23,4,11250000
-PHỤC LINH,HẢI PHÒNG,2026-01-24,5,13400000
-PHỤC LINH,HẢI PHÒNG,2026-01-25,5,18440000
-PHỤC LINH,HẢI PHÒNG,2026-01-26,8,4500000
-PHỤC LINH,HẢI PHÒNG,2026-01-27,1,12100000
-PHỤC LINH,HẢI PHÒNG,2026-01-28,6,8300000
+AN NGUYÊN,LONG BIÊN,2026-01-02,4,19800000,4950000
+AN NGUYÊN,LONG BIÊN,2026-01-03,7,4600000,657142
+AN NGUYÊN,LONG BIÊN,2026-01-04,10,23900000,2390000
+AN NGUYÊN,LONG BIÊN,2026-01-05,12,60300000,5025000
+AN NGUYÊN,LONG BIÊN,2026-01-06,4,10199000,2549750
+AN NGUYÊN,LONG BIÊN,2026-01-07,6,27300000,4550000
+AN NGUYÊN,LONG BIÊN,2026-01-08,10,23200000,2320000
+AN NGUYÊN,LONG BIÊN,2026-01-09,6,31400000,5233333
+AN NGUYÊN,LONG BIÊN,2026-01-10,7,22600000,3228571
+AN NGUYÊN,LONG BIÊN,2026-01-11,1,4800000,4800000
+AN NGUYÊN,LONG BIÊN,2026-01-12,7,30400000,4342857
+AN NGUYÊN,LONG BIÊN,2026-01-13,3,23500000,7833333
+AN NGUYÊN,LONG BIÊN,2026-01-14,4,11600000,2900000
+AN NGUYÊN,LONG BIÊN,2026-01-15,9,43100000,4788888
+AN NGUYÊN,LONG BIÊN,2026-01-16,4,14500000,3625000
+AN NGUYÊN,LONG BIÊN,2026-01-17,6,40400000,6733333
+AN NGUYÊN,LONG BIÊN,2026-01-18,6,35400000,5900000
+AN NGUYÊN,LONG BIÊN,2026-01-19,7,32100000,4585714
+AN NGUYÊN,LONG BIÊN,2026-01-20,6,35200000,5866666
+AN NGUYÊN,LONG BIÊN,2026-01-21,7,32500000,4642857
+AN NGUYÊN,LONG BIÊN,2026-01-22,6,16000000,2666666
+AN NGUYÊN,LONG BIÊN,2026-01-23,2,4499000,2249500
+AN NGUYÊN,LONG BIÊN,2026-01-24,4,11300000,2825000
+AN NGUYÊN,LONG BIÊN,2026-01-25,2,600000,300000
+AN NGUYÊN,LONG BIÊN,2026-01-26,6,7700000,1283333
+AN NGUYÊN,LONG BIÊN,2026-01-27,7,40000000,5714285
+AN NGUYÊN,LONG BIÊN,2026-01-28,5,10600000,2120000
+AN NHIÊN ,CMT8,2026-01-02,3,7000000,2333333
+AN NHIÊN ,CMT8,2026-01-03,3,11900000,3966666
+AN NHIÊN ,CMT8,2026-01-04,5,9500000,1900000
+AN NHIÊN ,CMT8,2026-01-05,4,16900000,4225000
+AN NHIÊN ,CMT8,2026-01-06,3,1500000,500000
+AN NHIÊN ,CMT8,2026-01-07,1,6100000,6100000
+AN NHIÊN ,CMT8,2026-01-08,5,28000000,5600000
+AN NHIÊN ,CMT8,2026-01-09,3,10000000,3333333
+AN NHIÊN ,CMT8,2026-01-10,3,3000000,1000000
+AN NHIÊN ,CMT8,2026-01-11,0,0,0
+AN NHIÊN ,CMT8,2026-01-12,4,3000000,750000
+AN NHIÊN ,CMT8,2026-01-13,3,3500000,1166666
+AN NHIÊN ,CMT8,2026-01-14,2,8000000,4000000
+AN NHIÊN ,CMT8,2026-01-15,2,1000000,500000
+AN NHIÊN ,CMT8,2026-01-16,2,1000000,500000
+AN NHIÊN ,CMT8,2026-01-17,6,5800000,966666
+AN NHIÊN ,CMT8,2026-01-18,0,800000,0
+AN NHIÊN ,CMT8,2026-01-19,2,7800000,3900000
+AN NHIÊN ,CMT8,2026-01-20,4,12500000,3125000
+AN NHIÊN ,CMT8,2026-01-21,0,0,0
+AN NHIÊN ,CMT8,2026-01-22,4,5000000,1250000
+AN NHIÊN ,CMT8,2026-01-23,1,1000000,1000000
+AN NHIÊN ,CMT8,2026-01-24,3,3600000,1200000
+AN NHIÊN ,CMT8,2026-01-25,1,5500000,5500000
+AN NHIÊN ,CMT8,2026-01-26,5,10000000,2000000
+AN NHIÊN ,CMT8,2026-01-27,1,10500000,10500000
+AN NHIÊN ,ADV,2026-01-02,3,13900000,4633333
+AN NHIÊN ,ADV,2026-01-03,2,6500000,3250000
+AN NHIÊN ,ADV,2026-01-04,4,13000000,3250000
+AN NHIÊN ,ADV,2026-01-05,4,4800000,1200000
+AN NHIÊN ,ADV,2026-01-06,3,6600000,2200000
+AN NHIÊN ,ADV,2026-01-07,1,5200000,5200000
+AN NHIÊN ,ADV,2026-01-08,3,2800000,933333
+AN NHIÊN ,ADV,2026-01-09,2,15100000,7550000
+AN NHIÊN ,ADV,2026-01-10,1,2500000,2500000
+AN NHIÊN ,ADV,2026-01-11,5,10800000,2160000
+AN NHIÊN ,ADV,2026-01-12,4,14000000,3500000
+AN NHIÊN ,ADV,2026-01-13,2,1000000,500000
+AN NHIÊN ,ADV,2026-01-14,9,14500000,1611111
+AN NHIÊN ,ADV,2026-01-15,2,3500000,1750000
+AN NHIÊN ,ADV,2026-01-16,3,10500000,3500000
+AN NHIÊN ,ADV,2026-01-17,4,15800000,3950000
+AN NHIÊN ,ADV,2026-01-18,5,8200000,1640000
+AN NHIÊN ,ADV,2026-01-19,4,10800000,2700000
+AN NHIÊN ,ADV,2026-01-20,1,4000000,4000000
+AN NHIÊN ,ADV,2026-01-21,3,13600000,4533333
+AN NHIÊN ,ADV,2026-01-22,7,9100000,1300000
+AN NHIÊN ,ADV,2026-01-23,6,1900000,316666
+AN NHIÊN ,ADV,2026-01-24,3,6300000,2100000
+AN NHIÊN ,ADV,2026-01-25,3,3000000,1000000
+AN NHIÊN ,ADV,2026-01-26,1,6000000,6000000
+AN NHIÊN ,ADV,2026-01-27,4,14000000,3500000
+PHỤC LINH,XÃ ĐÀN,2026-01-02,3,35500000,11833333
+PHỤC LINH,XÃ ĐÀN,2026-01-03,9,39699000,4411000
+PHỤC LINH,XÃ ĐÀN,2026-01-04,14,80800000,5771428
+PHỤC LINH,XÃ ĐÀN,2026-01-05,10,40150000,4015000
+PHỤC LINH,XÃ ĐÀN,2026-01-06,3,10000000,3333333
+PHỤC LINH,XÃ ĐÀN,2026-01-07,6,15800000,2633333
+PHỤC LINH,XÃ ĐÀN,2026-01-08,8,40260000,5032500
+PHỤC LINH,XÃ ĐÀN,2026-01-09,11,71300000,6481818
+PHỤC LINH,XÃ ĐÀN,2026-01-10,7,88440000,12634285
+PHỤC LINH,XÃ ĐÀN,2026-01-11,8,14299000,1787375
+PHỤC LINH,XÃ ĐÀN,2026-01-12,2,21460000,10730000
+PHỤC LINH,XÃ ĐÀN,2026-01-13,9,40700000,4522222
+PHỤC LINH,XÃ ĐÀN,2026-01-14,7,101000000,14428571
+PHỤC LINH,XÃ ĐÀN,2026-01-15,7,9700000,1385714
+PHỤC LINH,XÃ ĐÀN,2026-01-16,8,22300000,2787500
+PHỤC LINH,XÃ ĐÀN,2026-01-17,7,45100000,6442857
+PHỤC LINH,XÃ ĐÀN,2026-01-18,7,34700000,4957142
+PHỤC LINH,XÃ ĐÀN,2026-01-19,9,42579000,4731000
+PHỤC LINH,XÃ ĐÀN,2026-01-20,6,55300000,9216666
+PHỤC LINH,XÃ ĐÀN,2026-01-21,2,32100000,16050000
+PHỤC LINH,XÃ ĐÀN,2026-01-22,1,26300000,26300000
+PHỤC LINH,XÃ ĐÀN,2026-01-23,7,15500000,2214285
+PHỤC LINH,XÃ ĐÀN,2026-01-24,6,22160000,3693333
+PHỤC LINH,XÃ ĐÀN,2026-01-25,5,17100000,3420000
+PHỤC LINH,XÃ ĐÀN,2026-01-26,6,23800000,3966666
+PHỤC LINH,XÃ ĐÀN,2026-01-27,8,35380000,4422500
+PHỤC LINH,XÃ ĐÀN,2026-01-28,9,21300000,2366666
+PHỤC LINH,CẦU GIẤY,2026-01-02,3,12000000,4000000
+PHỤC LINH,CẦU GIẤY,2026-01-03,8,33000000,4125000
+PHỤC LINH,CẦU GIẤY,2026-01-04,9,42700000,4744444
+PHỤC LINH,CẦU GIẤY,2026-01-05,6,15600000,2600000
+PHỤC LINH,CẦU GIẤY,2026-01-06,8,35200000,4400000
+PHỤC LINH,CẦU GIẤY,2026-01-07,4,22500000,5625000
+PHỤC LINH,CẦU GIẤY,2026-01-08,7,13020000,1860000
+PHỤC LINH,CẦU GIẤY,2026-01-09,4,34700000,8675000
+PHỤC LINH,CẦU GIẤY,2026-01-10,5,60100000,12020000
+PHỤC LINH,CẦU GIẤY,2026-01-11,6,60200000,10033333
+PHỤC LINH,CẦU GIẤY,2026-01-12,8,24880000,3110000
+PHỤC LINH,CẦU GIẤY,2026-01-13,6,35049000,5841500
+PHỤC LINH,CẦU GIẤY,2026-01-14,6,50000000,8333333
+PHỤC LINH,CẦU GIẤY,2026-01-15,10,21100000,2110000
+PHỤC LINH,CẦU GIẤY,2026-01-16,5,31200000,6240000
+PHỤC LINH,CẦU GIẤY,2026-01-17,8,58600000,7325000
+PHỤC LINH,CẦU GIẤY,2026-01-18,12,60799000,5066583
+PHỤC LINH,CẦU GIẤY,2026-01-19,6,36100000,6016666
+PHỤC LINH,CẦU GIẤY,2026-01-20,7,53500000,7642857
+PHỤC LINH,CẦU GIẤY,2026-01-21,7,104299999,14899999
+PHỤC LINH,CẦU GIẤY,2026-01-22,5,4700000,940000
+PHỤC LINH,CẦU GIẤY,2026-01-23,5,4498000,899600
+PHỤC LINH,CẦU GIẤY,2026-01-24,8,25600000,3200000
+PHỤC LINH,CẦU GIẤY,2026-01-25,10,49190000,4919000
+PHỤC LINH,CẦU GIẤY,2026-01-26,5,20210000,4042000
+PHỤC LINH,CẦU GIẤY,2026-01-27,9,26598000,2955333
+PHỤC LINH,CẦU GIẤY,2026-01-28,3,4100000,1366666
+PHỤC LINH,HÀ ĐÔNG,2026-01-02,7,21300000,3042857
+PHỤC LINH,HÀ ĐÔNG,2026-01-03,4,19200000,4800000
+PHỤC LINH,HÀ ĐÔNG,2026-01-04,8,9200000,1150000
+PHỤC LINH,HÀ ĐÔNG,2026-01-05,8,13799000,1724875
+PHỤC LINH,HÀ ĐÔNG,2026-01-06,2,30600000,15300000
+PHỤC LINH,HÀ ĐÔNG,2026-01-07,8,33200000,4150000
+PHỤC LINH,HÀ ĐÔNG,2026-01-08,13,41600000,3200000
+PHỤC LINH,HÀ ĐÔNG,2026-01-09,8,7300000,912500
+PHỤC LINH,HÀ ĐÔNG,2026-01-10,8,14699000,1837375
+PHỤC LINH,HÀ ĐÔNG,2026-01-11,6,45100000,7516666
+PHỤC LINH,HÀ ĐÔNG,2026-01-12,7,23800000,3400000
+PHỤC LINH,HÀ ĐÔNG,2026-01-13,1,6660000,6660000
+PHỤC LINH,HÀ ĐÔNG,2026-01-14,9,30300000,3366666
+PHỤC LINH,HÀ ĐÔNG,2026-01-15,8,26600000,3325000
+PHỤC LINH,HÀ ĐÔNG,2026-01-16,6,19900000,3316666
+PHỤC LINH,HÀ ĐÔNG,2026-01-17,11,53200000,4836363
+PHỤC LINH,HÀ ĐÔNG,2026-01-18,10,46460000,4646000
+PHỤC LINH,HÀ ĐÔNG,2026-01-19,3,38400000,12800000
+PHỤC LINH,HÀ ĐÔNG,2026-01-20,2,24100000,12050000
+PHỤC LINH,HÀ ĐÔNG,2026-01-21,8,22000000,2750000
+PHỤC LINH,HÀ ĐÔNG,2026-01-22,3,42700000,14233333
+PHỤC LINH,HÀ ĐÔNG,2026-01-23,5,3700000,740000
+PHỤC LINH,HÀ ĐÔNG,2026-01-24,6,31600000,5266666
+PHỤC LINH,HÀ ĐÔNG,2026-01-25,6,47400000,7900000
+PHỤC LINH,HÀ ĐÔNG,2026-01-26,8,14300000,1787500
+PHỤC LINH,HÀ ĐÔNG,2026-01-27,5,7300000,1460000
+PHỤC LINH,HÀ ĐÔNG,2026-01-28,6,21300000,3550000
+PHỤC LINH,HẢI PHÒNG,2026-01-02,2,3600000,1800000
+PHỤC LINH,HẢI PHÒNG,2026-01-03,7,13500000,1928571
+PHỤC LINH,HẢI PHÒNG,2026-01-04,12,28600000,2383333
+PHỤC LINH,HẢI PHÒNG,2026-01-05,5,14200000,2840000
+PHỤC LINH,HẢI PHÒNG,2026-01-06,5,18600000,3720000
+PHỤC LINH,HẢI PHÒNG,2026-01-07,5,18100000,3620000
+PHỤC LINH,HẢI PHÒNG,2026-01-08,2,5600000,2800000
+PHỤC LINH,HẢI PHÒNG,2026-01-09,5,9700000,1940000
+PHỤC LINH,HẢI PHÒNG,2026-01-10,15,22800000,1520000
+PHỤC LINH,HẢI PHÒNG,2026-01-11,6,17100000,2850000
+PHỤC LINH,HẢI PHÒNG,2026-01-12,2,6550000,3275000
+PHỤC LINH,HẢI PHÒNG,2026-01-13,6,18800000,3133333
+PHỤC LINH,HẢI PHÒNG,2026-01-14,8,17700000,2212500
+PHỤC LINH,HẢI PHÒNG,2026-01-15,5,7800000,1560000
+PHỤC LINH,HẢI PHÒNG,2026-01-16,3,2100000,700000
+PHỤC LINH,HẢI PHÒNG,2026-01-17,5,11300000,2260000
+PHỤC LINH,HẢI PHÒNG,2026-01-18,4,29150000,7287500
+PHỤC LINH,HẢI PHÒNG,2026-01-19,4,3000000,750000
+PHỤC LINH,HẢI PHÒNG,2026-01-20,3,6000000,2000000
+PHỤC LINH,HẢI PHÒNG,2026-01-21,4,12700000,3175000
+PHỤC LINH,HẢI PHÒNG,2026-01-22,0,5000000,0
+PHỤC LINH,HẢI PHÒNG,2026-01-23,4,11250000,2812500
+PHỤC LINH,HẢI PHÒNG,2026-01-24,5,13400000,2680000
+PHỤC LINH,HẢI PHÒNG,2026-01-25,5,18440000,3688000
+PHỤC LINH,HẢI PHÒNG,2026-01-26,8,4500000,562500
+PHỤC LINH,HẢI PHÒNG,2026-01-27,1,12100000,12100000
+PHỤC LINH,HẢI PHÒNG,2026-01-28,6,8300000,1383333
 `;
 
-        // --- 2. CSV RAW DATA (Ads Cost) - UPDATED FROM 'Tổng hợp .xlsx' ---
-        // Data populated from user file 'Tổng hợp .xlsx - Sheet1.csv'
+        // --- 2. CSV RAW DATA (Ads Cost) - UPDATED FROM 'Copy of Tổng hợp .xlsx' ---
+        // Data populated from user file 'Copy of Tổng hợp .xlsx - Sheet1.csv'
         const csvAdsRaw = `
 AN NGUYÊN,LONG BIÊN,2026-01-31,359299000
 AN NHIÊN,ADV,2026-01-31,123886052
@@ -487,7 +487,7 @@ PHỤC LINH,HẢI PHÒNG,2026-01-31,113235303
 PHỤC LINH,XÃ ĐÀN,2026-01-31,301046333
 `;
 
-        // --- 3. SUMMARY TARGETS & REAL REVENUE - FROM 'Tổng hợp .xlsx' ---
+        // --- 3. SUMMARY TARGETS & REAL REVENUE - FROM 'Copy of Tổng hợp .xlsx' ---
         // Added real_revenue and real_customers to ensure Cards display correct totals from Summary file
         const summaryData = [
             { brand: 'AN NGUYÊN', branch: 'LONG BIÊN', target: 700000000, real_revenue: 626298000, real_customers: 159 },
@@ -550,7 +550,8 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,301046333
                         month: parseInt(dateStr.split('-')[1]),
                         day: parseInt(dateStr.split('-')[2]),
                         value1: val, // Cust or Ads
-                        value2: parseFloat(cols[4]) || 0 // Rev or 0
+                        value2: parseFloat(cols[4]) || 0, // Rev
+                        value3: parseFloat(cols[5]) || 0 // Average Bill
                     });
                 }
             });
@@ -605,7 +606,7 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,301046333
                     brand: s.brand, 
                     branch: s.branch, 
                     target: s.target, 
-                    // Use Real Revenue & Customers from Summary File to ensure accuracy
+                    // Use Real Revenue & Customers from Summary File
                     revenue: s.real_revenue || 0, 
                     customers: s.real_customers || 0, 
                     ads: 0 
@@ -615,7 +616,7 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,301046333
             // Fill Ads from CSV
             dailyAds.forEach(d => {
                 if(branchMap[d.branch]) {
-                    branchMap[d.branch].ads += d.value1; // col 3 is ads in ads csv
+                    branchMap[d.branch].ads += d.value1; 
                 }
             });
 
@@ -770,27 +771,92 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,301046333
             const daysInMonth = new Date(2026, currentMonth, 0).getDate();
             const labels = Array.from({length: daysInMonth}, (_, i) => i + 1);
             const revData = new Array(daysInMonth).fill(0);
-            const custData = new Array(daysInMonth).fill(0);
-            dailyData.forEach(d => { revData[d.day - 1] += d.value2; custData[d.day - 1] += d.value1; });
+            const billData = new Array(daysInMonth).fill(0); // For Avg Bill
+            
+            // Group data by day
+            const dailyGroups = {};
+            dailyData.forEach(d => {
+                if (!dailyGroups[d.day]) {
+                    dailyGroups[d.day] = { rev: 0, billSum: 0, count: 0 };
+                }
+                dailyGroups[d.day].rev += d.value2;
+                if (d.value3 > 0) { // Only count if there is bill data
+                    dailyGroups[d.day].billSum += d.value3;
+                    dailyGroups[d.day].count++;
+                }
+            });
+
+            // Fill chart data
+            for (let i = 1; i <= daysInMonth; i++) {
+                if (dailyGroups[i]) {
+                    revData[i-1] = dailyGroups[i].rev;
+                    // Average of averages or sum? Ideally average bill across branches 
+                    // Simple average of branches for chart visualization
+                    billData[i-1] = dailyGroups[i].count > 0 ? (dailyGroups[i].billSum / dailyGroups[i].count) : 0;
+                }
+            }
+
             if(chartInstances.main) chartInstances.main.destroy();
             const gradient = ctx.createLinearGradient(0, 0, 0, 400);
             gradient.addColorStop(0, 'rgba(107, 143, 113, 0.4)'); gradient.addColorStop(1, 'rgba(107, 143, 113, 0.0)');
+            
             chartInstances.main = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: 'Doanh Thu Ngày', data: revData, type: 'line', borderColor: '#6B8F71', backgroundColor: gradient, borderWidth: 2, tension: 0.4, fill: true, yAxisID: 'y', pointRadius: 0, pointHoverRadius: 6, pointBackgroundColor: '#6B8F71' },
-                        { label: 'Lượng Khách', data: custData, type: 'bar', backgroundColor: 'rgba(203, 191, 163, 0.5)', hoverBackgroundColor: '#CBBFA3', borderRadius: 2, yAxisID: 'y1' }
+                        { 
+                            label: 'Doanh Thu Ngày', 
+                            data: revData, 
+                            type: 'line', 
+                            borderColor: '#6B8F71', 
+                            backgroundColor: gradient, 
+                            borderWidth: 2, 
+                            tension: 0.4, 
+                            fill: true, 
+                            yAxisID: 'y', 
+                            pointRadius: 0, 
+                            pointHoverRadius: 6, 
+                            pointBackgroundColor: '#6B8F71' 
+                        },
+                        { 
+                            label: 'Trung Bình Bill', 
+                            data: billData, 
+                            type: 'line', 
+                            borderColor: '#D4AF37', // Gold color
+                            backgroundColor: 'transparent',
+                            borderWidth: 2, 
+                            borderDash: [5, 5], // Dashed line style
+                            tension: 0.4, 
+                            yAxisID: 'y_bill', 
+                            pointRadius: 0, 
+                            pointHoverRadius: 6, 
+                            pointBackgroundColor: '#D4AF37' 
+                        }
                     ]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false, animation: { duration: 2000, easing: 'easeOutQuart' }, interaction: { mode: 'index', intersect: false },
                     plugins: { 
                         legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, usePointStyle: true, font: {size: 11, family: 'Nunito'} } },
-                        tooltip: { backgroundColor: 'rgba(255, 255, 255, 0.95)', titleColor: '#3F3F3F', bodyColor: '#3F3F3F', borderColor: '#E5E5E5', borderWidth: 1, padding: 10, displayColors: true, callbacks: { label: function(context) { let label = context.dataset.label || ''; if (label) { label += ': '; } if (context.parsed.y !== null) { if(context.dataset.type === 'line') { label += new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(context.parsed.y); } else { label += context.parsed.y; } } return label; } } }
+                        tooltip: { backgroundColor: 'rgba(255, 255, 255, 0.95)', titleColor: '#3F3F3F', bodyColor: '#3F3F3F', borderColor: '#E5E5E5', borderWidth: 1, padding: 10, displayColors: true, callbacks: { label: function(context) { let label = context.dataset.label || ''; if (label) { label += ': '; } if (context.parsed.y !== null) { label += new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(context.parsed.y); } return label; } } }
                     },
-                    scales: { x: { grid: { display: false }, ticks: { font: {size: 10} } }, y: { type: 'linear', display: true, position: 'left', grid: { borderDash: [4, 4], color: '#f0f0f0' }, ticks: { callback: v => v/1000000 + 'M', font: {size: 10} } }, y1: { display: false } }
+                    scales: { 
+                        x: { grid: { display: false }, ticks: { font: {size: 10} } }, 
+                        y: { type: 'linear', display: true, position: 'left', grid: { borderDash: [4, 4], color: '#f0f0f0' }, ticks: { callback: v => v/1000000 + 'M', font: {size: 10} } }, 
+                        y_bill: { 
+                            type: 'linear', 
+                            display: true, 
+                            position: 'right', 
+                            grid: { drawOnChartArea: false }, 
+                            max: 10000000, // Max 10M as requested
+                            ticks: { 
+                                callback: v => v/1000000 + 'M', 
+                                font: {size: 10}, 
+                                color: '#D4AF37' 
+                            } 
+                        } 
+                    }
                 }
             });
         }
