@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Không Gian Quản Trị - An Nhiên 2026 (Premium)</title>
+    <title>Không Gian Quản Trị - Nội bộ 2026</title>
     
     <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script> <!-- Added DataLabels Plugin -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Zen Font Stack -->
@@ -76,8 +77,27 @@
         .reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
         
-        .progress-bar-bg { background-color: #F0F0F0; border-radius: 999px; overflow: hidden; height: 10px; }
+        .progress-bar-bg { background-color: #F0F0F0; border-radius: 999px; overflow: hidden; height: 10px; position: relative; }
         .progress-bar-fill { height: 100%; border-radius: 999px; width: 0%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
+        
+        /* Breakeven Marker */
+        .breakeven-marker {
+            position: absolute;
+            top: -4px;
+            bottom: -4px;
+            width: 2px;
+            background-color: #3F3F3F; /* Dark color for visibility */
+            z-index: 10;
+        }
+        .breakeven-label {
+            position: absolute;
+            top: -20px;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: #3F3F3F;
+            font-weight: bold;
+            white-space: nowrap;
+        }
 
         /* Top 1 Card */
         .card-top-1 {
@@ -161,7 +181,7 @@
                             <i data-lucide="briefcase" class="w-6 h-6 text-zen-gold"></i>
                         </div>
                         <div class="flex-1 z-10">
-                            <h3 class="font-display font-bold text-lg text-zen-dark mb-3">Góc Nhìn Chiến Lược - BÁO CÁO PHÂN TÍCH HIỆU QUẢ KINH DOANH</h3>
+                            <h3 class="font-display font-bold text-lg text-zen-dark mb-3">BÁO CÁO PHÂN TÍCH HIỆU QUẢ KINH DOANH THEO CHI NHÁNH</h3>
                             <div class="text-sm text-gray-700 leading-relaxed space-y-3" id="consultant-content">
                                 <!-- Static Content injected here -->
                                 <p><strong>1. Hiện trạng Kinh doanh</strong><br>
@@ -231,6 +251,19 @@
                             <i data-lucide="pie-chart" class="w-5 h-5"></i>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- MARKETING FUNNELS (NEW & IMPROVED) -->
+            <div class="mb-10 reveal-on-scroll">
+                <div class="flex justify-between items-center mb-6 px-1">
+                    <h3 class="font-display font-bold text-lg text-zen-dark flex items-center gap-2">
+                        <i data-lucide="filter" class="w-5 h-5 text-zen-tea"></i>
+                        Hiệu quả Marketing
+                    </h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="marketingContainer">
+                    <!-- Funnels will be injected here. Now 2 columns per row -> Bigger charts -->
                 </div>
             </div>
 
@@ -465,7 +498,7 @@ PHỤC LINH,HÀ ĐÔNG,2026-01-13,1,6660000,6660000
 PHỤC LINH,HÀ ĐÔNG,2026-01-14,9,30300000,3366666
 PHỤC LINH,HÀ ĐÔNG,2026-01-15,8,26600000,3325000
 PHỤC LINH,HÀ ĐÔNG,2026-01-16,6,19900000,3316666
-PHỤC LINH,HÀ ĐÔNG,2026-01-17,11,53200000,4836363
+PHỤC LINH,HÀ ĐÔNG,2026-01-17,11,53200000,4836364
 PHỤC LINH,HÀ ĐÔNG,2026-01-18,10,46460000,4646000
 PHỤC LINH,HÀ ĐÔNG,2026-01-19,3,38400000,12800000
 PHỤC LINH,HÀ ĐÔNG,2026-01-20,2,24100000,12050000
@@ -516,17 +549,25 @@ PHỤC LINH,HÀ ĐÔNG,2026-01-31,181344518
 PHỤC LINH,HẢI PHÒNG,2026-01-31,113236478
 PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
 `;
+        
+        // --- 3. CSV MARKETING DATA ---
+        const csvMarketing = `
+Phục Linh,3099,951,328
+An Nguyên,720,269,101
+An Nhiên ADV,565,202,47
+An Nhiên CMT8,860,267,78
+`;
 
-        // --- 3. SUMMARY TARGETS & REAL REVENUE - FROM 'Tổng hợp.xlsx' ---
-        // Added real_revenue and real_customers to ensure Cards display correct totals from Summary file
+        // --- 4. SUMMARY TARGETS & REAL REVENUE - FROM 'Tổng hợp.xlsx' ---
+        // Added real_revenue, real_customers, and breakeven to ensure Cards display correct totals from Summary file
         const summaryData = [
-            { brand: 'AN NGUYÊN', branch: 'LONG BIÊN', target: 700000000, real_revenue: 631098000, real_customers: 156 },
-            { brand: 'AN NHIÊN', branch: 'ADV', target: 500000000, real_revenue: 240400000, real_customers: 98 },
-            { brand: 'AN NHIÊN', branch: 'CMT8', target: 500000000, real_revenue: 187100000, real_customers: 82 },
-            { brand: 'PHỤC LINH', branch: 'CẦU GIẤY', target: 880000000, real_revenue: 1040892000, real_customers: 180 },
-            { brand: 'PHỤC LINH', branch: 'HÀ ĐÔNG', target: 820000000, real_revenue: 758538000, real_customers: 188 },
-            { brand: 'PHỤC LINH', branch: 'HẢI PHÒNG', target: 500000000, real_revenue: 358390000, real_customers: 135 },
-            { brand: 'PHỤC LINH', branch: 'XÃ ĐÀN', target: 1080000000, real_revenue: 1099167000, real_customers: 200 }
+            { brand: 'AN NGUYÊN', branch: 'LONG BIÊN', target: 700000000, real_revenue: 631098000, real_customers: 156, breakeven: 600000000 },
+            { brand: 'AN NHIÊN', branch: 'ADV', target: 500000000, real_revenue: 240400000, real_customers: 98, breakeven: 350000000 },
+            { brand: 'AN NHIÊN', branch: 'CMT8', target: 500000000, real_revenue: 187100000, real_customers: 82, breakeven: 350000000 },
+            { brand: 'PHỤC LINH', branch: 'CẦU GIẤY', target: 880000000, real_revenue: 1040892000, real_customers: 180, breakeven: 600000000 },
+            { brand: 'PHỤC LINH', branch: 'HÀ ĐÔNG', target: 820000000, real_revenue: 758538000, real_customers: 188, breakeven: 600000000 }, 
+            { brand: 'PHỤC LINH', branch: 'HẢI PHÒNG', target: 500000000, real_revenue: 358390000, real_customers: 135, breakeven: 350000000 }, 
+            { brand: 'PHỤC LINH', branch: 'XÃ ĐÀN', target: 1080000000, real_revenue: 1099167000, real_customers: 200, breakeven: 800000000 } 
         ];
 
         // --- GLOBAL STATE ---
@@ -534,6 +575,7 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
         let currentBrand = 'all';
         let parsedDailyData = [];
         let parsedAdsData = [];
+        let parsedMarketingData = [];
         let chartInstances = {};
         
         // --- OBSERVER ---
@@ -584,19 +626,34 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
             lines.forEach(line => {
                 const cols = line.split(',');
                 if(cols.length < 3) return;
-                const brand = cols[0].trim();
-                const branch = cols[1].trim();
-                const dateStr = cols[2].trim();
-                if(dateStr.startsWith('2026')) {
-                    const val = parseFloat(cols[3]) || 0;
-                    data.push({
-                        brand, branch, date: dateStr,
-                        month: parseInt(dateStr.split('-')[1]),
-                        day: parseInt(dateStr.split('-')[2]),
-                        value1: val, // Cust or Ads
-                        value2: parseFloat(cols[4]) || 0, // Rev
-                        value3: parseFloat(cols[5]) || 0 // Average Bill
-                    });
+                
+                if (type === 'marketing') {
+                    // For marketing file: Cơ sở, Tổng Lead, Tổng SDT, Khách đến SPA
+                    const name = cols[0].trim();
+                    if(name && name !== 'Cơ sở') {
+                         data.push({
+                            name: name,
+                            leads: parseInt(cols[1]) || 0,
+                            phones: parseInt(cols[2]) || 0,
+                            arrived: parseInt(cols[3]) || 0
+                        });
+                    }
+                } else {
+                    // For daily/ads data
+                    const brand = cols[0].trim();
+                    const branch = cols[1].trim();
+                    const dateStr = cols[2].trim();
+                    if(dateStr.startsWith('2026')) {
+                        const val = parseFloat(cols[3]) || 0;
+                        data.push({
+                            brand, branch, date: dateStr,
+                            month: parseInt(dateStr.split('-')[1]),
+                            day: parseInt(dateStr.split('-')[2]),
+                            value1: val, // Cust or Ads
+                            value2: parseFloat(cols[4]) || 0, // Rev
+                            value3: parseFloat(cols[5]) || 0 // Average Bill
+                        });
+                    }
                 }
             });
             return data;
@@ -655,8 +712,7 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
                     brand: s.brand, 
                     branch: s.branch, 
                     target: s.target, 
-                    // Use Real Revenue & Customers from Summary File
-                    // FIX: Only use summary data for Month 1 (Jan). Future months (T2, T3) should be 0 until updated.
+                    breakeven: s.breakeven,
                     revenue: currentMonth === 1 ? (s.real_revenue || 0) : 0, 
                     customers: currentMonth === 1 ? (s.real_customers || 0) : 0, 
                     ads: 0 
@@ -686,8 +742,8 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
 
             // 5. Render All
             renderMainChart(dailyRev); // Chart uses daily data
-            renderTargetProgress(aggregatedData); // Cards use Summary data
-            renderBranchCards(aggregatedData);
+            renderMarketingFunnels(); // NEW Marketing Funnels
+            renderBranchCards(aggregatedData); // Cards now include Breakeven logic
             renderAdsTable(aggregatedData);
             
             setTimeout(() => {
@@ -713,34 +769,107 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
 
         // --- RENDERERS ---
 
-        function renderTargetProgress(data) {
-            const container = document.getElementById('targetContainer');
+        function renderMarketingFunnels() {
+            const container = document.getElementById('marketingContainer');
             container.innerHTML = '';
-            if(data.length === 0) { container.innerHTML = '<p class="text-sm text-gray-400 text-center mt-10">Chưa có dữ liệu</p>'; return; }
-            const sorted = [...data].sort((a, b) => (b.revenue/b.target) - (a.revenue/a.target));
-            sorted.forEach((item, index) => {
-                const percent = item.target > 0 ? (item.revenue / item.target) * 100 : 0;
-                let barWidth = percent > 100 ? 100 : percent;
-                let barColor = 'bg-zen-tea';
-                if(percent < 30) barColor = 'bg-red-400'; else if(percent < 70) barColor = 'bg-orange-400'; if(percent >= 100) barColor = 'bg-green-500';
-                
-                const isTop1 = index === 0;
-                const topIndicator = isTop1 ? '<span class="ml-2 text-xs text-yellow-500 animate-pulse">👑 Top 1</span>' : '';
-                const nameStyle = isTop1 ? 'font-bold text-zen-tea' : 'text-zen-dark';
+            
+            // Filter marketing data based on currentBrand
+            let funnelData = parsedMarketingData;
+            
+            // Mapping for filter because names in mkt file are slightly different
+            // "Phục Linh" is aggregate for PL, "An Nguyên" is aggregate/single, "An Nhiên ADV", "An Nhiên CMT8"
+            
+            if (currentBrand !== 'all') {
+                if (currentBrand === 'PHỤC LINH') funnelData = funnelData.filter(d => d.name === 'Phục Linh');
+                else if (currentBrand === 'AN NGUYÊN') funnelData = funnelData.filter(d => d.name === 'An Nguyên');
+                else if (currentBrand === 'AN NHIÊN') funnelData = funnelData.filter(d => d.name.includes('An Nhiên'));
+            }
+
+            funnelData.forEach((item, index) => {
+                // Calculate percentages
+                const rateLeadToPhone = item.leads > 0 ? (item.phones / item.leads * 100).toFixed(1) : 0;
+                const ratePhoneToArrive = item.phones > 0 ? (item.arrived / item.phones * 100).toFixed(1) : 0;
+                const rateLeadToArrive = item.leads > 0 ? (item.arrived / item.leads * 100).toFixed(1) : 0;
+
                 const div = document.createElement('div');
-                div.className = `reveal-on-scroll`; div.style.transitionDelay = `${index * 100}ms`;
-                const formatShort = (n) => { if(n >= 1000000000) return (n/1000000000).toFixed(1) + ' tỷ'; if(n >= 1000000) return (n/1000000).toFixed(0) + 'tr'; return new Intl.NumberFormat('vi-VN').format(n); }
+                div.className = "bg-zen-card p-5 rounded-xl border border-zen-gray shadow-sm reveal-on-scroll";
+                div.style.transitionDelay = `${index * 100}ms`;
                 div.innerHTML = `
-                    <div class="flex justify-between items-end mb-1">
-                        <div><span class="text-sm ${nameStyle} block flex items-center">${index + 1}. ${item.branch} ${topIndicator}</span></div>
-                        <div class="text-right"><span class="text-xs font-bold ${percent >= 100 ? 'text-green-600' : 'text-gray-500'}">${percent.toFixed(1)}%</span></div>
+                    <h4 class="font-bold text-zen-dark mb-4 text-center">${item.name}</h4>
+                    <div class="h-48 relative">
+                         <canvas id="funnel-${index}"></canvas>
                     </div>
-                    <div class="progress-bar-bg relative mb-1 w-full bg-gray-100">
-                        <div class="progress-bar-fill ${barColor} shadow-sm" style="width: 0%" data-width="${barWidth}"></div>
+                    <div class="mt-4 grid grid-cols-3 gap-2 text-center text-[10px]">
+                        <div>
+                            <div class="font-bold text-gray-500">Lead->SĐT</div>
+                            <div class="text-zen-tea font-bold text-xs">${rateLeadToPhone}%</div>
+                        </div>
+                         <div>
+                            <div class="font-bold text-gray-500">SĐT->Đến</div>
+                            <div class="text-blue-500 font-bold text-xs">${ratePhoneToArrive}%</div>
+                        </div>
+                         <div>
+                            <div class="font-bold text-gray-500">Lead->Đến</div>
+                            <div class="text-green-600 font-bold text-xs">${rateLeadToArrive}%</div>
+                        </div>
                     </div>
-                    <div class="flex justify-between text-[10px] text-gray-400"><span>${formatShort(item.revenue)}</span><span>MT: ${formatShort(item.target)}</span></div>
                 `;
                 container.appendChild(div);
+
+                // Render Chart
+                const ctx = div.querySelector('canvas').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Tổng Lead', 'SĐT', 'Khách Đến'],
+                        datasets: [{
+                            label: 'Số lượng',
+                            data: [item.leads, item.phones, item.arrived],
+                            backgroundColor: [
+                                'rgba(203, 191, 163, 0.6)', // Lead - Wood color
+                                'rgba(107, 143, 113, 0.6)', // Phone - Tea color
+                                'rgba(59, 130, 246, 0.6)'   // Arrived - Blue
+                            ],
+                            borderColor: [
+                                '#CBBFA3',
+                                '#6B8F71',
+                                '#3b82f6'
+                            ],
+                            borderWidth: 1,
+                            barPercentage: 0.6
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', // Horizontal bar to simulate funnel
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            datalabels: { // Using plugin-datalabels
+                                color: '#3F3F3F',
+                                anchor: 'end',
+                                align: 'right',
+                                font: {
+                                    weight: 'bold',
+                                    size: 11
+                                },
+                                formatter: (value) => new Intl.NumberFormat('vi-VN').format(value)
+                            },
+                             tooltip: {
+                                enabled: false // Disable tooltip since numbers are shown directly
+                            }
+                        },
+                        scales: {
+                            x: { 
+                                grid: { display: false }, 
+                                beginAtZero: true,
+                                display: false // Hide x-axis labels to keep it clean
+                            },
+                            y: { grid: { display: false } }
+                        }
+                    },
+                    plugins: [ChartDataLabels] // Register plugin
+                });
             });
         }
 
@@ -751,6 +880,11 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
             if (sorted.length === 0) { container.innerHTML = '<p class="text-gray-400 col-span-full text-center py-4">Chưa có dữ liệu.</p>'; return; }
             sorted.forEach((item, idx) => {
                 const percent = item.target > 0 ? (item.revenue / item.target) * 100 : 0;
+                
+                // Breakeven logic
+                const bePercent = item.target > 0 ? (item.breakeven / item.target) * 100 : 0;
+                const isProfitable = item.revenue >= item.breakeven;
+                
                 const isTop1 = idx === 0;
                 const card = document.createElement('div');
                 const baseClasses = "bg-zen-card p-5 rounded-xl border flex flex-col justify-between reveal-on-scroll";
@@ -759,6 +893,7 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
                 let brandColor = 'text-zen-tea'; let brandBg = 'bg-zen-sage/20';
                 if(item.brand === 'AN NHIÊN') { brandColor = 'text-orange-600'; brandBg = 'bg-orange-100'; }
                 if(item.brand === 'PHỤC LINH') { brandColor = 'text-blue-600'; brandBg = 'bg-blue-100'; }
+                
                 card.innerHTML = `
                     <div>
                         <div class="flex items-center justify-between mb-3">
@@ -770,7 +905,28 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
                              ${item.target > 0 ? `<div class="flex justify-between items-baseline"><span class="text-gray-400 text-xs">Target</span><span class="text-xs font-bold text-gray-500">${new Intl.NumberFormat('vi-VN').format(item.target)}</span></div>` : ''}
                         </div>
                     </div>
-                    ${item.target > 0 ? `<div class="mt-2 pt-2 border-t border-gray-100"><div class="w-full bg-gray-200 rounded-full h-1.5 mb-2 overflow-hidden"><div class="progress-bar-fill ${isTop1 ? 'bg-yellow-500' : 'bg-zen-tea'} h-1.5 rounded-full" style="width: 0%" data-width="${Math.min(percent, 100)}"></div></div><div class="flex justify-between items-center text-xs"><span class="${percent >= 100 ? 'text-green-600' : 'text-gray-500'} font-bold">Đạt ${percent.toFixed(1)}%</span><div class="flex items-center text-gray-500"><i data-lucide="users" class="w-3 h-3 mr-1"></i> ${item.customers}</div></div></div>` : ''}
+                    ${item.target > 0 ? `
+                    <div class="mt-2 pt-2 border-t border-gray-100">
+                        <!-- Progress Bar Container with Relative Positioning -->
+                        <div class="progress-bar-bg mb-2 bg-gray-200">
+                            <!-- Breakeven Marker -->
+                            <div class="breakeven-marker" style="left: ${Math.min(bePercent, 100)}%;"></div>
+                            <!-- Breakeven Label -->
+                            <div class="breakeven-label" style="left: ${Math.min(bePercent, 100)}%;">DT hòa vốn</div>
+                            
+                            <!-- Actual Progress Bar -->
+                            <div class="progress-bar-fill h-1.5 rounded-full ${isProfitable ? 'bg-green-500' : 'bg-red-400'}" style="width: 0%" data-width="${Math.min(percent, 100)}"></div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="${percent >= 100 ? 'text-green-600' : 'text-gray-500'} font-bold">Đạt ${percent.toFixed(1)}%</span>
+                            <div class="flex items-center text-gray-500"><i data-lucide="users" class="w-3 h-3 mr-1"></i> ${item.customers}</div>
+                        </div>
+                        <div class="text-[10px] text-gray-400 mt-1 flex justify-between">
+                             <span>${isProfitable ? '✅ Đã có lãi' : '🔻 Chưa hòa vốn'}</span>
+                             <span>Mốc HV: ${formatShort(item.breakeven)}</span>
+                        </div>
+                    </div>` : ''}
                 `;
                 container.appendChild(card);
             });
@@ -826,14 +982,16 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
             const labels = Array.from({length: daysInMonth}, (_, i) => i + 1);
             const revData = new Array(daysInMonth).fill(0);
             const billData = new Array(daysInMonth).fill(0); // For Avg Bill
+            const custData = new Array(daysInMonth).fill(0); // For Customer Count
             
             // Group data by day
             const dailyGroups = {};
             dailyData.forEach(d => {
                 if (!dailyGroups[d.day]) {
-                    dailyGroups[d.day] = { rev: 0, billSum: 0, count: 0 };
+                    dailyGroups[d.day] = { rev: 0, billSum: 0, count: 0, cust: 0 };
                 }
                 dailyGroups[d.day].rev += d.value2;
+                dailyGroups[d.day].cust += d.value1; // Add daily customers
                 if (d.value3 > 0) { // Only count if there is bill data
                     dailyGroups[d.day].billSum += d.value3;
                     dailyGroups[d.day].count++;
@@ -844,6 +1002,7 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
             for (let i = 1; i <= daysInMonth; i++) {
                 if (dailyGroups[i]) {
                     revData[i-1] = dailyGroups[i].rev;
+                    custData[i-1] = dailyGroups[i].cust;
                     // Average of averages or sum? Ideally average bill across branches 
                     // Simple average of branches for chart visualization
                     billData[i-1] = dailyGroups[i].count > 0 ? (dailyGroups[i].billSum / dailyGroups[i].count) : 0;
@@ -869,9 +1028,11 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
                             tension: 0.4, 
                             fill: true, 
                             yAxisID: 'y', 
+                            order: 2,
                             pointRadius: 0, 
                             pointHoverRadius: 6, 
-                            pointBackgroundColor: '#6B8F71' 
+                            pointBackgroundColor: '#6B8F71',
+                            datalabels: { display: false } // Hide labels on line chart points to avoid clutter
                         },
                         { 
                             label: 'Trung Bình Bill', 
@@ -883,9 +1044,22 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
                             borderDash: [5, 5], // Dashed line style
                             tension: 0.4, 
                             yAxisID: 'y_bill', 
+                            order: 1,
                             pointRadius: 0, 
                             pointHoverRadius: 6, 
-                            pointBackgroundColor: '#D4AF37' 
+                            pointBackgroundColor: '#D4AF37',
+                            datalabels: { display: false }
+                        },
+                        {
+                            label: 'Lượng Khách',
+                            data: custData,
+                            type: 'bar',
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)', // Light Blue
+                            hoverBackgroundColor: 'rgba(59, 130, 246, 0.4)',
+                            borderRadius: 4,
+                            yAxisID: 'y_cust',
+                            order: 3,
+                            datalabels: { display: false }
                         }
                     ]
                 },
@@ -893,11 +1067,39 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
                     responsive: true, maintainAspectRatio: false, animation: { duration: 2000, easing: 'easeOutQuart' }, interaction: { mode: 'index', intersect: false },
                     plugins: { 
                         legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, usePointStyle: true, font: {size: 11, family: 'Nunito'} } },
-                        tooltip: { backgroundColor: 'rgba(255, 255, 255, 0.95)', titleColor: '#3F3F3F', bodyColor: '#3F3F3F', borderColor: '#E5E5E5', borderWidth: 1, padding: 10, displayColors: true, callbacks: { label: function(context) { let label = context.dataset.label || ''; if (label) { label += ': '; } if (context.parsed.y !== null) { label += new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(context.parsed.y); } return label; } } }
+                        tooltip: { 
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+                            titleColor: '#3F3F3F', 
+                            bodyColor: '#3F3F3F', 
+                            borderColor: '#E5E5E5', 
+                            borderWidth: 1, 
+                            padding: 10, 
+                            displayColors: true, 
+                            callbacks: { 
+                                label: function(context) { 
+                                    let label = context.dataset.label || ''; 
+                                    if (label) { label += ': '; } 
+                                    if (context.parsed.y !== null) { 
+                                        if (context.dataset.yAxisID === 'y_cust') {
+                                            label += context.parsed.y + ' khách';
+                                        } else {
+                                            label += new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(context.parsed.y); 
+                                        }
+                                    } 
+                                    return label; 
+                                } 
+                            } 
+                        }
                     },
                     scales: { 
                         x: { grid: { display: false }, ticks: { font: {size: 10} } }, 
-                        y: { type: 'linear', display: true, position: 'left', grid: { borderDash: [4, 4], color: '#f0f0f0' }, ticks: { callback: v => v/1000000 + 'M', font: {size: 10} } }, 
+                        y: { 
+                            type: 'linear', 
+                            display: true, 
+                            position: 'left', 
+                            grid: { borderDash: [4, 4], color: '#f0f0f0' }, 
+                            ticks: { callback: v => v/1000000 + 'M', font: {size: 10} } 
+                        }, 
                         y_bill: { 
                             type: 'linear', 
                             display: true, 
@@ -909,7 +1111,14 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
                                 font: {size: 10}, 
                                 color: '#D4AF37' 
                             } 
-                        } 
+                        },
+                        y_cust: {
+                            type: 'linear',
+                            display: false, // Hide axis labels to keep it clean, bar height is enough relative visualization
+                            position: 'right',
+                            grid: { display: false },
+                            suggestedMax: 50 // Provide some headroom
+                        }
                     }
                 }
             });
@@ -927,6 +1136,7 @@ PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
             initMonthSelector();
             parsedDailyData = parseCSV(csvRaw, 'rev'); 
             parsedAdsData = parseCSV(csvAdsRaw, 'ads');
+            parsedMarketingData = parseCSV(csvMarketing, 'marketing');
             setMonth(1); 
         };
     </script>
