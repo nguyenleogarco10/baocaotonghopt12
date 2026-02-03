@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Không Gian Quản Trị - Nội bộ 2026</title>
+    <title>Dashboard An Nhiên 2026 - Premium</title>
     
     <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script> <!-- Added DataLabels Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Zen Font Stack -->
@@ -86,7 +86,7 @@
             top: -4px;
             bottom: -4px;
             width: 2px;
-            background-color: #3F3F3F; /* Dark color for visibility */
+            background-color: #3F3F3F; 
             z-index: 10;
         }
         .breakeven-label {
@@ -157,7 +157,7 @@
                 <h2 class="font-display text-xl font-bold" id="pageTitle">Tổng Quan Tháng <span id="displayMonth">1</span>/2026</h2>
                 <p class="text-xs text-gray-400 flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    Dữ liệu thực tế [Cập nhật 31/01]
+                    Dữ liệu thực tế [Tự động cập nhật]
                 </p>
             </div>
             
@@ -170,7 +170,7 @@
         <!-- DASHBOARD BODY -->
         <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scroll scroll-smooth" id="scroll-body">
             
-            <!-- CONSULTANT BOX (STATIC CONTENT) -->
+            <!-- CONSULTANT BOX (DYNAMIC CONTENT) -->
             <div class="mb-8 reveal-on-scroll" style="transition-delay: 0ms;">
                 <div class="consultant-box p-6 rounded-2xl shadow-sm border border-zen-gray relative">
                     <div class="absolute top-4 right-4 text-zen-wood opacity-20">
@@ -181,21 +181,9 @@
                             <i data-lucide="briefcase" class="w-6 h-6 text-zen-gold"></i>
                         </div>
                         <div class="flex-1 z-10">
-                            <h3 class="font-display font-bold text-lg text-zen-dark mb-3">BÁO CÁO PHÂN TÍCH HIỆU QUẢ KINH DOANH THEO CHI NHÁNH</h3>
+                            <h3 class="font-display font-bold text-lg text-zen-dark mb-3">Góc Nhìn Chiến Lược</h3>
                             <div class="text-sm text-gray-700 leading-relaxed space-y-3" id="consultant-content">
-                                <!-- Static Content injected here -->
-                                <p><strong>1. Hiện trạng Kinh doanh</strong><br>
-                                <span class="font-bold">• Phân hóa doanh thu:</span> Có sự chênh lệch lớn. <span class="text-green-600 font-bold">Cầu Giấy (118%)</span> và <span class="text-green-600 font-bold">Xã Đàn (101.77%)</span> xuất sắc vượt KPI. Ngược lại, <span class="text-red-600 font-bold">ADV và CMT8</span> rơi vào mức báo động đỏ (dưới 50%). <span class="text-yellow-600 font-bold">Hà Đông và Long Biên</span> hoàn thành ở mức khá (trên 90%).<br>
-                                <span class="font-bold">• Giá trị đơn hàng:</span> Tương đồng với doanh thu. Nhóm dẫn đầu đạt trung bình trên 5 triệu/đơn, trong khi nhóm cuối bảng (ADV, CMT8, Hải Phòng) chỉ đạt mức thấp ~2.5 triệu.</p>
-
-                                <p><strong>2. Hiệu quả Marketing</strong><br>
-                                <span class="font-bold text-green-600">• Tối ưu nhất:</span> <strong>Cầu Giấy</strong> (Chi phí Ads trung bình nhưng doanh thu thuộc top đầu).<br>
-                                <span class="font-bold text-red-600">• Lãng phí:</span> <strong>Xã Đàn</strong> (Doanh thu cao nhưng chi phí Ads gấp đôi Cầu Giấy). <strong>Hà Đông và Long Biên</strong> cũng chi tiêu cao nhưng doanh thu chưa tương xứng.</p>
-
-                                <p><strong>3. Đề xuất trọng tâm</strong><br>
-                                <span class="font-bold text-zen-tea">▶️ Chiến lược:</span> Lấy <strong>Cầu Giấy</strong> làm mô hình chuẩn để nhân rộng quy trình chốt đơn và quản lý chi phí.<br>
-                                <span class="font-bold text-zen-tea">▶️ Tối ưu:</span> Cắt giảm, tinh chỉnh Ads tại <strong>Xã Đàn</strong> để bảo toàn lợi nhuận.<br>
-                                <span class="font-bold text-zen-tea">▶️ Cải tổ:</span> Tái cấu trúc toàn diện <strong>ADV & CMT8</strong> (về vị trí/khách hàng); tập trung đào tạo Upsell để tăng giá trị bill tại <strong>Hải Phòng</strong>.</p>
+                                <!-- Content injected by JS -->
                             </div>
                         </div>
                     </div>
@@ -254,7 +242,21 @@
                 </div>
             </div>
 
-            <!-- MARKETING FUNNELS (NEW & IMPROVED) -->
+            <!-- MAIN CHART (Full Width) -->
+            <div class="grid grid-cols-1 gap-6 mb-8">
+                <!-- CHART -->
+                <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray reveal-on-scroll group" style="transition-delay: 200ms;">
+                    <h3 class="font-display font-bold text-lg text-zen-dark mb-6 flex items-center gap-2">
+                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-zen-tea"></i>
+                        Biểu Đồ Doanh Thu, Khách & Bill
+                    </h3>
+                    <div class="h-80 w-full relative transition-transform duration-700 ease-out transform group-hover:scale-[1.01]">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MARKETING FUNNELS -->
             <div class="mb-10 reveal-on-scroll">
                 <div class="flex justify-between items-center mb-6 px-1">
                     <h3 class="font-display font-bold text-lg text-zen-dark flex items-center gap-2">
@@ -263,33 +265,7 @@
                     </h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="marketingContainer">
-                    <!-- Funnels will be injected here. Now 2 columns per row -> Bigger charts -->
-                </div>
-            </div>
-
-            <!-- MAIN CHART & TARGET -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                <!-- CHART -->
-                <div class="lg:col-span-2 bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray reveal-on-scroll group" style="transition-delay: 200ms;">
-                    <h3 class="font-display font-bold text-lg text-zen-dark mb-6 flex items-center gap-2">
-                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-zen-tea"></i>
-                        Biểu Đồ Doanh Thu & Trung Bình Bill
-                    </h3>
-                    <div class="h-80 w-full relative transition-transform duration-700 ease-out transform group-hover:scale-[1.01]">
-                        <canvas id="mainChart"></canvas>
-                    </div>
-                </div>
-                <!-- TARGET COMPARISON -->
-                <div class="bg-zen-card p-6 rounded-2xl shadow-sm border border-zen-gray flex flex-col reveal-on-scroll" style="transition-delay: 300ms;">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-display font-bold text-lg text-zen-dark">Tiến Độ Target</h3>
-                        <div class="bg-zen-bg p-2 rounded-full">
-                            <i data-lucide="trophy" class="w-5 h-5 text-zen-gold"></i>
-                        </div>
-                    </div>
-                    <div id="targetContainer" class="flex-1 space-y-5 overflow-y-auto pr-2 custom-scroll">
-                        <!-- Filled by JS -->
-                    </div>
+                    <!-- Funnels will be injected here -->
                 </div>
             </div>
 
@@ -327,7 +303,6 @@
                                 <tr>
                                     <th class="w-10"></th>
                                     <th>Cơ Sở</th>
-                                    <!-- Use !text-right to force alignment -->
                                     <th class="!text-right">Chi Phí Ads</th>
                                     <th class="!text-right">Doanh Thu</th>
                                     <th class="!text-right">CIR (%)</th>
@@ -347,11 +322,12 @@
     </main>
 
     <script>
-        // --- 1. CSV RAW DATA (Daily Revenue) ---
-        // Contains Revenue, Customers, and Average Bill
-        const csvRaw = `
+        // ================= DATA STORE =================
+        
+        // --- MONTH 1 (JAN) DATA - RE-PARSED FROM NEW FILES ---
+        const csvRaw_M1 = `
 AN NGUYÊN,LONG BIÊN,2026-01-02,4,19800000,4950000
-AN NGUYÊN,LONG BIÊN,2026-01-03,7,4600000,657143
+AN NGUYÊN,LONG BIÊN,2026-01-03,7,4600000,657142
 AN NGUYÊN,LONG BIÊN,2026-01-04,10,23900000,2390000
 AN NGUYÊN,LONG BIÊN,2026-01-05,12,60300000,5025000
 AN NGUYÊN,LONG BIÊN,2026-01-06,4,10199000,2549750
@@ -363,22 +339,25 @@ AN NGUYÊN,LONG BIÊN,2026-01-11,1,4800000,4800000
 AN NGUYÊN,LONG BIÊN,2026-01-12,7,30400000,4342857
 AN NGUYÊN,LONG BIÊN,2026-01-13,3,23500000,7833333
 AN NGUYÊN,LONG BIÊN,2026-01-14,4,11600000,2900000
-AN NGUYÊN,LONG BIÊN,2026-01-15,9,43100000,4788889
+AN NGUYÊN,LONG BIÊN,2026-01-15,9,43100000,4788888
 AN NGUYÊN,LONG BIÊN,2026-01-16,4,14500000,3625000
 AN NGUYÊN,LONG BIÊN,2026-01-17,6,40400000,6733333
 AN NGUYÊN,LONG BIÊN,2026-01-18,6,35400000,5900000
 AN NGUYÊN,LONG BIÊN,2026-01-19,7,32100000,4585714
-AN NGUYÊN,LONG BIÊN,2026-01-20,6,35200000,5866667
+AN NGUYÊN,LONG BIÊN,2026-01-20,6,35200000,5866666
 AN NGUYÊN,LONG BIÊN,2026-01-21,7,32500000,4642857
-AN NGUYÊN,LONG BIÊN,2026-01-22,6,16000000,2666667
+AN NGUYÊN,LONG BIÊN,2026-01-22,6,16000000,2666666
 AN NGUYÊN,LONG BIÊN,2026-01-23,2,4499000,2249500
 AN NGUYÊN,LONG BIÊN,2026-01-24,4,11300000,2825000
 AN NGUYÊN,LONG BIÊN,2026-01-25,2,600000,300000
-AN NGUYÊN,LONG BIÊN,2026-01-26,6,7700000,1283333
-AN NGUYÊN,LONG BIÊN,2026-01-27,7,40000000,5714286
-AN NGUYÊN,LONG BIÊN,2026-01-28,5,10600000,2120000
+AN NGUYÊN,LONG BIÊN,2026-01-26,3,7700000,2566666
+AN NGUYÊN,LONG BIÊN,2026-01-27,7,40300000,5757142
+AN NGUYÊN,LONG BIÊN,2026-01-28,5,19400000,3880000
+AN NGUYÊN,LONG BIÊN,2026-01-29,1,4500000,4500000
+AN NGUYÊN,LONG BIÊN,2026-01-30,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-01-31,0,0,0
 AN NHIÊN ,CMT8,2026-01-02,3,7000000,2333333
-AN NHIÊN ,CMT8,2026-01-03,3,11900000,3966667
+AN NHIÊN ,CMT8,2026-01-03,3,11900000,3966666
 AN NHIÊN ,CMT8,2026-01-04,5,9500000,1900000
 AN NHIÊN ,CMT8,2026-01-05,4,16900000,4225000
 AN NHIÊN ,CMT8,2026-01-06,3,1500000,500000
@@ -388,21 +367,25 @@ AN NHIÊN ,CMT8,2026-01-09,3,10000000,3333333
 AN NHIÊN ,CMT8,2026-01-10,3,3000000,1000000
 AN NHIÊN ,CMT8,2026-01-11,0,0,0
 AN NHIÊN ,CMT8,2026-01-12,4,3000000,750000
-AN NHIÊN ,CMT8,2026-01-13,3,3500000,1166667
+AN NHIÊN ,CMT8,2026-01-13,3,3500000,1166666
 AN NHIÊN ,CMT8,2026-01-14,2,8000000,4000000
 AN NHIÊN ,CMT8,2026-01-15,2,1000000,500000
 AN NHIÊN ,CMT8,2026-01-16,2,1000000,500000
-AN NHIÊN ,CMT8,2026-01-17,6,5800000,966667
-AN NHIÊN ,CMT8,2026-01-18,0,800000,0
-AN NHIÊN ,CMT8,2026-01-19,2,7800000,3900000
+AN NHIÊN ,CMT8,2026-01-17,6,5800000,966666
+AN NHIÊN ,CMT8,2026-01-18,2,800000,400000
+AN NHIÊN ,CMT8,2026-01-19,4,7800000,1950000
 AN NHIÊN ,CMT8,2026-01-20,4,12500000,3125000
-AN NHIÊN ,CMT8,2026-01-21,0,0,0
+AN NHIÊN ,CMT8,2026-01-21,1,0,0
 AN NHIÊN ,CMT8,2026-01-22,4,5000000,1250000
 AN NHIÊN ,CMT8,2026-01-23,1,1000000,1000000
 AN NHIÊN ,CMT8,2026-01-24,3,3600000,1200000
 AN NHIÊN ,CMT8,2026-01-25,1,5500000,5500000
 AN NHIÊN ,CMT8,2026-01-26,5,10000000,2000000
 AN NHIÊN ,CMT8,2026-01-27,1,10500000,10500000
+AN NHIÊN ,CMT8,2026-01-28,2,500000,250000
+AN NHIÊN ,CMT8,2026-01-29,2,8400000,4200000
+AN NHIÊN ,CMT8,2026-01-30,4,5300000,1325000
+AN NHIÊN ,CMT8,2026-01-31,4,4000000,1000000
 AN NHIÊN ,ADV,2026-01-02,3,13900000,4633333
 AN NHIÊN ,ADV,2026-01-03,2,6500000,3250000
 AN NHIÊN ,ADV,2026-01-04,4,13000000,3250000
@@ -429,6 +412,10 @@ AN NHIÊN ,ADV,2026-01-24,3,6300000,2100000
 AN NHIÊN ,ADV,2026-01-25,3,3000000,1000000
 AN NHIÊN ,ADV,2026-01-26,1,6000000,6000000
 AN NHIÊN ,ADV,2026-01-27,4,14000000,3500000
+AN NHIÊN ,ADV,2026-01-28,4,10000000,2500000
+AN NHIÊN ,ADV,2026-01-29,3,12500000,4166666
+AN NHIÊN ,ADV,2026-01-30,3,1600000,533333
+AN NHIÊN ,ADV,2026-01-31,3,6500000,2166666
 PHỤC LINH,XÃ ĐÀN,2026-01-02,3,35500000,11833333
 PHỤC LINH,XÃ ĐÀN,2026-01-03,9,39699000,4411000
 PHỤC LINH,XÃ ĐÀN,2026-01-04,14,80800000,5771428
@@ -448,14 +435,17 @@ PHỤC LINH,XÃ ĐÀN,2026-01-17,7,45100000,6442857
 PHỤC LINH,XÃ ĐÀN,2026-01-18,7,34700000,4957142
 PHỤC LINH,XÃ ĐÀN,2026-01-19,9,42579000,4731000
 PHỤC LINH,XÃ ĐÀN,2026-01-20,6,55300000,9216666
-PHỤC LINH,XÃ ĐÀN,2026-01-21,2,32100000,16050000
+PHỤC LINH,XÃ ĐÀN,2026-01-21,2,32400000,16200000
 PHỤC LINH,XÃ ĐÀN,2026-01-22,1,26300000,26300000
 PHỤC LINH,XÃ ĐÀN,2026-01-23,7,15500000,2214285
 PHỤC LINH,XÃ ĐÀN,2026-01-24,6,22160000,3693333
-PHỤC LINH,XÃ ĐÀN,2026-01-25,5,17100000,3420000
-PHỤC LINH,XÃ ĐÀN,2026-01-26,6,23800000,3966666
+PHỤC LINH,XÃ ĐÀN,2026-01-25,4,17100000,4275000
+PHỤC LINH,XÃ ĐÀN,2026-01-26,4,29700000,7425000
 PHỤC LINH,XÃ ĐÀN,2026-01-27,8,35380000,4422500
-PHỤC LINH,XÃ ĐÀN,2026-01-28,9,21300000,2366666
+PHỤC LINH,XÃ ĐÀN,2026-01-28,7,21300000,3042857
+PHỤC LINH,XÃ ĐÀN,2026-01-29,7,49500000,7071428
+PHỤC LINH,XÃ ĐÀN,2026-01-30,7,40740000,5820000
+PHỤC LINH,XÃ ĐÀN,2026-01-31,4,1700000,425000
 PHỤC LINH,CẦU GIẤY,2026-01-02,3,12000000,4000000
 PHỤC LINH,CẦU GIẤY,2026-01-03,8,33000000,4125000
 PHỤC LINH,CẦU GIẤY,2026-01-04,9,42700000,4744444
@@ -478,11 +468,14 @@ PHỤC LINH,CẦU GIẤY,2026-01-20,7,53500000,7642857
 PHỤC LINH,CẦU GIẤY,2026-01-21,7,104299999,14899999
 PHỤC LINH,CẦU GIẤY,2026-01-22,5,4700000,940000
 PHỤC LINH,CẦU GIẤY,2026-01-23,5,4498000,899600
-PHỤC LINH,CẦU GIẤY,2026-01-24,8,25600000,3200000
+PHỤC LINH,CẦU GIẤY,2026-01-24,7,25600000,3657142
 PHỤC LINH,CẦU GIẤY,2026-01-25,10,49190000,4919000
-PHỤC LINH,CẦU GIẤY,2026-01-26,5,20210000,4042000
+PHỤC LINH,CẦU GIẤY,2026-01-26,6,31560000,5260000
 PHỤC LINH,CẦU GIẤY,2026-01-27,9,26598000,2955333
-PHỤC LINH,CẦU GIẤY,2026-01-28,3,4100000,1366666
+PHỤC LINH,CẦU GIẤY,2026-01-28,3,10100000,3366666
+PHỤC LINH,CẦU GIẤY,2026-01-29,4,52600000,13150000
+PHỤC LINH,CẦU GIẤY,2026-01-30,6,31499000,5249833
+PHỤC LINH,CẦU GIẤY,2026-01-31,2,13800000,6900000
 PHỤC LINH,HÀ ĐÔNG,2026-01-02,7,21300000,3042857
 PHỤC LINH,HÀ ĐÔNG,2026-01-03,4,19200000,4800000
 PHỤC LINH,HÀ ĐÔNG,2026-01-04,8,9200000,1150000
@@ -490,7 +483,7 @@ PHỤC LINH,HÀ ĐÔNG,2026-01-05,8,13799000,1724875
 PHỤC LINH,HÀ ĐÔNG,2026-01-06,2,30600000,15300000
 PHỤC LINH,HÀ ĐÔNG,2026-01-07,8,33200000,4150000
 PHỤC LINH,HÀ ĐÔNG,2026-01-08,13,41600000,3200000
-PHỤC LINH,HÀ ĐÔNG,2026-01-09,8,7300000,912500
+PHỤC LINH,HÀ ĐÔNG,2026-01-09,8,7900000,987500
 PHỤC LINH,HÀ ĐÔNG,2026-01-10,8,14699000,1837375
 PHỤC LINH,HÀ ĐÔNG,2026-01-11,6,45100000,7516666
 PHỤC LINH,HÀ ĐÔNG,2026-01-12,7,23800000,3400000
@@ -498,18 +491,21 @@ PHỤC LINH,HÀ ĐÔNG,2026-01-13,1,6660000,6660000
 PHỤC LINH,HÀ ĐÔNG,2026-01-14,9,30300000,3366666
 PHỤC LINH,HÀ ĐÔNG,2026-01-15,8,26600000,3325000
 PHỤC LINH,HÀ ĐÔNG,2026-01-16,6,19900000,3316666
-PHỤC LINH,HÀ ĐÔNG,2026-01-17,11,53200000,4836364
+PHỤC LINH,HÀ ĐÔNG,2026-01-17,11,53200000,4836363
 PHỤC LINH,HÀ ĐÔNG,2026-01-18,10,46460000,4646000
 PHỤC LINH,HÀ ĐÔNG,2026-01-19,3,38400000,12800000
 PHỤC LINH,HÀ ĐÔNG,2026-01-20,2,24100000,12050000
 PHỤC LINH,HÀ ĐÔNG,2026-01-21,8,22000000,2750000
 PHỤC LINH,HÀ ĐÔNG,2026-01-22,3,42700000,14233333
-PHỤC LINH,HÀ ĐÔNG,2026-01-23,5,3700000,740000
-PHỤC LINH,HÀ ĐÔNG,2026-01-24,6,31600000,5266666
+PHỤC LINH,HÀ ĐÔNG,2026-01-23,4,3700000,925000
+PHỤC LINH,HÀ ĐÔNG,2026-01-24,7,31600000,4514285
 PHỤC LINH,HÀ ĐÔNG,2026-01-25,6,47400000,7900000
-PHỤC LINH,HÀ ĐÔNG,2026-01-26,8,14300000,1787500
+PHỤC LINH,HÀ ĐÔNG,2026-01-26,7,18500000,2642857
 PHỤC LINH,HÀ ĐÔNG,2026-01-27,5,7300000,1460000
-PHỤC LINH,HÀ ĐÔNG,2026-01-28,6,21300000,3550000
+PHỤC LINH,HÀ ĐÔNG,2026-01-28,7,30000000,4285714
+PHỤC LINH,HÀ ĐÔNG,2026-01-29,5,23000000,4600000
+PHỤC LINH,HÀ ĐÔNG,2026-01-30,7,27320000,3902857
+PHỤC LINH,HÀ ĐÔNG,2026-01-31,7,22799000,3257000
 PHỤC LINH,HẢI PHÒNG,2026-01-02,2,3600000,1800000
 PHỤC LINH,HẢI PHÒNG,2026-01-03,7,13500000,1928571
 PHỤC LINH,HẢI PHÒNG,2026-01-04,12,28600000,2383333
@@ -532,25 +528,284 @@ PHỤC LINH,HẢI PHÒNG,2026-01-20,3,6000000,2000000
 PHỤC LINH,HẢI PHÒNG,2026-01-21,4,12700000,3175000
 PHỤC LINH,HẢI PHÒNG,2026-01-22,0,5000000,0
 PHỤC LINH,HẢI PHÒNG,2026-01-23,4,11250000,2812500
-PHỤC LINH,HẢI PHÒNG,2026-01-24,5,13400000,2680000
-PHỤC LINH,HẢI PHÒNG,2026-01-25,5,18440000,3688000
-PHỤC LINH,HẢI PHÒNG,2026-01-26,8,4500000,562500
+PHỤC LINH,HẢI PHÒNG,2026-01-24,4,13400000,3350000
+PHỤC LINH,HẢI PHÒNG,2026-01-25,4,18440000,4610000
+PHỤC LINH,HẢI PHÒNG,2026-01-26,6,15800000,2633333
 PHỤC LINH,HẢI PHÒNG,2026-01-27,1,12100000,12100000
-PHỤC LINH,HẢI PHÒNG,2026-01-28,6,8300000,1383333
+PHỤC LINH,HẢI PHÒNG,2026-01-28,4,10700000,2675000
+PHỤC LINH,HẢI PHÒNG,2026-01-29,2,1500000,750000
+PHỤC LINH,HẢI PHÒNG,2026-01-30,2,3300000,1650000
+PHỤC LINH,HẢI PHÒNG,2026-01-31,2,1000000,500000
+`;
+
+        const csvRaw_M2 = `
+AN NGUYÊN,LONG BIÊN,2026-02-01,2,1500000,750000
+AN NGUYÊN,LONG BIÊN,2026-02-02,8,6000000,750000
+AN NGUYÊN,LONG BIÊN,2026-02-03,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-04,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-05,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-06,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-07,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-08,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-09,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-10,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-11,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-12,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-13,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-14,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-15,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-16,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-17,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-18,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-19,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-20,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-21,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-22,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-23,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-24,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-25,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-26,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-27,0,0,0
+AN NGUYÊN,LONG BIÊN,2026-02-28,0,0,0
+AN NHIÊN,CMT8,2026-02-01,20,50000000,2500000
+AN NHIÊN,CMT8,2026-02-02,0,0,0
+AN NHIÊN,CMT8,2026-02-03,0,0,0
+AN NHIÊN,CMT8,2026-02-04,0,0,0
+AN NHIÊN,CMT8,2026-02-05,0,0,0
+AN NHIÊN,CMT8,2026-02-06,0,0,0
+AN NHIÊN,CMT8,2026-02-07,0,0,0
+AN NHIÊN,CMT8,2026-02-08,0,0,0
+AN NHIÊN,CMT8,2026-02-09,0,0,0
+AN NHIÊN,CMT8,2026-02-10,0,0,0
+AN NHIÊN,CMT8,2026-02-11,0,0,0
+AN NHIÊN,CMT8,2026-02-12,0,0,0
+AN NHIÊN,CMT8,2026-02-13,0,0,0
+AN NHIÊN,CMT8,2026-02-14,0,0,0
+AN NHIÊN,CMT8,2026-02-15,0,0,0
+AN NHIÊN,CMT8,2026-02-16,0,0,0
+AN NHIÊN,CMT8,2026-02-17,0,0,0
+AN NHIÊN,CMT8,2026-02-18,0,0,0
+AN NHIÊN,CMT8,2026-02-19,0,0,0
+AN NHIÊN,CMT8,2026-02-20,0,0,0
+AN NHIÊN,CMT8,2026-02-21,0,0,0
+AN NHIÊN,CMT8,2026-02-22,0,0,0
+AN NHIÊN,CMT8,2026-02-23,0,0,0
+AN NHIÊN,CMT8,2026-02-24,0,0,0
+AN NHIÊN,CMT8,2026-02-25,0,0,0
+AN NHIÊN,CMT8,2026-02-26,0,0,0
+AN NHIÊN,CMT8,2026-02-27,0,0,0
+AN NHIÊN,CMT8,2026-02-28,0,0,0
+AN NHIÊN,ADV,2026-02-01,30,35000000,1166666667
+AN NHIÊN,ADV,2026-02-02,10,77000000,7700000
+AN NHIÊN,ADV,2026-02-03,0,0,0
+AN NHIÊN,ADV,2026-02-04,0,0,0
+AN NHIÊN,ADV,2026-02-05,0,0,0
+AN NHIÊN,ADV,2026-02-06,0,0,0
+AN NHIÊN,ADV,2026-02-07,0,0,0
+AN NHIÊN,ADV,2026-02-08,0,0,0
+AN NHIÊN,ADV,2026-02-09,0,0,0
+AN NHIÊN,ADV,2026-02-10,0,0,0
+AN NHIÊN,ADV,2026-02-11,0,0,0
+AN NHIÊN,ADV,2026-02-12,0,0,0
+AN NHIÊN,ADV,2026-02-13,0,0,0
+AN NHIÊN,ADV,2026-02-14,0,0,0
+AN NHIÊN,ADV,2026-02-15,0,0,0
+AN NHIÊN,ADV,2026-02-16,0,0,0
+AN NHIÊN,ADV,2026-02-17,0,0,0
+AN NHIÊN,ADV,2026-02-18,0,0,0
+AN NHIÊN,ADV,2026-02-19,0,0,0
+AN NHIÊN,ADV,2026-02-20,0,0,0
+AN NHIÊN,ADV,2026-02-21,0,0,0
+AN NHIÊN,ADV,2026-02-22,0,0,0
+AN NHIÊN,ADV,2026-02-23,0,0,0
+AN NHIÊN,ADV,2026-02-24,0,0,0
+AN NHIÊN,ADV,2026-02-25,0,0,0
+AN NHIÊN,ADV,2026-02-26,0,0,0
+AN NHIÊN,ADV,2026-02-27,0,0,0
+AN NHIÊN,ADV,2026-02-28,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-01,10,210800000,21080000
+PHỤC LINH,XÃ ĐÀN,2026-02-02,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-03,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-04,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-05,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-06,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-07,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-08,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-09,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-10,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-11,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-12,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-13,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-14,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-15,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-16,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-17,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-18,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-19,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-20,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-21,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-22,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-23,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-24,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-25,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-26,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-27,0,0,0
+PHỤC LINH,XÃ ĐÀN,2026-02-28,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-01,20,115000000,5750000
+PHỤC LINH,CẦU GIẤY,2026-02-02,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-03,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-04,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-05,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-06,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-07,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-08,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-09,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-10,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-11,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-12,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-13,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-14,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-15,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-16,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-17,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-18,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-19,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-20,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-21,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-22,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-23,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-24,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-25,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-26,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-27,0,0,0
+PHỤC LINH,CẦU GIẤY,2026-02-28,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-01,70,131000000,1871428571
+PHỤC LINH,HÀ ĐÔNG,2026-02-02,0,22000000,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-03,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-04,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-05,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-06,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-07,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-08,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-09,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-10,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-11,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-12,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-13,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-14,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-15,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-16,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-17,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-18,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-19,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-20,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-21,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-22,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-23,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-24,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-25,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-26,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-27,0,0,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-28,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-01,30,15000000,500000
+PHỤC LINH,HẢI PHÒNG,2026-02-02,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-03,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-04,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-05,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-06,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-07,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-08,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-09,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-10,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-11,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-12,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-13,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-14,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-15,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-16,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-17,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-18,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-19,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-20,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-21,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-22,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-23,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-24,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-25,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-26,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-27,0,0,0
+PHỤC LINH,HẢI PHÒNG,2026-02-28,0,0,0
 `;
 
         // --- 2. CSV RAW DATA (Ads Cost) - UPDATED FROM 'Tổng hợp.xlsx' ---
-        const csvAdsRaw = `
-AN NGUYÊN,LONG BIÊN,2026-01-31,193527000
-AN NHIÊN,ADV,2026-01-31,131413690
-AN NHIÊN,CMT8,2026-01-31,66585298
+        const csvAdsRaw_M1 = `
+AN NGUYÊN,LONG BIÊN,2026-01-31,200281629
+AN NHIÊN,ADV,2026-01-31,141863670
+AN NHIÊN,CMT8,2026-01-31,70221332
 PHỤC LINH,CẦU GIẤY,2026-01-31,155995939
-PHỤC LINH,HÀ ĐÔNG,2026-01-31,181344518
+PHỤC LINH,HÀ ĐÔNG,2026-01-31,187948814
 PHỤC LINH,HẢI PHÒNG,2026-01-31,113236478
-PHỤC LINH,XÃ ĐÀN,2026-01-31,310537738
+PHỤC LINH,XÃ ĐÀN,2026-01-31,314208557
 `;
         
-        // --- 3. CSV MARKETING DATA ---
+        const csvAdsRaw_M2 = `
+AN NGUYÊN,LONG BIÊN,2026-02-28,5466795
+AN NHIÊN,ADV,2026-02-28,7895304
+AN NHIÊN,CMT8,2026-02-28,4199889
+PHỤC LINH,CẦU GIẤY,2026-02-28,0
+PHỤC LINH,HÀ ĐÔNG,2026-02-28,0
+PHỤC LINH,HẢI PHÒNG,2026-02-28,4957448
+PHỤC LINH,XÃ ĐÀN,2026-02-28,5746816
+`;
+
+        // --- 3. SUMMARY TARGETS & REAL REVENUE - FROM 'Tổng hợp.xlsx' ---
+        // Added real_revenue, real_customers, and breakeven to ensure Cards display correct totals from Summary file
+        const summaryData_M1 = [
+            { brand: 'AN NGUYÊN', branch: 'LONG BIÊN', target: 700000000, real_revenue: 631098000, real_customers: 156, breakeven: 600000000 },
+            { brand: 'AN NHIÊN', branch: 'ADV', target: 500000000, real_revenue: 248000000, real_customers: 102, breakeven: 350000000 },
+            { brand: 'AN NHIÊN', branch: 'CMT8', target: 500000000, real_revenue: 191100000, real_customers: 85, breakeven: 350000000 },
+            { brand: 'PHỤC LINH', branch: 'CẦU GIẤY', target: 880000000, real_revenue: 1054692999, real_customers: 192, breakeven: 600000000 },
+            { brand: 'PHỤC LINH', branch: 'HÀ ĐÔNG', target: 820000000, real_revenue: 782337000, real_customers: 195, breakeven: 600000000 }, 
+            { brand: 'PHỤC LINH', branch: 'HẢI PHÒNG', target: 500000000, real_revenue: 359390000, real_customers: 137, breakeven: 450000000 }, 
+            { brand: 'PHỤC LINH', branch: 'XÃ ĐÀN', target: 1080000000, real_revenue: 1100867000, real_customers: 198, breakeven: 800000000 } 
+        ];
+
+        const summaryData_M2 = [
+            { brand: 'AN NGUYÊN', branch: 'LONG BIÊN', target: 700000000, real_revenue: 7500000, real_customers: 17, breakeven: 600000000 },
+            { brand: 'AN NHIÊN', branch: 'ADV', target: 500000000, real_revenue: 11200000, real_customers: 4, breakeven: 350000000 },
+            { brand: 'AN NHIÊN', branch: 'CMT8', target: 500000000, real_revenue: 5000000, real_customers: 2, breakeven: 350000000 },
+            { brand: 'PHỤC LINH', branch: 'CẦU GIẤY', target: 880000000, real_revenue: 11500000, real_customers: 2, breakeven: 600000000 },
+            { brand: 'PHỤC LINH', branch: 'HÀ ĐÔNG', target: 820000000, real_revenue: 15300000, real_customers: 7, breakeven: 600000000 }, 
+            { brand: 'PHỤC LINH', branch: 'HẢI PHÒNG', target: 500000000, real_revenue: 1500000, real_customers: 3, breakeven: 450000000 }, 
+            { brand: 'PHỤC LINH', branch: 'XÃ ĐÀN', target: 1080000000, real_revenue: 21080000, real_customers: 1, breakeven: 800000000 } 
+        ];
+
+        // --- CONSULTANT COMMENTS ---
+        const comments_M1 = `
+            <p><strong>1. Hiện trạng Kinh doanh</strong><br>
+            <span class="font-bold">• Phân hóa doanh thu:</span> Có sự chênh lệch lớn. <span class="text-green-600 font-bold">Cầu Giấy (118%)</span> và <span class="text-green-600 font-bold">Xã Đàn (101.77%)</span> xuất sắc vượt KPI. Ngược lại, <span class="text-red-600 font-bold">ADV và CMT8</span> rơi vào mức báo động đỏ (dưới 50%). <span class="text-yellow-600 font-bold">Hà Đông và Long Biên</span> hoàn thành ở mức khá (trên 90%).<br>
+            <span class="font-bold">• Giá trị đơn hàng:</span> Tương đồng với doanh thu. Nhóm dẫn đầu đạt trung bình trên 5 triệu/đơn, trong khi nhóm cuối bảng (ADV, CMT8, Hải Phòng) chỉ đạt mức thấp ~2.5 triệu.</p>
+            <p><strong>2. Hiệu quả Marketing</strong><br>
+            <span class="font-bold text-green-600">• Tối ưu nhất:</span> <strong>Cầu Giấy</strong> (Chi phí Ads trung bình nhưng doanh thu thuộc top đầu).<br>
+            <span class="font-bold text-red-600">• Lãng phí:</span> <strong>Xã Đàn</strong> (Doanh thu cao nhưng chi phí Ads gấp đôi Cầu Giấy). <strong>Hà Đông và Long Biên</strong> cũng chi tiêu cao nhưng doanh thu chưa tương xứng.</p>
+            <p><strong>3. Đề xuất trọng tâm</strong><br>
+            <span class="font-bold text-zen-tea">▶️ Chiến lược:</span> Lấy <strong>Cầu Giấy</strong> làm mô hình chuẩn để nhân rộng quy trình chốt đơn và quản lý chi phí.<br>
+            <span class="font-bold text-zen-tea">▶️ Tối ưu:</span> Cắt giảm, tinh chỉnh Ads tại <strong>Xã Đàn</strong> để bảo toàn lợi nhuận.<br>
+            <span class="font-bold text-zen-tea">▶️ Cải tổ:</span> Tái cấu trúc toàn diện <strong>ADV & CMT8</strong> (về vị trí/khách hàng); tập trung đào tạo Upsell để tăng giá trị bill tại <strong>Hải Phòng</strong>.</p>
+        `;
+
+        const comments_M2 = `
+            <p><strong>1. Khởi động Tháng 2</strong><br>
+            Dữ liệu đầu tháng 2 cho thấy sự khởi đầu chậm rãi sau kỳ nghỉ Tết. Các chỉ số doanh thu và lượng khách đang ở mức thấp so với trung bình tháng 1. Cần theo dõi sát sao để có biện pháp kích cầu kịp thời.</p>
+            <p><strong>2. Điểm cần lưu ý</strong><br>
+            <span class="text-yellow-600 font-bold">•</span> Doanh thu các ngày đầu tháng còn thấp, chưa phản ánh đúng tiềm năng thực tế.<br>
+            <span class="text-yellow-600 font-bold">•</span> Chi phí Ads tháng 2 đã bắt đầu được phân bổ, cần theo dõi hiệu quả chuyển đổi (CIR) ngay từ những ngày đầu.</p>
+            <p><strong>3. Đề xuất hành động</strong><br>
+            <span class="font-bold text-zen-tea">▶️</span> Đẩy mạnh các chương trình khai xuân, lì xì đầu năm để thu hút khách hàng quay trở lại.<br>
+            <span class="font-bold text-zen-tea">▶️</span> Tối ưu hóa lại các chiến dịch quảng cáo, tập trung vào các dịch vụ phù hợp với nhu cầu sau Tết.</p>
+        `;
+
+        // --- 6. MARKETING DATA ---
         const csvMarketing = `
 Phục Linh,3099,951,328
 An Nguyên,720,269,101
@@ -558,23 +813,12 @@ An Nhiên ADV,565,202,47
 An Nhiên CMT8,860,267,78
 `;
 
-        // --- 4. SUMMARY TARGETS & REAL REVENUE - FROM 'Tổng hợp.xlsx' ---
-        // Added real_revenue, real_customers, and breakeven to ensure Cards display correct totals from Summary file
-        const summaryData = [
-            { brand: 'AN NGUYÊN', branch: 'LONG BIÊN', target: 700000000, real_revenue: 631098000, real_customers: 156, breakeven: 600000000 },
-            { brand: 'AN NHIÊN', branch: 'ADV', target: 500000000, real_revenue: 240400000, real_customers: 98, breakeven: 350000000 },
-            { brand: 'AN NHIÊN', branch: 'CMT8', target: 500000000, real_revenue: 187100000, real_customers: 82, breakeven: 350000000 },
-            { brand: 'PHỤC LINH', branch: 'CẦU GIẤY', target: 880000000, real_revenue: 1040892000, real_customers: 180, breakeven: 600000000 },
-            { brand: 'PHỤC LINH', branch: 'HÀ ĐÔNG', target: 820000000, real_revenue: 758538000, real_customers: 188, breakeven: 600000000 }, 
-            { brand: 'PHỤC LINH', branch: 'HẢI PHÒNG', target: 500000000, real_revenue: 358390000, real_customers: 135, breakeven: 350000000 }, 
-            { brand: 'PHỤC LINH', branch: 'XÃ ĐÀN', target: 1080000000, real_revenue: 1099167000, real_customers: 200, breakeven: 800000000 } 
-        ];
-
         // --- GLOBAL STATE ---
         let currentMonth = 1; 
         let currentBrand = 'all';
         let parsedDailyData = [];
         let parsedAdsData = [];
+        let currentSummaryData = [];
         let parsedMarketingData = [];
         let chartInstances = {};
         
@@ -612,7 +856,7 @@ An Nhiên CMT8,860,267,78
             for (let i = 1; i <= 12; i++) {
                 const btn = document.createElement('button');
                 btn.id = `btn-m${i}`;
-                btn.className = `month-btn px-3 py-1 text-xs font-bold rounded-lg transition-all whitespace-nowrap ${i === 1 ? 'bg-zen-tea text-white shadow-sm' : 'text-gray-500 hover:bg-white hover:text-zen-tea'}`;
+                btn.className = `month-btn px-3 py-1 text-xs font-bold rounded-lg transition-all whitespace-nowrap ${i === 2 ? 'bg-zen-tea text-white shadow-sm' : 'text-gray-500 hover:bg-white hover:text-zen-tea'}`;
                 btn.innerText = `T${i}`;
                 btn.onclick = () => setMonth(i);
                 container.appendChild(btn);
@@ -628,8 +872,7 @@ An Nhiên CMT8,860,267,78
                 if(cols.length < 3) return;
                 
                 if (type === 'marketing') {
-                    // For marketing file: Cơ sở, Tổng Lead, Tổng SDT, Khách đến SPA
-                    const name = cols[0].trim();
+                     const name = cols[0].trim();
                     if(name && name !== 'Cơ sở') {
                          data.push({
                             name: name,
@@ -639,7 +882,6 @@ An Nhiên CMT8,860,267,78
                         });
                     }
                 } else {
-                    // For daily/ads data
                     const brand = cols[0].trim();
                     const branch = cols[1].trim();
                     const dateStr = cols[2].trim();
@@ -672,9 +914,26 @@ An Nhiên CMT8,860,267,78
                 }
             });
             
-            // Update Title Date
             const monthDisplay = document.getElementById('displayMonth');
             if(monthDisplay) monthDisplay.innerText = m;
+
+            // Load Data for Selected Month
+            if (m === 1) {
+                parsedDailyData = parseCSV(csvRaw_M1, 'rev');
+                parsedAdsData = parseCSV(csvAdsRaw_M1, 'ads');
+                currentSummaryData = summaryData_M1;
+                document.getElementById('consultant-content').innerHTML = comments_M1;
+            } else if (m === 2) {
+                parsedDailyData = parseCSV(csvRaw_M2, 'rev');
+                parsedAdsData = parseCSV(csvAdsRaw_M2, 'ads');
+                currentSummaryData = summaryData_M2;
+                document.getElementById('consultant-content').innerHTML = comments_M2;
+            } else {
+                parsedDailyData = [];
+                parsedAdsData = [];
+                currentSummaryData = [];
+                document.getElementById('consultant-content').innerHTML = "<p>Chưa có dữ liệu.</p>";
+            }
             
             updateDashboard();
         }
@@ -691,21 +950,17 @@ An Nhiên CMT8,860,267,78
 
         // --- MAIN LOGIC ---
         function updateDashboard() {
-            // 1. Filter Data
-            let dailyRev = parsedDailyData.filter(d => d.month === currentMonth);
-            let dailyAds = parsedAdsData.filter(d => d.month === currentMonth);
+            let dailyRev = parsedDailyData; 
+            let dailyAds = parsedAdsData;
 
             if (currentBrand !== 'all') {
                 dailyRev = dailyRev.filter(d => d.brand === currentBrand);
                 dailyAds = dailyAds.filter(d => d.brand === currentBrand);
             }
 
-            // 2. Aggregate Data by Branch
             const branchMap = {};
-
-            // Init from summary (Targets & REAL REVENUE)
-            let filteredSummary = summaryData;
-            if (currentBrand !== 'all') filteredSummary = summaryData.filter(d => d.brand === currentBrand);
+            let filteredSummary = currentSummaryData;
+            if (currentBrand !== 'all') filteredSummary = currentSummaryData.filter(d => d.brand === currentBrand);
             
             filteredSummary.forEach(s => {
                 branchMap[s.branch] = { 
@@ -713,13 +968,12 @@ An Nhiên CMT8,860,267,78
                     branch: s.branch, 
                     target: s.target, 
                     breakeven: s.breakeven,
-                    revenue: currentMonth === 1 ? (s.real_revenue || 0) : 0, 
-                    customers: currentMonth === 1 ? (s.real_customers || 0) : 0, 
+                    revenue: s.real_revenue || 0, 
+                    customers: s.real_customers || 0, 
                     ads: 0 
                 };
             });
 
-            // Fill Ads from CSV
             dailyAds.forEach(d => {
                 if(branchMap[d.branch]) {
                     branchMap[d.branch].ads += d.value1; 
@@ -727,23 +981,19 @@ An Nhiên CMT8,860,267,78
             });
 
             const aggregatedData = Object.values(branchMap);
-
-            // 3. Totals
             const totalRevenue = aggregatedData.reduce((sum, d) => sum + d.revenue, 0);
             const totalCustomers = aggregatedData.reduce((sum, d) => sum + d.customers, 0);
             const totalAds = aggregatedData.reduce((sum, d) => sum + d.ads, 0);
             const avgBill = totalCustomers > 0 ? Math.round(totalRevenue / totalCustomers) : 0;
 
-            // 4. Update KPIs
             animateValue("kpi-revenue", parseInt(document.getElementById('kpi-revenue').innerText.replace(/\D/g,'')) || 0, totalRevenue, 1000);
             animateValue("kpi-customers", parseInt(document.getElementById('kpi-customers').innerText.replace(/\D/g,'')) || 0, totalCustomers, 1000);
             animateValue("kpi-ads", parseInt(document.getElementById('kpi-ads').innerText.replace(/\D/g,'')) || 0, totalAds, 1000);
             animateValue("kpi-bill", parseInt(document.getElementById('kpi-bill').innerText.replace(/\D/g,'')) || 0, avgBill, 1000);
 
-            // 5. Render All
-            renderMainChart(dailyRev); // Chart uses daily data
-            renderMarketingFunnels(); // NEW Marketing Funnels
-            renderBranchCards(aggregatedData); // Cards now include Breakeven logic
+            renderMainChart(dailyRev); 
+            renderMarketingFunnels();
+            renderBranchCards(aggregatedData); 
             renderAdsTable(aggregatedData);
             
             setTimeout(() => {
@@ -773,11 +1023,7 @@ An Nhiên CMT8,860,267,78
             const container = document.getElementById('marketingContainer');
             container.innerHTML = '';
             
-            // Filter marketing data based on currentBrand
-            let funnelData = parsedMarketingData;
-            
-            // Mapping for filter because names in mkt file are slightly different
-            // "Phục Linh" is aggregate for PL, "An Nguyên" is aggregate/single, "An Nhiên ADV", "An Nhiên CMT8"
+            let funnelData = parsedMarketingData; 
             
             if (currentBrand !== 'all') {
                 if (currentBrand === 'PHỤC LINH') funnelData = funnelData.filter(d => d.name === 'Phục Linh');
@@ -786,7 +1032,6 @@ An Nhiên CMT8,860,267,78
             }
 
             funnelData.forEach((item, index) => {
-                // Calculate percentages
                 const rateLeadToPhone = item.leads > 0 ? (item.phones / item.leads * 100).toFixed(1) : 0;
                 const ratePhoneToArrive = item.phones > 0 ? (item.arrived / item.phones * 100).toFixed(1) : 0;
                 const rateLeadToArrive = item.leads > 0 ? (item.arrived / item.leads * 100).toFixed(1) : 0;
@@ -816,7 +1061,6 @@ An Nhiên CMT8,860,267,78
                 `;
                 container.appendChild(div);
 
-                // Render Chart
                 const ctx = div.querySelector('canvas').getContext('2d');
                 new Chart(ctx, {
                     type: 'bar',
@@ -826,9 +1070,9 @@ An Nhiên CMT8,860,267,78
                             label: 'Số lượng',
                             data: [item.leads, item.phones, item.arrived],
                             backgroundColor: [
-                                'rgba(203, 191, 163, 0.6)', // Lead - Wood color
-                                'rgba(107, 143, 113, 0.6)', // Phone - Tea color
-                                'rgba(59, 130, 246, 0.6)'   // Arrived - Blue
+                                'rgba(203, 191, 163, 0.6)', 
+                                'rgba(107, 143, 113, 0.6)', 
+                                'rgba(59, 130, 246, 0.6)'   
                             ],
                             borderColor: [
                                 '#CBBFA3',
@@ -840,12 +1084,12 @@ An Nhiên CMT8,860,267,78
                         }]
                     },
                     options: {
-                        indexAxis: 'y', // Horizontal bar to simulate funnel
+                        indexAxis: 'y', 
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
                             legend: { display: false },
-                            datalabels: { // Using plugin-datalabels
+                            datalabels: { 
                                 color: '#3F3F3F',
                                 anchor: 'end',
                                 align: 'right',
@@ -856,19 +1100,19 @@ An Nhiên CMT8,860,267,78
                                 formatter: (value) => new Intl.NumberFormat('vi-VN').format(value)
                             },
                              tooltip: {
-                                enabled: false // Disable tooltip since numbers are shown directly
+                                enabled: false 
                             }
                         },
                         scales: {
                             x: { 
                                 grid: { display: false }, 
                                 beginAtZero: true,
-                                display: false // Hide x-axis labels to keep it clean
+                                display: false 
                             },
                             y: { grid: { display: false } }
                         }
                     },
-                    plugins: [ChartDataLabels] // Register plugin
+                    plugins: [ChartDataLabels] 
                 });
             });
         }
@@ -907,14 +1151,9 @@ An Nhiên CMT8,860,267,78
                     </div>
                     ${item.target > 0 ? `
                     <div class="mt-2 pt-2 border-t border-gray-100">
-                        <!-- Progress Bar Container with Relative Positioning -->
                         <div class="progress-bar-bg mb-2 bg-gray-200">
-                            <!-- Breakeven Marker -->
                             <div class="breakeven-marker" style="left: ${Math.min(bePercent, 100)}%;"></div>
-                            <!-- Breakeven Label -->
                             <div class="breakeven-label" style="left: ${Math.min(bePercent, 100)}%;">DT hòa vốn</div>
-                            
-                            <!-- Actual Progress Bar -->
                             <div class="progress-bar-fill h-1.5 rounded-full ${isProfitable ? 'bg-green-500' : 'bg-red-400'}" style="width: 0%" data-width="${Math.min(percent, 100)}"></div>
                         </div>
                         
@@ -935,11 +1174,10 @@ An Nhiên CMT8,860,267,78
         function renderAdsTable(data) {
             const tbody = document.getElementById('adsTableBody');
             tbody.innerHTML = '';
-            // Sort by ads spend desc
             const sorted = [...data].sort((a, b) => b.ads - a.ads);
             
             sorted.forEach(item => {
-                if(item.ads === 0 && item.revenue === 0) return; // Skip empty rows
+                if(item.ads === 0 && item.revenue === 0) return;
 
                 const tr = document.createElement('tr');
                 const cir = item.revenue > 0 ? (item.ads / item.revenue) * 100 : 0;
@@ -952,7 +1190,6 @@ An Nhiên CMT8,860,267,78
                 let cirClass = 'text-zen-dark';
                 let cirBadge = '<span class="px-2 py-1 rounded bg-gray-100 text-gray-500 text-xs font-bold">Ổn định</span>';
                 
-                // NEW CIR LOGIC: 0-30 Tốt, 30-50 Khá, >50 TB
                 if (cir > 50) {
                     cirClass = 'text-red-500 font-bold';
                     cirBadge = '<span class="px-2 py-1 rounded bg-red-100 text-red-600 text-xs font-bold">Trung bình</span>';
@@ -978,33 +1215,29 @@ An Nhiên CMT8,860,267,78
 
         function renderMainChart(dailyData) {
             const ctx = document.getElementById('mainChart').getContext('2d');
-            const daysInMonth = new Date(2026, currentMonth, 0).getDate();
+            const daysInMonth = (currentMonth === 2) ? 28 : 31;
             const labels = Array.from({length: daysInMonth}, (_, i) => i + 1);
             const revData = new Array(daysInMonth).fill(0);
-            const billData = new Array(daysInMonth).fill(0); // For Avg Bill
-            const custData = new Array(daysInMonth).fill(0); // For Customer Count
+            const billData = new Array(daysInMonth).fill(0); 
+            const custData = new Array(daysInMonth).fill(0); 
             
-            // Group data by day
             const dailyGroups = {};
             dailyData.forEach(d => {
                 if (!dailyGroups[d.day]) {
                     dailyGroups[d.day] = { rev: 0, billSum: 0, count: 0, cust: 0 };
                 }
                 dailyGroups[d.day].rev += d.value2;
-                dailyGroups[d.day].cust += d.value1; // Add daily customers
-                if (d.value3 > 0) { // Only count if there is bill data
+                dailyGroups[d.day].cust += d.value1;
+                if (d.value3 > 0) {
                     dailyGroups[d.day].billSum += d.value3;
                     dailyGroups[d.day].count++;
                 }
             });
 
-            // Fill chart data
             for (let i = 1; i <= daysInMonth; i++) {
                 if (dailyGroups[i]) {
                     revData[i-1] = dailyGroups[i].rev;
                     custData[i-1] = dailyGroups[i].cust;
-                    // Average of averages or sum? Ideally average bill across branches 
-                    // Simple average of branches for chart visualization
                     billData[i-1] = dailyGroups[i].count > 0 ? (dailyGroups[i].billSum / dailyGroups[i].count) : 0;
                 }
             }
@@ -1032,16 +1265,16 @@ An Nhiên CMT8,860,267,78
                             pointRadius: 0, 
                             pointHoverRadius: 6, 
                             pointBackgroundColor: '#6B8F71',
-                            datalabels: { display: false } // Hide labels on line chart points to avoid clutter
+                            datalabels: { display: false } 
                         },
                         { 
                             label: 'Trung Bình Bill', 
                             data: billData, 
                             type: 'line', 
-                            borderColor: '#D4AF37', // Gold color
+                            borderColor: '#D4AF37', 
                             backgroundColor: 'transparent',
                             borderWidth: 2, 
-                            borderDash: [5, 5], // Dashed line style
+                            borderDash: [5, 5], 
                             tension: 0.4, 
                             yAxisID: 'y_bill', 
                             order: 1,
@@ -1054,7 +1287,7 @@ An Nhiên CMT8,860,267,78
                             label: 'Lượng Khách',
                             data: custData,
                             type: 'bar',
-                            backgroundColor: 'rgba(59, 130, 246, 0.2)', // Light Blue
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)', 
                             hoverBackgroundColor: 'rgba(59, 130, 246, 0.4)',
                             borderRadius: 4,
                             yAxisID: 'y_cust',
@@ -1105,7 +1338,7 @@ An Nhiên CMT8,860,267,78
                             display: true, 
                             position: 'right', 
                             grid: { drawOnChartArea: false }, 
-                            max: 10000000, // Max 10M as requested
+                            max: 10000000, 
                             ticks: { 
                                 callback: v => v/1000000 + 'M', 
                                 font: {size: 10}, 
@@ -1114,10 +1347,10 @@ An Nhiên CMT8,860,267,78
                         },
                         y_cust: {
                             type: 'linear',
-                            display: false, // Hide axis labels to keep it clean, bar height is enough relative visualization
-                            position: 'right',
+                            display: false, 
+                            position: 'right', 
                             grid: { display: false },
-                            suggestedMax: 50 // Provide some headroom
+                            suggestedMax: 50 
                         }
                     }
                 }
@@ -1134,10 +1367,10 @@ An Nhiên CMT8,860,267,78
         window.onload = function() {
             lucide.createIcons();
             initMonthSelector();
-            parsedDailyData = parseCSV(csvRaw, 'rev'); 
-            parsedAdsData = parseCSV(csvAdsRaw, 'ads');
+            parsedDailyData = parseCSV(csvRaw_M1, 'rev').concat(parseCSV(csvRaw_M2, 'rev'));
+            parsedAdsData = parseCSV(csvAdsRaw_M1, 'ads').concat(parseCSV(csvAdsRaw_M2, 'ads'));
             parsedMarketingData = parseCSV(csvMarketing, 'marketing');
-            setMonth(1); 
+            setMonth(2); 
         };
     </script>
 </body>
